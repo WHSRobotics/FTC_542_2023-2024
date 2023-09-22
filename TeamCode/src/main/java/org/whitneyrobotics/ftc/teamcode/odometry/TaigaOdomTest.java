@@ -41,13 +41,13 @@ public class TaigaOdomTest extends OpMode {
         fR.setDirection(DcMotorSimple.Direction.REVERSE);
         bR.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        fL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // X Direction on Odom
+        fR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Y Direction on Odom
+        bL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Heading or Rotation on Odom
 
-        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // X
+        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // Y
+        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // Heading or Rotation
     }
 
     @Override
