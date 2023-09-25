@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -22,8 +23,10 @@ public class Claw {
     public Double linearSlidesExtensionTarget;
     public Double linearSlidesSpeed;
 
-    public clawServoPosition(HardwareMap hardwareMap){
-        this(hardwareMap, "imu");
+    public final DcMotorEx SlidesMotor;
+
+    public Double linearSlidesPosition(){
+        return ((SlidesMotor.getCurrentPosition());
     }
 
     public Claw(HardwareMap hardwareMap){
