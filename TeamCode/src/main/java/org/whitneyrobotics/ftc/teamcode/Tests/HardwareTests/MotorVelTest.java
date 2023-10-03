@@ -1,0 +1,33 @@
+package org.whitneyrobotics.ftc.teamcode.Tests.HardwareTests;
+
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.IMU;
+import org.whitneyrobotics.ftc.teamcode.Tests.Test;
+
+@RequiresApi(api = Build.VERSION_CODES.N)
+@TeleOp(name="Motor Velocity Test :P", group="Hardware Tests")
+@Test(name="Velocity Test", autoTerminateAfterSeconds = 1)
+public class MotorVelTest extends OpModeEx {
+    OmniDrivetrain drivetrain;
+    IMU imu;
+    @Override
+    public void initInternal() {
+        imu = new IMU(hardwareMap);
+        drivetrain = new OmniDrivetrain(hardwareMap, imu);
+    }
+    private double maxVelocity = 0d;
+    @Override
+    protected void loopInternal() {
+        drivetrain.operateByCommand(gamepad1.LEFT_STICK_X.value(), gamepad1.LEFT_STICK_Y.value(), gamepad1.RIGHT_STICK_X.value());
+        maxVelocity = Math.max(Math.abs(drivetrain.getVelocity()), maxVelocity);
+        telemetryPro.addData("Motor Velocity", drivetrain.getVelocity());
+        telemetryPro.addData("Max Velocity", maxVelocity);
+
+    }
+}
