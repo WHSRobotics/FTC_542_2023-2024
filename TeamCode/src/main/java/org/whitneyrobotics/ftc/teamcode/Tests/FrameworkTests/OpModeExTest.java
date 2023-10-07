@@ -57,11 +57,6 @@ public class OpModeExTest extends OpModeEx {
             scroll = Functions.clamp((scroll + event.floatVal) * (gamepad1.CIRCLE.value() ? 5 : 1) ,0,1000);
         });
 
-        gamepad1.TRIANGLE.onDoublePress(event -> {
-            telemetryPro.addLine(String.format("Button pressed %s times",event.consecutivePresses), LineItem.Color.PURPLE, LineItem.RichTextFormat.BOLD)
-                    .persistent();
-        });
-
         gamepad1.SQUARE.onButtonHold(event -> {
             telemetryPro.addItem(new TextLine(String.format("Button held!",event.consecutivePresses), true, LineItem.Color.FUCHSIA, LineItem.RichTextFormat.BOLD));
         });

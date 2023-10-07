@@ -1,6 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.Examples;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -12,6 +13,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.WHSIMU;
 
 import java.util.function.UnaryOperator;
 
+@TeleOp(name="Demo")
 public class DrivetrainBasic extends OpModeEx {
     DcMotorEx fL, fR, bL, bR;
     IMU imu;
@@ -42,7 +44,7 @@ public class DrivetrainBasic extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        double angle = (fieldCentric ? imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) : 0) + Math.PI/2;
+        double angle = (fieldCentric ? imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) : 0);
         UnaryOperator<Float> powerScaling = x -> (float)Math.pow(x, 3);
         if(gamepad1.BUMPER_LEFT.value()){
             powerScaling = x -> x / 2;

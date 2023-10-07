@@ -14,26 +14,26 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TextLine;
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Libraries.JSON.RobotDataUtil;
 import org.whitneyrobotics.ftc.teamcode.Libraries.JSON.WHSRobotData;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.IMU;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.WHSIMU;
 
 @TeleOp(name="Persistent Data Store Test", group="Z")
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class JSONTest extends OpModeEx {
-    IMU imu;
+    WHSIMU imu;
 
     @Override
     public void initInternal() {
         WHSRobotData.reset();
-        imu = new IMU(hardwareMap);
+        imu = new WHSIMU(hardwareMap);
         initializeDashboardTelemetry(10);
         RobotDataUtil.load(WHSRobotData.class);
-        imu.zeroHeading(WHSRobotData.heading);
+        imu.zeroCalibrationOffset(WHSRobotData.heading);
         gamepad1.TRIANGLE.onPress(e -> {
             RobotDataUtil.save(WHSRobotData.class);
             requestOpModeStop();
         });
 
-        gamepad1.SQUARE.onPress(e -> imu.zeroHeading());
+        gamepad1.SQUARE.onPress(e -> imu.zeroCalibrationOffset());
 
         String jsonContent = ReadWriteFile.readFile(RobotDataUtil.loadFile(WHSRobotData.class.getName(), ".json"));
         telemetryPro.addItem(new TextLine(jsonContent,true, LineItem.Color.LIME));
@@ -46,7 +46,7 @@ public class JSONTest extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        WHSRobotData.heading = imu.getHeading();
+        WHSRobotData.heading = imu.getHeadingYaw();
         telemetry.addData("Heading",WHSRobotData.heading);
         telemetryPro.addLine(RobotDataUtil.getClassWriteableFields(WHSRobotData.class)[0].getName(), LineItem.Color.ROBOTICS);
     }

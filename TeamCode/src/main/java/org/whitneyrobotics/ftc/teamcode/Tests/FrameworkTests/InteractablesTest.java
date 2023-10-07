@@ -60,7 +60,7 @@ public class InteractablesTest extends OpModeEx {
     @Override
     public void initInternal() {
         setupGamepads();
-        telemetryPro.setInteractingGamepad(gamepad1);
+        telemetryPro.setInteractingGamepad(gamepad1, g->g.DPAD_UP, g -> gamepad1.DPAD_DOWN);
         setupTelemetry();
     }
 
