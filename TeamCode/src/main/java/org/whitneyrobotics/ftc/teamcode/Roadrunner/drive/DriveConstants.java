@@ -26,10 +26,6 @@ public class DriveConstants {
     public static final double TICKS_PER_REV = 383.6;
     public static final double MAX_RPM = 435;
 
-    public static final RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
-
-    public static final RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.UP;
-
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
      * Set this flag to false if drive encoders are not present and an alternative localization
@@ -52,7 +48,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 15.5; // in
+    public static double TRACK_WIDTH = 14.814567; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -94,8 +90,11 @@ public class DriveConstants {
      */
     public static double MAX_VEL = 73.17330064499293;
     public static double MAX_ACCEL = 73.17330064499293;
-    public static double MAX_ANG_VEL = Math.toRadians(270.4852451612903);
-    public static double MAX_ANG_ACCEL = Math.toRadians(270.4852451612903);
+    public static double MAX_ANG_VEL = Math.toRadians(288.7552360511267);
+    public static double MAX_ANG_ACCEL = Math.toRadians(288.7552360511267);
+
+    public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+    public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.DOWN;
 
 
     public static double encoderTicksToInches(double ticks) {
