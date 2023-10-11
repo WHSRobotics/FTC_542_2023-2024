@@ -60,6 +60,10 @@ public class MultipleChoicePoll extends Interactable {
             return "\t" + caption;
         }
 
+        public T getValue(){
+            return value;
+        }
+
         public MultipleChoiceOption(String caption, T value){
             this.caption = caption;
             this.value = value;

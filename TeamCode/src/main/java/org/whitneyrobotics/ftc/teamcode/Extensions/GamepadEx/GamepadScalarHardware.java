@@ -50,6 +50,10 @@ public class GamepadScalarHardware implements GamepadHardware{
         this.interactionConsumer = callback;
     }
 
+    public void onInteraction(VoidAction callback){
+        this.interactionConsumer = e -> callback.action();
+    }
+
     @Override
     public void update(Object newState) {
         Float input = (Float) newState;

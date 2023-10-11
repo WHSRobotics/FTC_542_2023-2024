@@ -1,2 +1,6 @@
-package org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx;public interface VoidAction {
+package org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx;
+
+@FunctionalInterface
+public interface VoidAction {
+    void action();
 }

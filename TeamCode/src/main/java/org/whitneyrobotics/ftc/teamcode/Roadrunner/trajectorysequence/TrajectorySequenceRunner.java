@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.trajectorysequence;
+package org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence;
 
 import androidx.annotation.Nullable;
 
@@ -24,7 +24,7 @@ import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.sequencese
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.sequencesegment.TurnSegment;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.sequencesegment.WaitSegment;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.util.LogFiles;
+import org.whitneyrobotics.ftc.teamcode.Roadrunner.util.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;

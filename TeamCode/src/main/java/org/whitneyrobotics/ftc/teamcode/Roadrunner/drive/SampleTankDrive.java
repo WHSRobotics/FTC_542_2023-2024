@@ -30,7 +30,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
+import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequenceRunner;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.util.LynxModuleUtil;
 
 import java.util.ArrayList;

@@ -29,12 +29,24 @@ public class Button implements GamepadHardware{
         this.interactionEventConsumer = callback;
     }
 
+    public void onInteraction(VoidAction callback){
+        this.interactionEventConsumer = e -> callback.action();
+    }
+
     public void onPress(@NonNull Consumer<GamepadInteractionEvent> callback){
         this.pressEventConsumer = callback;
     }
 
+    public void onPress(VoidAction callback){
+        this.pressEventConsumer = e -> callback.action();
+    }
+
     public void onRelease(@NonNull Consumer<GamepadInteractionEvent> callback){
         this.releaseEventConsumer = callback;
+    }
+
+    public void onRelease(VoidAction callback){
+        this.releaseEventConsumer = e -> callback.action();
     }
 
     /* TODO: Rebuild double presses with FSM

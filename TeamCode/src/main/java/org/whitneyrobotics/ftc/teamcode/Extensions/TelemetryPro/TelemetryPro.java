@@ -40,7 +40,7 @@ public class TelemetryPro {
                 .setRichTextFormat(LineItem.RichTextFormat.BOLD)
         );
         this.addItem(new KeyValueLine("Runtime", true, (() ->
-            String.format("%s:%s",(int)Math.floor(currentOpMode.getRuntime()/60), (int)Math.floor(currentOpMode.getRuntime()%60))
+            String.format("%s:",(int)Math.floor(currentOpMode.getRuntime()/60)) + (currentOpMode.getRuntime()%60<10 ? "0" : "") + String.format("%s",(int)Math.floor(currentOpMode.getRuntime()%60))
         ), LineItem.Color.WHITE));
 
         Test testingAnnotation = o.getClass().getDeclaredAnnotation(Test.class);
