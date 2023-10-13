@@ -152,6 +152,8 @@ public abstract class OpModeEx extends OpMode {
 
     @Override
     public void init_loop(){
+        gamepad1.update();
+        gamepad2.update();
         telemetryPro.update();
         initInternalLoop();
     }

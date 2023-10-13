@@ -6,6 +6,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 import org.whitneyrobotics.ftc.teamcode.Libraries.Geometry.Coordinate;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Geometry.Position;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Navigation._DEPRECIATED_PurePursuit.SwerveWaypoint;
@@ -20,6 +22,14 @@ import java.util.ArrayList;
  */
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class Functions {
+
+    private Functions(){}
+    public static <T> T requireNotNull(T arg){
+        if (arg == null){
+            throw new IllegalArgumentException("Null argument");
+        }
+        return arg;
+    }
 
     public static int randInt(int min, int max){
         return (int)Math.floor(Math.random()*max + min);
@@ -238,5 +248,13 @@ public class Functions {
             path.add(positions[i]);
         }
         return path;
+    }
+
+    public static Pose2d rotateVectorCounterclockwise(Pose2d orig, double theta){
+        return new Pose2d(
+                orig.getX() * Math.cos(theta) - orig.getX() * Math.sin(theta),
+                orig.getY() * Math.sin(theta) + orig.getY() * Math.cos(theta),
+                orig.getHeading()
+        );
     }
 }
