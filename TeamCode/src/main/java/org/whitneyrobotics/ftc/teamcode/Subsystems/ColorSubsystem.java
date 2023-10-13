@@ -18,7 +18,7 @@ public class ColorSubsystem {
     private StateMachine<Phases> stateMachine;
 
     private enum Phases {ON, OFF}
-    enum Colors {
+    public enum Colors {
         ERROR(false),
         ERROR_FLASHING(true),
         NOTIFICATION(true),
