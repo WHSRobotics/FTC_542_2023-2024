@@ -19,11 +19,11 @@ public class PrismSensor {
         IDLE
     }
     Servo bottomLED, topLED;
-    boolean requestImmediateDetection;
+    private boolean requestImmediateDetection;
 
     RevColorSensorV3 sensor;
     PWMOutputImplEx bottomLEDImpl, topLEDImpl;
-    int[] colors = new int[2];
+    public int[] colors = new int[2];
     public final StateMachine<States> stateMachine;
     public PrismSensor(HardwareMap hardwareMap){
         bottomLED = hardwareMap.get(Servo.class, "bottomLED");
@@ -57,5 +57,7 @@ public class PrismSensor {
     public void update(){
         stateMachine.update();
     }
+
+    public void requestImmediateDetection() {requestImmediateDetection = true;}
 
 }
