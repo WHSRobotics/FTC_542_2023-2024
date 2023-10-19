@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.Button;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadInteractionEvent;
-import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAControllerNew;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAController; /*change to PIDVAControllerNew once that script is functional
 /**
  * Create by Siddhant Khapra on 10/17/2023
  */
@@ -51,19 +51,17 @@ public class newLinearSlides {
     private int currentLevel = 0;
     public int getCurrentLevel() {return currentLevel;}
     public LinearSlidesSTATE linearSlidesSTATE;
-    private final PIDVAControllerNew pidvaController = new PIDVAControllerNew(MAX_VELOCITY,MAX_ACCELERATION,1,0,0);
+    private final PIDVAController pidvaController = new PIDVAController(MAX_VELOCITY,MAX_ACCELERATION,1,0,0);
 
     //Button inc, Button dec, Button switchState, Button reset
-    public LinearSlides(HardwareMap hardwareMap, GamepadEx gamepad1) {
+    public newLinearSlides(HardwareMap hardwareMap, GamepadEx gamepad1) {
         Button inc = gamepad1.DPAD_UP;
         Button dec = gamepad1.DPAD_DOWN;
         Button switchState = gamepad1.BUMPER_LEFT;
         Button reset = gamepad1.X;
-        LSleft = hardwareMap.get(DcMotorEx.class, "LinearSlidesLeft");
-        LSright = hardwareMap.get(DcMotorEx.class, "LinearSlidesRight");
-        LSleft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        LSright.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        LSright.setDirection(DcMotorEx.Direction.REVERSE);
+        LSlides = hardwareMap.get(DcMotorEx.class, "LinearSlides");
+        LSlides.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        LSlides.setDirection(DcMotorEx.Direction.REVERSE);
         linearSlidesSTATE = LinearSlidesSTATE.LEVELED;
         inc.onPress((GamepadInteractionEvent callback) -> {incrementLevel();});
         dec.onPress((GamepadInteractionEvent callback) -> {decrementLevel();});
@@ -105,14 +103,11 @@ public class newLinearSlides {
     }
 
     private void setMotorPower(double power) {
-        LSleft.setPower(power);
-        LSright.setPower(power);
+        LSlides.setPower(power);
     }
     public void resetEncoder() {
-        LSleft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        LSleft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        LSright.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        LSright.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        LSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        LSlides.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 
