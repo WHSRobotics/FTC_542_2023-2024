@@ -12,7 +12,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadInteractionEvent;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAController; /*change to PIDVAControllerNew once that script is functional
 /**
- * Create by Siddhant Khapra on 10/17/2023
+ * Create by Siddhant Khapra, Gavin Kai-Vida, Aaryan Virk on 10/17/2023
  */
 @RequiresApi(api = Build.VERSION_CODES.N) //
 public class newLinearSlides {
