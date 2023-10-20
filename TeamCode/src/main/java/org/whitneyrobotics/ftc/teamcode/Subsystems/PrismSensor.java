@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.hardware.PWMOutputImplEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
+import com.qualcomm.robotcore.hardware.ServoImpl;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateForge;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
@@ -18,31 +21,34 @@ public class PrismSensor {
         DETECTING_BOTTOM,
         IDLE
     }
-    Servo bottomLED, topLED;
+    ServoControllerEx controller;
+    private final int servoBottomIndex = 3, servoTopIndex = 5;
     private boolean requestImmediateDetection;
 
     RevColorSensorV3 sensor;
-    PWMOutputImplEx bottomLEDImpl, topLEDImpl;
     public int[] colors = new int[2];
     public final StateMachine<States> stateMachine;
     public PrismSensor(HardwareMap hardwareMap){
-        bottomLED = hardwareMap.get(Servo.class, "bottomLED");
-        topLED = hardwareMap.get(Servo.class, "topLED");
+        controller = hardwareMap.getAll(ServoControllerEx.class).get(0); //Gets the servo controller for the Control Hub
         sensor = hardwareMap.get(RevColorSensorV3.class, "PrismSensor");
+        controller.setServoPosition(servoBottomIndex,1);
+        controller.setServoPosition(servoTopIndex,1);
+        controller.setServoPwmDisable(servoTopIndex);
+        controller.setServoPwmDisable(servoBottomIndex);
         stateMachine = StateForge.StateMachine()
                 .state(States.DETECTING_TOP)
-                    .onEntry(() -> topLED.setPosition(0.5))
+                    .onEntry(() -> controller.setServoPwmEnable(servoTopIndex))
                     .onExit(() -> {
                         colors[1] = sensor.getNormalizedColors().toColor();
-                        topLED.setPosition(0);
+                        controller.setServoPwmDisable(servoTopIndex);
                     })
                     .timedTransitionLinear(0.5)
                 .fin()
                 .state(States.DETECTING_BOTTOM)
-                    .onEntry(() -> bottomLED.setPosition(0.5))
+                    .onEntry(() -> controller.setServoPwmEnable(servoBottomIndex))
                     .onEntry(() -> {
                         colors[0] = sensor.getNormalizedColors().toColor();
-                        bottomLED.setPosition(0);
+                        controller.setServoPwmDisable(servoBottomIndex);
                     })
                     .timedTransitionLinear(0.5)
                 .fin()
@@ -56,6 +62,17 @@ public class PrismSensor {
 
     public void update(){
         stateMachine.update();
+    }
+
+    public String getState(){
+        return stateMachine.getMachineState().name();
+    }
+
+    public double[] getPositions(){
+        return new double[]{
+                controller.getServoPosition(servoTopIndex),
+                controller.getServoPosition(servoBottomIndex)
+        };
     }
 
     public void requestImmediateDetection() {requestImmediateDetection = true;}

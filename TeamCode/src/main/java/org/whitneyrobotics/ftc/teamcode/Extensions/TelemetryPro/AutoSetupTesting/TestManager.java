@@ -6,6 +6,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TextLine;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class TestManager {
 
@@ -18,6 +19,14 @@ public class TestManager {
         boolean warning = false;
         boolean failed = false;
         String reason = "";
+
+        public boolean getWarning(){
+            return warning;
+        }
+
+        public boolean getFailed(){
+            return failed;
+        }
 
         public Test(String label, Runnable func){
             this.label = label;
@@ -59,16 +68,17 @@ public class TestManager {
     /**
      * Call in a looping context.
      */
-    public void run() {
+    public List<Test> run() {
         folder.purge();
         for (Test t: tests) {
             t.evaluate();
             folder.addChild(new TextLine(
-                    t.label + " " +(t.failed ? " FAILED" : t.warning ? " Passed with warning" : "Passed") + "\n" + t.reason,
+                    t.label + " " + (t.failed ? " FAILED" : t.warning ? " Passed with warning" : "Passed") + "\n" + t.reason,
                     true,
                     t.failed ? LineItem.Color.RED : t.warning ? LineItem.Color.ROBOTICS : LineItem.Color.LIME,
                     LineItem.RichTextFormat.BOLD)
             );
         }
+        return tests;
     }
 }

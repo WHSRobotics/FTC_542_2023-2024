@@ -252,8 +252,8 @@ public class Functions {
 
     public static Pose2d rotateVectorCounterclockwise(Pose2d orig, double theta){
         return new Pose2d(
-                orig.getX() * Math.cos(theta) - orig.getX() * Math.sin(theta),
-                orig.getY() * Math.sin(theta) + orig.getY() * Math.cos(theta),
+                orig.getX() * Math.cos(theta) - orig.getY() * Math.sin(theta),
+                orig.getX() * Math.sin(theta) + orig.getY() * Math.cos(theta),
                 orig.getHeading()
         );
     }

@@ -49,6 +49,8 @@ public class TrajectorySequenceRunner {
 
     private final NanoClock clock;
 
+    private boolean isDrawingRobot = true;
+
     private TrajectorySequence currentTrajectorySequence;
     private double currentSegmentStartTime;
     private int currentSegmentIndex;
@@ -92,6 +94,10 @@ public class TrajectorySequenceRunner {
         currentSegmentStartTime = clock.seconds();
         currentSegmentIndex = 0;
         lastSegmentIndex = -1;
+    }
+
+    public void setIsDrawingRobot(boolean isDrawingRobot) {
+        this.isDrawingRobot = isDrawingRobot;
     }
 
     public @Nullable
@@ -226,9 +232,9 @@ public class TrajectorySequenceRunner {
         packet.put("yError", getLastPoseError().getY());
         packet.put("headingError (deg)", Math.toDegrees(getLastPoseError().getHeading()));
 
-        draw(fieldOverlay, currentTrajectorySequence, currentSegment, targetPose, poseEstimate);
+        if(isDrawingRobot) draw(fieldOverlay, currentTrajectorySequence, currentSegment, targetPose, poseEstimate);
 
-        dashboard.sendTelemetryPacket(packet);
+        if(isDrawingRobot) dashboard.sendTelemetryPacket(packet);
 
         return driveSignal;
     }

@@ -21,7 +21,7 @@ public class ViperSlidesTest extends OpModeEx {
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        gamepad1.A.onPress(e -> {
+        gamepad1.A.onPress(() -> {
             slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             if(slideMotor.getDirection() == DcMotorSimple.Direction.REVERSE){

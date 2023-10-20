@@ -80,7 +80,7 @@ public class SubstateMachine<I extends Enum<I>, R extends Enum<R>> extends State
     }
 
     @Override
-    public R getSubstate(){
+    public Enum<R> getSubstate(){
         return embeddedStateMachine.getMachineState();
     }
 

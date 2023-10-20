@@ -64,7 +64,7 @@ public class StateMachine<E extends Enum<E>> {
         synchronizeAllSubStateMachines();
     }
 
-    public E getMachineState(){
+    public Enum<E> getMachineState(){
         return currentState.getState();
     }
 

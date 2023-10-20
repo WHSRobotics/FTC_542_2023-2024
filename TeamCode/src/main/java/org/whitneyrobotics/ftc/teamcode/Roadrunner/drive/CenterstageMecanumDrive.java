@@ -150,6 +150,10 @@ public class CenterstageMecanumDrive extends MecanumDrive {
         return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
+    public void disableRobotDrawing(){
+        trajectorySequenceRunner.setIsDrawingRobot(false);
+    }
+
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return new TrajectorySequenceBuilder(
                 startPose,

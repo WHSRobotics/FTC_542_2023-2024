@@ -54,7 +54,7 @@ public class State<E extends Enum<E>> {
         return transitions;
     }
 
-    public E getState() {
+    public Enum<E> getState() {
         return state;
     }
 

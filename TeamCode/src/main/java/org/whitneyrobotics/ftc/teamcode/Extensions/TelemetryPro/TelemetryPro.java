@@ -58,7 +58,11 @@ public class TelemetryPro {
     }
 
     public TestManager useTestManager(){
-        TestManager testManager = new TestManager(this);
+        testManager = new TestManager(this);
+        return testManager;
+    }
+
+    public TestManager getTestManager(){
         return testManager;
     }
 
