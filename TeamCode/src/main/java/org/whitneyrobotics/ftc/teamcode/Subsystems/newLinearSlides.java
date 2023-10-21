@@ -9,8 +9,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.Button;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
+import org.whitneyrobotics.ftc.teamcode.visionImpl.gaugeDistance;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadInteractionEvent;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAController; /*change to PIDVAControllerNew once that script is functional
+
 /**
  * Created by Siddhant Khapra, Gavin Kai-Vida, Aaryan Virk on 10/17/2023
  */
@@ -40,7 +42,8 @@ public class newLinearSlides {
     private static final int CYCLES_PER_REVOLUTION = 7;
     private static final double GEAR_RATIO = 1.0/2.0;
 
-
+    //Import Distance
+    public double actualGaugedDistance = gaugeDistance.actualDistance;
 
     public enum LinearSlidesSTATE{
         LEVELED(SLIDES_UPPER_BOUND/3), //default, linear slides leveled control
