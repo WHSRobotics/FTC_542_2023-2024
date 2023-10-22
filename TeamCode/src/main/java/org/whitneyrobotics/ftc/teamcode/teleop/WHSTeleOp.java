@@ -12,6 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.newLinearSlides;
 import org.whitneyrobotics.ftc.teamcode.visionImpl.gaugeDistance;
 
+import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
+import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.Button;
+
 
 //CenterStage Main Teleop
 
