@@ -1,142 +1,214 @@
-package org.whitneyrobotics.ftc.teamcode.Subsystems;
+package org.whitneyrobotics.ftc.teamcode.subsys;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.Button;
-import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
-import org.whitneyrobotics.ftc.teamcode.visionImpl.gaugeDistance;
-import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadInteractionEvent;
-import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAController; /*change to PIDVAControllerNew once that script is functional
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.whitneyrobotics.ftc.teamcode.Libraries.JSON.Alias;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDControllerNew;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDFCoefficientsNew;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDFControllerNew;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVACoefficients;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAControllerNew;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Filters.RateLimitingFilter;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.WHSRobotImpl;
+//fix these four imports
 
-/**
- * Created by Siddhant Khapra, Gavin Kai-Vida, Aaryan Virk on 10/17/2023
- */
-@RequiresApi(api = Build.VERSION_CODES.N) //
-public class newLinearSlides {
-    public DcMotorEx LSlides;
+public class newLinearSlides  {
+    public static double DEADBAND_ERROR = 0.35;
+    public static double maxVelocity = 3.5;
+    public static double acceleration = 9;
+    public static double TICKS_PER_INCH = 100;
+    public static double SPOOL_RADIUS = 0.75;
+    public static double powerMultiplier = 2;
+    boolean fullyAutonomousMode;
+    double initial = 0.0d;
+    public static double idleStatic = 0.08;
+    public static boolean useIdleStatic = false;
 
-    public double getSlidesPosition(){
-        return (LSlides.getCurrentPosition());
-    }
-    private double slidesPositionTarget = 0.0;
-    public boolean isOnTarget(){return Math.abs(slidesPositionTarget-getSlidesPosition())<=ACCEPTABLE_ERROR;}
-    public double getSlidesVelocity(){return (LSlides.getVelocity());}
 
-    public boolean isSlidingInProgress(){return getSlidesVelocity() != 0;}
-    public double getMotorPower(){return (LSlides.getPower());}
+    //coefficients to control slidesVelocity
+    public static PIDFCoefficientsNew idleCoefficients = new PIDFCoefficientsNew()
+            .setKP(0.13)
+            .setKI(0)
+            .setKD(0.003);
+    public static PIDFControllerNew idleController = new PIDFControllerNew(idleCoefficients);
 
-    //Emergency Stops
-    private static final double SLIDES_UPPER_BOUND = 976.0;
-    private static final double SLIDES_LOWER_BOUND = 0.0;
-    private static final double SLIDES_INIT = 5.0; // inches
-    private static final double MAX_ACCELERATION = 5; // inches/sec^2
-    private static final double MAX_VELOCITY = 50; // inches/s
+    public static PIDVACoefficients slidingCoefficients = new PIDVACoefficients()
+            .setKP(0.1)
+            .setKI(0.00)
+            .setKD(0.012)
+            .setKV(1.12)
+            .setKA(0.04)
+            .setKStatic(0.5)
+            .setMaxAcceleration(9)
+            .setMaxVelocity(3.5);
 
-    private static final double ACCEPTABLE_ERROR = 5; //ticks
-    private static final double SHAFT_DIAMETER = 2; //inches
-    private static final int CYCLES_PER_REVOLUTION = 7;
-    private static final double GEAR_RATIO = 1.0/2.0;
+    public static double TRUE_VELOCITY = 4;
+    public static PIDVAControllerNew slidingController = new PIDVAControllerNew(slidingCoefficients);
+    public static RateLimitingFilter velocityLimiter = new RateLimitingFilter(acceleration,0);
 
-    //Import Distance
-    public double actualGaugedDistance = gaugeDistance.actualDistance;
 
-    public enum LinearSlidesSTATE{
-        LEVELED(SLIDES_UPPER_BOUND/3), //default, linear slides leveled control
-        DRIVER_CONTROLLED(1.0); //driver custom position control
-        private final double interval;
-        LinearSlidesSTATE(double interval){this.interval = interval;}
-    }
-    private int currentLevel = 0;
-    public int getCurrentLevel() {return currentLevel;}
-    public LinearSlidesSTATE linearSlidesSTATE;
-    private final PIDVAController pidvaController = new PIDVAController(MAX_VELOCITY,MAX_ACCELERATION,1,0,0);
 
-    //Button inc, Button dec, Button switchState, Button reset
-    public newLinearSlides(HardwareMap hardwareMap, GamepadEx gamepad1) {
-        Button inc = gamepad1.DPAD_UP;
-        Button dec = gamepad1.DPAD_DOWN;
-        Button switchState = gamepad1.BUMPER_LEFT;
-        Button reset = gamepad1.X;
-        LSlides = hardwareMap.get(DcMotorEx.class, "LinearSlides");
-        LSlides.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        LSlides.setDirection(DcMotorEx.Direction.REVERSE);
-        linearSlidesSTATE = LinearSlidesSTATE.LEVELED;
-        inc.onPress((GamepadInteractionEvent callback) -> {incrementLevel();});
-        dec.onPress((GamepadInteractionEvent callback) -> {decrementLevel();});
-        inc.onButtonHold((GamepadInteractionEvent callback) -> {if ((linearSlidesSTATE == LinearSlidesSTATE.DRIVER_CONTROLLED) && ((slidesPositionTarget+linearSlidesSTATE.interval) <= SLIDES_UPPER_BOUND))
-            setMotorPower(0.5);});
-        dec.onButtonHold((GamepadInteractionEvent callback) -> {if ((linearSlidesSTATE == LinearSlidesSTATE.DRIVER_CONTROLLED) && ((slidesPositionTarget-linearSlidesSTATE.interval) >= SLIDES_LOWER_BOUND))
-            setMotorPower(-0.5);});
-        inc.onRelease((GamepadInteractionEvent callback) -> {if (linearSlidesSTATE == LinearSlidesSTATE.DRIVER_CONTROLLED)
-            setMotorPower(0.0);});
-        dec.onRelease((GamepadInteractionEvent callback) -> {if (linearSlidesSTATE == LinearSlidesSTATE.DRIVER_CONTROLLED)
-            setMotorPower(0.0);});
-        switchState.onPress((GamepadInteractionEvent callback) -> {
-            if (linearSlidesSTATE == LinearSlidesSTATE.LEVELED) linearSlidesSTATE = LinearSlidesSTATE.DRIVER_CONTROLLED;
-            else linearSlidesSTATE = LinearSlidesSTATE.LEVELED;});
-        reset.onPress((GamepadInteractionEvent callback) -> reset());
-        resetEncoder();
-    }
-    public void setLevelTarget(int levelTarget) {
-        if (levelTarget <= 3 && levelTarget >= 0) {
-            slidesPositionTarget = levelTarget*linearSlidesSTATE.interval;
-            currentLevel = levelTarget;
+    public enum Target {
+        FIRSTMARK(12.375), SECONDMARK(19), THIRDMARK(25.75), LOWERED(0), ;
+
+        Target(double position){
+            this.position = position;
+        }
+        private double position;
+
+        public double getPosition() {
+            return position;
         }
     }
-    public void incrementLevel(){
-        if (((slidesPositionTarget+linearSlidesSTATE.interval) <= SLIDES_UPPER_BOUND) && linearSlidesSTATE == LinearSlidesSTATE.LEVELED)
-            slidesPositionTarget += linearSlidesSTATE.interval;
-        if (linearSlidesSTATE == LinearSlidesSTATE.LEVELED){
-            currentLevel = (int)(SLIDES_UPPER_BOUND/slidesPositionTarget);}
-    }
-    public void decrementLevel(){
-        if (((slidesPositionTarget-linearSlidesSTATE.interval) >= SLIDES_LOWER_BOUND) && linearSlidesSTATE == LinearSlidesSTATE.LEVELED)
-            slidesPositionTarget -= linearSlidesSTATE.interval;
-        if (linearSlidesSTATE == LinearSlidesSTATE.LEVELED) {
-            currentLevel = (int)(SLIDES_UPPER_BOUND/slidesPositionTarget);}
+
+    private enum State {
+        PID_CONTROLLED, IDLE
     }
 
-    public void reset() {
-        setLevelTarget(0);
-    }
+    public State currentState = State.IDLE;
+    public double currentTarget = Target.LOWERED.position;
 
-    private void setMotorPower(double power) {
-        LSlides.setPower(power);
-    }
-    public void resetEncoder() {
-        LSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        LSlides.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-    }
+    private DcMotorEx slidesL, slidesR;
+    public WHSRobotImpl.Mode mode = WHSRobotImpl.Mode.TELEOP;
+    private WHSRobotImpl.Alliance alliance = WHSRobotImpl.Alliance.RED;
 
 
-    private void moveToTarget() {
-        //moving position to position target
-        /*
-        pidController.calculate(slidesPositionTarget,getSlidesPosition());
-        double power = Functions.map(pidController.getOutput(),-100,100,-1,1);
-        setMotorPower(power);
-         */
+    @Alias("Current Velocity")
+    public double velocity;
+
+    public void setAlliance(WHSRobotImpl.Alliance alliance){
+        this.alliance = alliance;
     }
 
-    public void changeState(LinearSlidesSTATE state) {
-        if (state == LinearSlidesSTATE.DRIVER_CONTROLLED) {
-            currentLevel = -1;
+    public void setMode(WHSRobotImpl.Mode mode){
+        this.mode = mode;
+    }
+
+    public double getVelocity(){
+        velocity = (slidesL.getVelocity(AngleUnit.RADIANS) + slidesR.getVelocity(AngleUnit.RADIANS))/2 * SPOOL_RADIUS;
+        return velocity;
+    }
+
+    public void setInitialPosition(double pos){
+        initial = pos;
+    }
+
+    public void zeroSlides(){
+        resetEncoders();
+        initial = 0;
+    }
+
+    public double currentVelocity = 0.0d;
+    public LinearSlidesMeet3(HardwareMap hardwareMap){
+        this(hardwareMap, false);
+    }
+    public LinearSlidesMeet3(HardwareMap hardwareMap, boolean auto){
+        slidesL = hardwareMap.get(DcMotorEx.class, "slidesL");
+        slidesR = hardwareMap.get(DcMotorEx.class,"slidesR");
+        slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
+        slidesL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slidesR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        resetEncoders();
+        fullyAutonomousMode = auto;
+        //pidL = new PIDControlledMotor(slidesL,5, new PIDCoefficientsNew(kP,kI,kD));
+        //pidR = new PIDControlledMotor(slidesR,5,new PIDCoefficientsNew(kP,kI,kD));
+    }
+
+    public void setTarget(double t){
+        this.currentTarget = t;
+        slidingController.reset();
+        slidingController.setTarget(t);
+        currentState = State.PID_CONTROLLED;
+    }
+
+    public void up(double inches){
+        setTarget(getPosition() + inches);
+    }
+
+    public void down(double inches){
+        setTarget(getPosition() - inches);
+    }
+
+    public void setTarget(Target t){
+        setTarget(t.position);
+    }
+
+    public void resetEncoders(){
+        slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slidesL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slidesR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    /*
+    public static int scaleDegree = 4;
+
+    public void calculateStaticCompensation(){
+        double pos = this.getPosition();
+        if(pos < 0) return;
+        staticCompensation = Math.min(Math.pow(pos,scaleDegree)/Target.HIGH.getPosition() * kStatic,kStatic);
+    }
+    */
+
+    public void tick(){
+        operate(0,false);
+    }
+
+    public double error;
+    public static double output;
+    public void operate(double power, boolean slow){
+        getVelocity();
+        //calculateStaticCompensation();
+        if(Math.abs(power) > 0.1){ cancelMovement();} // signal filtering
+        switch (currentState) {
+            case IDLE:
+                double rawTargetVelocity = power * TRUE_VELOCITY * (slow ? 0.5 : 1);
+                velocityLimiter.calculate(rawTargetVelocity); //synthetic acceleration
+                double targetVelocity = velocityLimiter.getOutput();
+                idleController.calculate(targetVelocity, velocity);
+                output = Math.signum(idleController.getOutput()) * Functions.map(Math.abs(idleController.getOutput() + powerMultiplier * rawTargetVelocity),0,10,0,1) + (useIdleStatic ? idleStatic : 0);
+                break;
+            case PID_CONTROLLED:
+                error = currentTarget - getPosition();
+                if(Math.abs(error)<DEADBAND_ERROR){
+                    if(!fullyAutonomousMode) cancelMovement();
+                    break;
+                }
+                slidingController.calculate(getPosition());
+                output =  Math.signum(slidingController.getOutput()) * Functions.map(Math.abs(slidingController.getOutput()),0,maxVelocity,0,1);
+                break;
         }
-        linearSlidesSTATE = state;
+
+
+        slidesL.setPower(output);
+        slidesR.setPower(output);
     }
 
-    public void operate() {
-        if (!isOnTarget() && linearSlidesSTATE != LinearSlidesSTATE.DRIVER_CONTROLLED) {
-            if (getSlidesVelocity() == 0.0) {
-                pidvaController.setDesiredPos(slidesPositionTarget, getSlidesPosition(), System.nanoTime());
-            }
-            setMotorPower(pidvaController.output(getSlidesPosition(), System.nanoTime()));
-        }
+    public String getPhase(){
+        return currentState ==  State.PID_CONTROLLED ? slidingController.phase : "IDLE";
+    }
+    public boolean isSliding(){
+        return currentState == State.PID_CONTROLLED;
+    }
+    public boolean isRaised(){return getPosition() > 1;}
+
+    public double getRawPosition(){
+        return (slidesL.getCurrentPosition() + slidesR.getCurrentPosition())/2;
+    }
+
+    public double getPosition(){
+        return getRawPosition()/TICKS_PER_INCH + initial;
+    }
+
+    private void cancelMovement(){
+        this.currentState = State.IDLE;
+        idleController.reset();
     }
 
 }
