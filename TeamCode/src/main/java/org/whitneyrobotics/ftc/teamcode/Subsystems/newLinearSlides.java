@@ -74,7 +74,7 @@ public class newLinearSlides  {
     public State currentState = State.IDLE;
     public double currentTarget = Target.LOWERED.position;
 
-    private DcMotorEx slidesL, slidesR;
+    private DcMotorEx lSlides;
     public WHSRobotImpl.Mode mode = WHSRobotImpl.Mode.TELEOP;
     private WHSRobotImpl.Alliance alliance = WHSRobotImpl.Alliance.RED;
 
@@ -109,11 +109,10 @@ public class newLinearSlides  {
         this(hardwareMap, false);
     }
     public LinearSlidesMeet3(HardwareMap hardwareMap, boolean auto){
-        slidesL = hardwareMap.get(DcMotorEx.class, "slidesL");
-        slidesR = hardwareMap.get(DcMotorEx.class,"slidesR");
-        slidesR.setDirection(DcMotorSimple.Direction.REVERSE);
-        slidesL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slidesR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lSlides = hardwareMap.get(DcMotorEx.class, "lslides");
+        lSlides.setDirection(DcMotorSimple.Direction.REVERSE);
+        lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
         fullyAutonomousMode = auto;
         //pidL = new PIDControlledMotor(slidesL,5, new PIDCoefficientsNew(kP,kI,kD));
@@ -140,10 +139,8 @@ public class newLinearSlides  {
     }
 
     public void resetEncoders(){
-        slidesL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slidesL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slidesR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slidesR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lSlides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /*
@@ -186,8 +183,7 @@ public class newLinearSlides  {
         }
 
 
-        slidesL.setPower(output);
-        slidesR.setPower(output);
+        lSlides.setPower(output);
     }
 
     public String getPhase(){
@@ -199,7 +195,7 @@ public class newLinearSlides  {
     public boolean isRaised(){return getPosition() > 1;}
 
     public double getRawPosition(){
-        return (slidesL.getCurrentPosition() + slidesR.getCurrentPosition())/2;
+        return (lSlides.getCurrentPosition());
     }
 
     public double getPosition(){
