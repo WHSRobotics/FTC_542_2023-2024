@@ -14,7 +14,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 public class gaugeDistance extends LinearOpMode{
     public static double actualDistance;
 
-    void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException {
         AprilTagProcessor tagProcessor = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
