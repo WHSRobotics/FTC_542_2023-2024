@@ -17,7 +17,7 @@ import org.whitneyrobotics.ftc.teamcode.Tests.Test;
 import java.util.Arrays;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-@TeleOp(name="Interactable Test")
+@TeleOp(name="Interactable Test", group="Framework Tests")
 @Test(name="Interactable Test", description = "Testing interactable items with BetterTelemetry")
 public class InteractablesTest extends OpModeEx {
 

@@ -1,4 +1,4 @@
-package org.whitneyrobotics.ftc.teamcode.visionImpl;
+package org.whitneyrobotics.ftc.teamcode.VisionImpl;
 
 import android.os.Build;
 import android.util.Log;
@@ -6,9 +6,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;

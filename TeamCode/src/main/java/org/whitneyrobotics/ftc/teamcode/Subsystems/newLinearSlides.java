@@ -1,4 +1,4 @@
-package org.whitneyrobotics.ftc.teamcode.subsys;
+package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,7 +15,6 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVACoefficients;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAControllerNew;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Filters.RateLimitingFilter;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
-import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.WHSRobotImpl;
 //fix these four imports
 
 public class newLinearSlides  {
@@ -75,23 +74,17 @@ public class newLinearSlides  {
     public double currentTarget = Target.LOWERED.position;
 
     private DcMotorEx lSlides;
-    public WHSRobotImpl.Mode mode = WHSRobotImpl.Mode.TELEOP;
-    private WHSRobotImpl.Alliance alliance = WHSRobotImpl.Alliance.RED;
+    //public WHSRobotImpl.Mode mode = WHSRobotImpl.Mode.TELEOP;
+    //private WHSRobotImpl.Alliance alliance = WHSRobotImpl.Alliance.RED;
 
 
     @Alias("Current Velocity")
     public double velocity;
 
-    public void setAlliance(WHSRobotImpl.Alliance alliance){
-        this.alliance = alliance;
-    }
-
-    public void setMode(WHSRobotImpl.Mode mode){
-        this.mode = mode;
-    }
+    //public void setAlliance(WHSRobotImpl.Alliance alliance){
 
     public double getVelocity(){
-        velocity = (slidesL.getVelocity(AngleUnit.RADIANS) + slidesR.getVelocity(AngleUnit.RADIANS))/2 * SPOOL_RADIUS;
+        //velocity = (slidesL.getVelocity(AngleUnit.RADIANS) + slidesR.getVelocity(AngleUnit.RADIANS))/2 * SPOOL_RADIUS;
         return velocity;
     }
 
@@ -105,19 +98,6 @@ public class newLinearSlides  {
     }
 
     public double currentVelocity = 0.0d;
-    public LinearSlidesMeet3(HardwareMap hardwareMap){
-        this(hardwareMap, false);
-    }
-    public LinearSlidesMeet3(HardwareMap hardwareMap, boolean auto){
-        lSlides = hardwareMap.get(DcMotorEx.class, "lslides");
-        lSlides.setDirection(DcMotorSimple.Direction.REVERSE);
-        lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        resetEncoders();
-        fullyAutonomousMode = auto;
-        //pidL = new PIDControlledMotor(slidesL,5, new PIDCoefficientsNew(kP,kI,kD));
-        //pidR = new PIDControlledMotor(slidesR,5,new PIDCoefficientsNew(kP,kI,kD));
-    }
 
     public void setTarget(double t){
         this.currentTarget = t;

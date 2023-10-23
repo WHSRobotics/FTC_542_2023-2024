@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package org.whitneyrobotics.ftc.teamcode.visionImpl;
+package org.whitneyrobotics.ftc.teamcode.VisionImpl;
 
 import android.util.Log;
 
@@ -31,7 +31,6 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 

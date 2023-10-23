@@ -1,4 +1,4 @@
-package org.whitneyrobotics.ftc.teamcode.visionImpl;
+package org.whitneyrobotics.ftc.teamcode.VisionImpl;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

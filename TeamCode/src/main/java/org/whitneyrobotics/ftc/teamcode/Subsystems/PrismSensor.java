@@ -1,18 +1,11 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PWMOutput;
-import com.qualcomm.robotcore.hardware.PWMOutputImplEx;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
-import com.qualcomm.robotcore.hardware.ServoImpl;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateForge;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
-import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.TransitionCondition;
 
 public class PrismSensor {
 
@@ -35,7 +28,7 @@ public class PrismSensor {
         controller.setServoPosition(servoTopIndex,1);
         controller.setServoPwmDisable(servoTopIndex);
         controller.setServoPwmDisable(servoBottomIndex);
-        stateMachine = StateForge.StateMachine()
+        stateMachine = new StateForge.StateMachineBuilder<States>()
                 .state(States.DETECTING_TOP)
                     .onEntry(() -> controller.setServoPwmEnable(servoTopIndex))
                     .onExit(() -> {

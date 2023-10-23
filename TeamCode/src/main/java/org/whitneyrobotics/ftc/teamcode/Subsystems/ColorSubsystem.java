@@ -1,6 +1,5 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
-import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,7 +10,6 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.NanoStopwatch;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ColorSubsystem {
@@ -43,7 +41,7 @@ public class ColorSubsystem {
     private RevBlinkinLedDriver ledDriver;
     public ColorSubsystem(HardwareMap hardwareMap){
         this.ledDriver = hardwareMap.getAll(RevBlinkinLedDriver.class).iterator().next(); // Get the first REV Blinkin defined
-        stateMachine = StateForge.StateMachine()
+        stateMachine = new StateForge.StateMachineBuilder<Phases>()
                 .state(Phases.ON)
                     .onEntry(() -> {
                         setGamepadColors();

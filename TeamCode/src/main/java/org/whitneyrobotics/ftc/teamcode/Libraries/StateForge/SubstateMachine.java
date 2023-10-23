@@ -18,13 +18,13 @@ public class SubstateMachine<I extends Enum<I>, R extends Enum<R>> extends State
 
     private TRANSITION_BEHAVIOR transitionBehavior = TRANSITION_BEHAVIOR.PERSIST_INTERNAL_STATE;
 
-    public SubstateMachine(List<State<R>> embeddedStateList, Enum<I> state, List transitions) {
+    public SubstateMachine(List<State<R>> embeddedStateList, I state, List transitions) {
         super(state, transitions);
         embeddedStateMachine = new StateMachine<>(embeddedStateList);
         setOnEntryAction(this::checkTransitionBehavior);
     }
 
-    public SubstateMachine(List<State<R>> embeddedStateList, Enum<I> state, Action onEntryAction, Action onExitAction, List transitions) {
+    public SubstateMachine(List<State<R>> embeddedStateList, I state, Action onEntryAction, Action onExitAction, List transitions) {
         super(state, onEntryAction, onExitAction, transitions);
         embeddedStateMachine = new StateMachine<>(embeddedStateList);
         setOnEntryAction(() -> {
@@ -33,7 +33,7 @@ public class SubstateMachine<I extends Enum<I>, R extends Enum<R>> extends State
         });
     }
 
-    public SubstateMachine(List<State<R>> embeddedStateList, Enum<I> state, Action onEntryAction, Action onExitAction, List transitions, boolean nonLinear) {
+    public SubstateMachine(List<State<R>> embeddedStateList, I state, Action onEntryAction, Action onExitAction, List transitions, boolean nonLinear) {
         super(state, onEntryAction, onExitAction, transitions, nonLinear);
         embeddedStateMachine = new StateMachine<>(embeddedStateList);
         setOnEntryAction(() -> {
@@ -42,7 +42,7 @@ public class SubstateMachine<I extends Enum<I>, R extends Enum<R>> extends State
         });
     }
 
-    public SubstateMachine(StateMachine<R> embeddedStateMachine, Enum<I> state, Action onEntryAction, Action onExitAction, List transitions, boolean nonLinear){
+    public SubstateMachine(StateMachine<R> embeddedStateMachine, I state, Action onEntryAction, Action onExitAction, List transitions, boolean nonLinear){
         super(state, onEntryAction, onExitAction, transitions, nonLinear);
         this.embeddedStateMachine = embeddedStateMachine;
         setOnEntryAction(() -> {

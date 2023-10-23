@@ -11,6 +11,11 @@ public class StateForge {
     public static class StateMachineBuilder<E extends Enum<E>> {
         private List<State<E>> states = new ArrayList<>();
 
+        //Note: Call with Parameterized Type to avoid unchecked cast warning
+        public StateMachineBuilder(){
+
+        }
+
         public StateBuilder<E> state(E stateEnum){
             return new StateBuilder<>(this, stateEnum);
         }
@@ -132,7 +137,7 @@ public class StateForge {
          * @param builderCommands A lambda function that accepts a sequence of commands to build the embedded state machine
          * @return the instance
          */
-        public SubStateMachineBuilder<E,R> buildEmbeddedStateMachine(SubstateBuilder<E,R> builderCommands) {
+        public SubStateMachineBuilder<E,R> buildEmbeddedStateMachine(SubstateBuilder<R> builderCommands) {
             embeddedMachine = builderCommands.useCommands(new StateMachineBuilder<>()).build();
             return this;
         }
@@ -158,7 +163,12 @@ public class StateForge {
         }
     }
 
-    public static <E extends Enum<E>> StateMachineBuilder StateMachine(){
+    /**
+     * Improperly parameterizes classes - will be removed in a future release
+     * @return
+     * @param <E>
+     */
+    public static <E extends Enum<E>> StateMachineBuilder _UNSTABLE_StateMachine(){
         return new StateMachineBuilder<E>();
     }
 }
