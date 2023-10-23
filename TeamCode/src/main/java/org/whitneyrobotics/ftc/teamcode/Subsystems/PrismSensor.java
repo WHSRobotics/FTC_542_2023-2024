@@ -39,7 +39,7 @@ public class PrismSensor {
                 .fin()
                 .state(States.DETECTING_BOTTOM)
                     .onEntry(() -> controller.setServoPwmEnable(servoBottomIndex))
-                    .onEntry(() -> {
+                    .onExit(() -> {
                         colors[0] = sensor.getNormalizedColors().toColor();
                         controller.setServoPwmDisable(servoBottomIndex);
                     })
