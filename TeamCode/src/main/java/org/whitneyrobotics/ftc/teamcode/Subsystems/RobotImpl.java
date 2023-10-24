@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.fullMotion;
 
 /**
  * Singleton instance for Robot Implementation including subsystems, sensors, and other hardware.
@@ -36,12 +37,16 @@ public class RobotImpl {
     public CenterstageMecanumDrive drive;
     public PrismSensor prismSensor;
     public ColorSubsystem colorSubsystem;
+    public fullMotion fullMotion;
+
+
 
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
         prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
+        fullMotion = new fullMotion(hardwareMap);
     }
 
     public void switchAlliance(){

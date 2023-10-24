@@ -14,7 +14,7 @@ public class PrismSensor {
         DETECTING_BOTTOM,
         IDLE
     }
-    ServoControllerEx controller;
+    ServoImplEx top, bottom;
     private final int servoBottomIndex = 3, servoTopIndex = 5;
     private boolean requestImmediateDetection;
 
@@ -22,7 +22,8 @@ public class PrismSensor {
     public int[] colors = new int[2];
     public final StateMachine<States> stateMachine;
     public PrismSensor(HardwareMap hardwareMap){
-        controller = hardwareMap.getAll(ServoControllerEx.class).get(0); //Gets the servo controller for the Control Hub
+        top = (ServoImplEx) hardwareMap.get(Servo.class, "topPrism");
+        bottom = (ServoImplEx) hardwareMap.get(Servo.class, "bottomPrism");;
         sensor = hardwareMap.get(RevColorSensorV3.class, "PrismSensor");
         controller.setServoPosition(servoBottomIndex,1);
         controller.setServoPosition(servoTopIndex,1);
@@ -30,18 +31,19 @@ public class PrismSensor {
         controller.setServoPwmDisable(servoBottomIndex);
         stateMachine = new StateForge.StateMachineBuilder<States>()
                 .state(States.DETECTING_TOP)
-                    .onEntry(() -> controller.setServoPwmEnable(servoTopIndex))
+                    .onEntry(top::setPwmEnable)
                     .onExit(() -> {
                         colors[1] = sensor.getNormalizedColors().toColor();
-                        controller.setServoPwmDisable(servoTopIndex);
+                        top.setPwmDisable();
+
                     })
                     .timedTransitionLinear(0.5)
                 .fin()
                 .state(States.DETECTING_BOTTOM)
                     .onEntry(() -> controller.setServoPwmEnable(servoBottomIndex))
-                    .onEntry(() -> {
+                    .onExit(() -> {
                         colors[0] = sensor.getNormalizedColors().toColor();
-                        controller.setServoPwmDisable(servoBottomIndex);
+                        bottom.setPwmDisable();
                     })
                     .timedTransitionLinear(0.5)
                 .fin()
@@ -63,8 +65,7 @@ public class PrismSensor {
 
     public double[] getPositions(){
         return new double[]{
-                controller.getServoPosition(servoTopIndex),
-                controller.getServoPosition(servoBottomIndex)
+                0,0
         };
     }
 
