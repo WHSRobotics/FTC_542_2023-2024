@@ -13,8 +13,11 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.Dista
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 
 import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.BACKDROP_EDGE_FROM_WALL;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.FieldSide.AUDIENCE;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.FieldSide.BACKSTAGE;
 import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.PIXEL_WIDTH;
 import static org.whitneyrobotics.ftc.teamcode.Constants.RobotDetails.ROBOT_LENGTH;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.FieldSide;
 
 import java.util.function.UnaryOperator;
 
@@ -47,8 +50,8 @@ public class MecanumTeleOp extends OpModeEx {
         });
 
         tileSelector = new MultipleChoicePoll("Select Tile", false,
-                new MultipleChoicePoll.MultipleChoiceOption("Backstage" , 1),
-                new MultipleChoicePoll.MultipleChoiceOption("Audience",0));
+                new MultipleChoicePoll.MultipleChoiceOption<FieldSide>("Backstage", BACKSTAGE),
+                new MultipleChoicePoll.MultipleChoiceOption<FieldSide>("Audience", AUDIENCE));
 
 
         gamepad1.TRIANGLE.onPress(() -> {
