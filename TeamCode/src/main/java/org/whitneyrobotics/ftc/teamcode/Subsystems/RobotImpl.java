@@ -39,8 +39,6 @@ public class RobotImpl {
     public ColorSubsystem colorSubsystem;
     public fullMotion fullMotion;
 
-    public fullMotion fullMotion;
-
 
 
     private RobotImpl(HardwareMap hardwareMap) {

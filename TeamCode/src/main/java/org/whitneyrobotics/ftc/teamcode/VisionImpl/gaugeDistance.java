@@ -10,7 +10,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp
+@TeleOp(name = "gaugeDistance", group = "1")
 public class gaugeDistance extends LinearOpMode{
     public static double actualDistance;
 

@@ -51,6 +51,9 @@ public class newLinearSlides  {
     public static PIDVAControllerNew slidingController = new PIDVAControllerNew(slidingCoefficients);
     public static RateLimitingFilter velocityLimiter = new RateLimitingFilter(acceleration,0);
 
+    public static void setSlides(double position) {
+        setSlides(position);
+    }
 
 
     public enum Target {
