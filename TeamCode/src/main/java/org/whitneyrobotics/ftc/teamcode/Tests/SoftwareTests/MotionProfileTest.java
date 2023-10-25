@@ -12,6 +12,7 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.NanoStopwatch;
 public class MotionProfileTest extends OpModeEx {
     MotionProfileTrapezoidal motionProfile;
     public static double V_MAX = 20, A_MAX = 10;
+    public static double GOAL = 100;
     NanoStopwatch stopwatch = new NanoStopwatch();
 
     @Override
@@ -20,6 +21,14 @@ public class MotionProfileTest extends OpModeEx {
         gamepad1.A.onPress(stopwatch::reset);
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         initializeDashboardTelemetry(25);
+        telemetryPro.addData("Position",0);
+        telemetryPro.addData("Velocity", 0);
+        telemetryPro.addData("Acceleration", 0);
+    }
+
+    @Override
+    public void startInternal(){
+        stopwatch.reset();
     }
 
     @Override
@@ -27,9 +36,16 @@ public class MotionProfileTest extends OpModeEx {
         //Constantly reload constants (heh)
         motionProfile.setMaxAccel(A_MAX);
         motionProfile.setMaxVelocity(V_MAX);
+        if (GOAL != motionProfile.getGoal()) motionProfile.setGoal(GOAL);
+
+        if(motionProfile.isFinished(stopwatch.seconds())){
+            motionProfile.setGoal(-GOAL);
+            stopwatch.reset();
+        }
 
         telemetryPro.addData("Position", motionProfile.positionAt(stopwatch.seconds()));
         telemetryPro.addData("Velocity", motionProfile.velocityAt(stopwatch.seconds()));
         telemetryPro.addData("Acceleration", motionProfile.accelerationAt(stopwatch.seconds()));
+        telemetryPro.addData("Pos at t1", motionProfile.positionAt(V_MAX/A_MAX));
     }
 }

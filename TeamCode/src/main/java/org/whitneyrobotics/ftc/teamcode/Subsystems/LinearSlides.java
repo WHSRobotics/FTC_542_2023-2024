@@ -63,16 +63,17 @@ public class LinearSlides {
 
     //Button inc, Button dec, Button switchState, Button reset
     public LinearSlides(HardwareMap hardwareMap) {
-        Button inc = gamepad1.DPAD_UP;
-        Button dec = gamepad1.DPAD_DOWN;
-        Button switchState = gamepad1.BUMPER_LEFT;
-        Button reset = gamepad1.X;
+        //Button inc = gamepad1.DPAD_UP;
+        //Button dec = gamepad1.DPAD_DOWN;
+        //Button switchState = gamepad1.BUMPER_LEFT;
+        //Button reset = gamepad1.X;
         LSleft = hardwareMap.get(DcMotorEx.class, "LinearSlidesLeft");
         LSright = hardwareMap.get(DcMotorEx.class, "LinearSlidesRight");
         LSleft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         LSright.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         LSright.setDirection(DcMotorEx.Direction.REVERSE);
         linearSlidesSTATE = LinearSlidesSTATE.LEVELED;
+        /*
         inc.onPress((GamepadInteractionEvent callback) -> {incrementLevel();});
         dec.onPress((GamepadInteractionEvent callback) -> {decrementLevel();});
         inc.onButtonHold((GamepadInteractionEvent callback) -> {if ((linearSlidesSTATE == LinearSlidesSTATE.DRIVER_CONTROLLED) && ((slidesPositionTarget+linearSlidesSTATE.interval) <= SLIDES_UPPER_BOUND))
@@ -87,6 +88,7 @@ public class LinearSlides {
             if (linearSlidesSTATE == LinearSlidesSTATE.LEVELED) linearSlidesSTATE = LinearSlidesSTATE.DRIVER_CONTROLLED;
             else linearSlidesSTATE = LinearSlidesSTATE.LEVELED;});
         reset.onPress((GamepadInteractionEvent callback) -> reset());
+        */
         resetEncoder();
     }
     public void setLevelTarget(int levelTarget) {
