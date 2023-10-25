@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.Button;
-import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadInteractionEvent;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDVAController;
 
@@ -46,6 +45,9 @@ public class LinearSlides {
     private static final int CYCLES_PER_REVOLUTION = 7;
     private static final double GEAR_RATIO = 1.0/2.0;
 
+    public void setSlides(double position) {
+        LSleft.setTargetPosition((int)position);
+    }
 
 
     public enum LinearSlidesSTATE{
@@ -60,7 +62,7 @@ public class LinearSlides {
     private final PIDVAController pidvaController = new PIDVAController(MAX_VELOCITY,MAX_ACCELERATION,1,0,0);
 
     //Button inc, Button dec, Button switchState, Button reset
-    public LinearSlides(HardwareMap hardwareMap, GamepadEx gamepad1) {
+    public LinearSlides(HardwareMap hardwareMap) {
         Button inc = gamepad1.DPAD_UP;
         Button dec = gamepad1.DPAD_DOWN;
         Button switchState = gamepad1.BUMPER_LEFT;

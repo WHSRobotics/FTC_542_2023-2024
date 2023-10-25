@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.whitneyrobotics.ftc.teamcode.VisionImpl.AprilTagScanner2023;
+import org.whitneyrobotics.ftc.teamcode.VisionImpl.AprilTagScanner23_24;
 
 
 
@@ -19,16 +19,16 @@ public class fullMotion {
     ServoImplEx servo1;
     ServoImplEx servo2;
     ServoImplEx claw;
-    AprilTagScanner2023 scanner;
+    AprilTagScanner23_24 scanner;
 
 
     public fullMotion(HardwareMap hardwareMap) {
 
-        linearSlides = new LinearSlides(hardwareMap);
+        linearSlides = new newLinearSlides(hardwareMap);
         servo1 = hardwareMap.get(ServoImplEx.class, "servo1");
         servo2 = hardwareMap.get(ServoImplEx.class, "servo2");
         claw = hardwareMap.get(ServoImplEx.class, "claw");
-        scanner = new AprilTagScanner2023("Webcam 1", hardwareMap);
+        scanner = new AprilTagScanner23_24("Webcam 1", hardwareMap);
 
     }
 

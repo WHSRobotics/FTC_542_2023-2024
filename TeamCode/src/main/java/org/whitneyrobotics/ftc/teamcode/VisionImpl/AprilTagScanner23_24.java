@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-public class AprilTagScanner2023 {
+public class AprilTagScanner23_24 {
     private final AprilTagProcessor tagProcessor;
     private final VisionPortal visionPortal;
     private double lastDistance;
 
-    public AprilTagScanner2023 (String webcam, HardwareMap hardwareMap){
+    public AprilTagScanner23_24(String webcam, HardwareMap hardwareMap){
         lastDistance = -1;
         tagProcessor = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
