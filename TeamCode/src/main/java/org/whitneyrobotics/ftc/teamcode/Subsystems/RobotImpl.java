@@ -33,12 +33,20 @@ public class RobotImpl {
         instance = new RobotImpl(hardwareMap);
     }
 
+<<<<<<< Updated upstream
     public final CenterstageMecanumDrive drive;
     public final PrismSensor prismSensor;
     public final ColorSubsystem colorSubsystem;
     public final fullMotion fullMotion;
 
     public final VoltageSensor voltageSensor;
+=======
+    public CenterstageMecanumDrive drive;
+    public PrismSensor prismSensor;
+    public ColorSubsystem colorSubsystem;
+    public fullMotion fullMotion;
+
+>>>>>>> Stashed changes
 
 
     private RobotImpl(HardwareMap hardwareMap) {

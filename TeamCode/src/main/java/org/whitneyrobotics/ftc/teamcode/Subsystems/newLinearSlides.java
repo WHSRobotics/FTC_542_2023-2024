@@ -22,7 +22,7 @@ public class newLinearSlides  {
     public static double maxVelocity = 3.5;
     public static double acceleration = 9;
     public static double TICKS_PER_INCH = 100;
-    public static double SPOOL_RADIUS = 0.75;
+    public static double SPOOL_RADIUS = 1.4036 / 2;
     public static double powerMultiplier = 2;
     boolean fullyAutonomousMode;
     double initial = 0.0d;
@@ -69,6 +69,10 @@ public class newLinearSlides  {
         }
     }
 
+    public newLinearSlides(HardwareMap hardwareMap) {
+        lSlides = hardwareMap.get(DcMotorEx.class,"lSlide");
+    }
+
     private enum State {
         PID_CONTROLLED, IDLE
     }
@@ -76,7 +80,7 @@ public class newLinearSlides  {
     public State currentState = State.IDLE;
     public double currentTarget = Target.LOWERED.position;
 
-    private DcMotorEx lSlides;
+    public DcMotorEx lSlides;
     //public WHSRobotImpl.Mode mode = WHSRobotImpl.Mode.TELEOP;
     //private WHSRobotImpl.Alliance alliance = WHSRobotImpl.Alliance.RED;
 
