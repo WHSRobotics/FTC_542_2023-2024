@@ -15,7 +15,6 @@ public class RobotImpl {
 
     public Alliance alliance = Alliance.RED;
     private static RobotImpl instance = null;
-    private VoltageSensor voltageSensor;
     boolean showMatchNotifs = false; //Controls notifications lights for endgame and match end notifications
 
     public static RobotImpl getInstance() {
@@ -34,11 +33,12 @@ public class RobotImpl {
         instance = new RobotImpl(hardwareMap);
     }
 
-    public CenterstageMecanumDrive drive;
-    public PrismSensor prismSensor;
-    public ColorSubsystem colorSubsystem;
-    public fullMotion fullMotion;
+    public final CenterstageMecanumDrive drive;
+    public final PrismSensor prismSensor;
+    public final ColorSubsystem colorSubsystem;
+    public final fullMotion fullMotion;
 
+    public final VoltageSensor voltageSensor;
 
 
     private RobotImpl(HardwareMap hardwareMap) {

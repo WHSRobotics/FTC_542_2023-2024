@@ -23,8 +23,8 @@ public class fullMotion {
 
 
     public fullMotion(HardwareMap hardwareMap) {
-
-        linearSlides = new newLinearSlides(hardwareMap);
+        //TODO: lSlides needs a constructor to instantiate it. All lSlides motors will be null as of now.
+        //linearSlides = new newLinearSlides(hardwareMap);
         servo1 = hardwareMap.get(ServoImplEx.class, "servo1");
         servo2 = hardwareMap.get(ServoImplEx.class, "servo2");
         claw = hardwareMap.get(ServoImplEx.class, "claw");

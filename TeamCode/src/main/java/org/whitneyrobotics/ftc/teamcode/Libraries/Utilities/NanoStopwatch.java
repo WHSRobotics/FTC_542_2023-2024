@@ -4,7 +4,7 @@ public class NanoStopwatch {
     public NanoStopwatch(){
         reset();
     };
-    public long time;
+    private long time;
     public void reset(){
         time = System.nanoTime();
     }
