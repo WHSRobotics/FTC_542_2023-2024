@@ -5,14 +5,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.GamepadEx;
-
-// Created By Sanjay Ganapathy on 10/23/2023
+ 
 
 public class LiftingMechanism {
     private static final double KP = 0.01; // Proportional constant for PID control
     private static final double MAX_POWER = 1.0; // Maximum power for the motors
 
-    private boolean fullyExtended = false;
+    private boolean fullyExtended = false; 
     private double targetPosition = 0.0;
     private final DcMotorEx Motor1;
     private final DcMotorEx Motor2;
