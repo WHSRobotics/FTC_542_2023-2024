@@ -1,19 +1,90 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
-import com.qualcomm.robotcore.hardware.ServoControllerEx;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
-import com.qualcomm.robotcore.hardware.configuration.typecontainers.ServoConfigurationType;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
-public class WristServo extends ServoImplEx {
-    WristServo(ServoControllerEx controller, int portNumber, ServoConfigurationType servoType){
-        super(controller,portNumber, servoType);
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+public class WristServo{
+    private final Servo wrist;
+    private double initializationCutoff = 5;
+    private boolean override = false;
+
+    private Servo[] servos = new Servo[2];
+
+    //For closing the grabber, issues with going all the way down. Should decrease Close position
+    public enum WristStates {
+        OPEN(0), CLOSE(0.55);
+        //NEED TO FIGURE OUT ACTUAL NUMBERS
+        private double position;
+        WristStates(double position){
+            this.position = position;
+        }
+        public double getPosition() {
+            return position;
+        }
     }
-    public static void wristRotation(WristServo WristServoInstance) { //Wrist motion when we move the arm to put the pixel on the backdrop
-        WristServoInstance.setPosition(0.167);
-        /* if we let the servo arm being straight up be the position 1.00 and the servo arm being pointed down (180 degree change counterclockwise ) be 0.00, then 
-        a 150 degree change would be about 1-150/180=1-0.8333...=0.167 so the position would be 0.167 to get it perpendicular to the backdrop.
-        We can change the parameter in setPosition() later as needed
-         */
+
+    public WristStates currentState = WristStates.OPEN;
+
+    public WristServo(HardwareMap hardwareMap){
+        wrist = hardwareMap.get(Servo.class,"wrist");
+        this.tick();
+    }
+
+
+    public void toggleState(){
+        currentState = (currentState == WristStates.OPEN ? WristStates.CLOSE : WristStates.OPEN);
+        wrist.setPosition(currentState.getPosition());
+    }
+
+    public void setState(boolean opened){
+        currentState = (opened ? WristStates.CLOSE : WristStates.OPEN);
+    }
+
+    public void updateState(WristStates state){
+        currentState = state;
+    }
+
+    public void setForceOpen(boolean state){
+        override = state;
+    }
+
+    public void testSetPosition(double position) {
+        wrist.setPosition(position);
+    }
+    public void forceOpen(){ override = true; }
+
+    public void tick() {
+        if(override){
+            wrist.setPosition(WristStates.OPEN.getPosition());
+            //override should be updated every loop
+            override = false;
+        } else {
+            wrist.setPosition(currentState.getPosition());
+        }
+    }
+
+    public double getPosition(){
+        return wrist.getPosition();
+    }
+
+    public WristStates getCurrentState(){
+        return currentState;
+    }
+
+    public Servo getArmServo(){
+        return wrist;
+    }
+
+    /**
+     * Standardized reset method for resetting encoders
+     */
+    public void resetEncoders() {
 
     }
 }
+
+

@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.WristServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.fullMotion;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.newLinearSlides;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ClawServo;
 
 /**
  * Singleton instance for Robot Implementation including subsystems, sensors, and other hardware.
@@ -33,20 +36,15 @@ public class RobotImpl {
         instance = new RobotImpl(hardwareMap);
     }
 
-<<<<<<< Updated upstream
     public final CenterstageMecanumDrive drive;
     public final PrismSensor prismSensor;
     public final ColorSubsystem colorSubsystem;
-    public final fullMotion fullMotion;
+    public final newLinearSlides slides;
+    public final ElbowMotor elbowMotor;
+    public final ClawServo clawServo;
 
     public final VoltageSensor voltageSensor;
-=======
-    public CenterstageMecanumDrive drive;
-    public PrismSensor prismSensor;
-    public ColorSubsystem colorSubsystem;
-    public fullMotion fullMotion;
-
->>>>>>> Stashed changes
+    public final WristServo wristServo;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
@@ -54,7 +52,10 @@ public class RobotImpl {
         prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
-        fullMotion = new fullMotion(hardwareMap);
+        slides = new newLinearSlides(hardwareMap);
+        wristServo = new WristServo(hardwareMap);
+        elbowMotor = new ElbowMotor(hardwareMap);
+        clawServo = new ClawServo(hardwareMap);
     }
 
     public void switchAlliance(){

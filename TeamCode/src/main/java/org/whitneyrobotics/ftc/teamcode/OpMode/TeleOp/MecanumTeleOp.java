@@ -1,6 +1,6 @@
 package org.whitneyrobotics.ftc.teamcode.OpMode.TeleOp;
 
-    import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -104,6 +104,11 @@ public class MecanumTeleOp extends OpModeEx {
         gamepad1.LEFT_STICK_Y.onInteraction(drivetrain::cancelTrajectory);
         gamepad1.RIGHT_STICK_X.onInteraction(drivetrain::cancelTrajectory);
         telemetryPro.addItem(tileSelector);
+
+        //gamepad2.SQUARE.onPress(e -> robot.slides.setTarget(slides.Target.FIRSTMARK));
+        //gamepad2.TRIANGLE.onPress(e -> robot.slides.setTarget(slides.Target.SECONDMARK));
+        //gamepad2.CIRCLE.onPress(e -> robot.slides.setTarget(slides.Target.THIRDMARK));
+        //gamepad2.CROSS.onPress(e -> robot.slides.setTarget(slides.Target.LOWERED));
     }
 
     @Override
