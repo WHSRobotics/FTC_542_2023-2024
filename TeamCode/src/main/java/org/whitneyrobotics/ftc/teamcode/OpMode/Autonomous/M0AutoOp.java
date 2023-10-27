@@ -72,6 +72,7 @@ public class M0AutoOp extends OpModeEx {
                 break;
         }
         if(desiredTrajectory != null) robot.drive.followTrajectorySequenceAsync(desiredTrajectory);
+
     }
 
     @Override

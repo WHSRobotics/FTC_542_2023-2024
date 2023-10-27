@@ -47,7 +47,7 @@ public class RobotImpl {
     public final VoltageSensor voltageSensor;
     public final WristServo wristServo;
     public final DroneLauncher droneLauncher;
-
+    public final LiftingMechanism liftingMechanism;
 
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
@@ -59,6 +59,7 @@ public class RobotImpl {
         elbowMotor = new ElbowMotor(hardwareMap);
         clawServo = new ClawServo(hardwareMap);
         droneLauncher = new DroneLauncher(hardwareMap);
+        liftingMechanism = new LiftingMechanism(hardwareMap);
     }
 
     public void switchAlliance(){
