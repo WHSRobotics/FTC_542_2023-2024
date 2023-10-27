@@ -10,6 +10,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.WristServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.fullMotion;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.newLinearSlides;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ClawServo;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.DroneLauncher;
 
 /**
  * Singleton instance for Robot Implementation including subsystems, sensors, and other hardware.
@@ -45,6 +46,7 @@ public class RobotImpl {
 
     public final VoltageSensor voltageSensor;
     public final WristServo wristServo;
+    public final DroneLauncher droneLauncher;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
@@ -56,6 +58,7 @@ public class RobotImpl {
         wristServo = new WristServo(hardwareMap);
         elbowMotor = new ElbowMotor(hardwareMap);
         clawServo = new ClawServo(hardwareMap);
+        droneLauncher = new DroneLauncher(hardwareMap);
     }
 
     public void switchAlliance(){
