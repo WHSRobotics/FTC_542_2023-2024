@@ -9,18 +9,18 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.newLinearSlides;
 
 @TeleOp (name = "Basic Linear Slides Test")
-public class LinearSlidesBasicTest extends OpMode {
+public class LinearSlidesBasicTest extends OpModeEx {
     newLinearSlides linearSlides;
 
     @Override
-    public void init() {
-        newLinearSlides linearSlides = new newLinearSlides(hardwareMap);
+    public void initInternal() {
+        linearSlides = new newLinearSlides(hardwareMap);
 
     }
 
     @Override
-    public void loop() {
-        linearSlides.setTarget(gamepad1.right_stick_y);
-        linearSlides.operate(gamepad1.left_stick_y, gamepad1.left_bumper);
+    public void loopInternal() {
+        //linearSlides.setTarget(gamepad1);
+        linearSlides.operate(gamepad1.LEFT_STICK_Y.value(), gamepad1.BUMPER_LEFT.value());
     }
 }

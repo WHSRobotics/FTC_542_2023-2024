@@ -16,8 +16,8 @@ public abstract class Command {
      * An enum describing the command behavior when another command with a conflicting requirement is scheduled
      */
     public static enum InterruptBehavior {
-        CancelIncoming,
-        CancelSelf
+        CANCEL_INCOMING,
+        CANCEL_SELF
     }
 
     protected Command() {
