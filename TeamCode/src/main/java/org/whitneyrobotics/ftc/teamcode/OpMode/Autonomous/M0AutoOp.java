@@ -77,6 +77,6 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        robot.drive.update();
+        robot.update();
     }
 }
