@@ -47,7 +47,7 @@ public class FormalPIDLinearSlides {
         UP(1215);
         private double position;
         ServoPositions(double position){
-            this.position = position;
+            this.position = (position / 537.7) * 2 * Math.PI;
         }
     }
 
