@@ -48,7 +48,7 @@ public class MotionProfileTrapezoidal {
         double pos;
         double a_max = maxAccel.get(), v_max = maxVelocity.get();
         if(t1==t2){
-            v_max = Math.sqrt(goalPoint*maxAccel.get()); //Use kinematic without t
+            v_max = Math.sqrt(Math.abs(goalPoint)*maxAccel.get()); //Use kinematic without t
         }
         if(t_elapsed <= t1){
             pos = 0.5*a_max*Math.pow(t_elapsed,2)*coefficient;
@@ -67,7 +67,7 @@ public class MotionProfileTrapezoidal {
         double v = 0;
         double a_max = maxAccel.get(), v_max = maxVelocity.get();
         if(t1==t2){
-            v_max = Math.sqrt(goalPoint*maxAccel.get()); //Use kinematic without t
+            v_max = Math.sqrt(Math.abs(goalPoint)*maxAccel.get()); //Use kinematic without t
         }
         if(t_elapsed <= t1) v=a_max*t_elapsed;
         else if(t_elapsed <= t2) v = v_max;

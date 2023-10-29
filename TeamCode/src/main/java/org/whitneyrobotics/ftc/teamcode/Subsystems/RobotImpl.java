@@ -1,16 +1,15 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
+import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
+
+import static org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit.TILE_WIDTH;
 import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.WristServo;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.fullMotion;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.newLinearSlides;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.ClawServo;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.DroneLauncher;
 
 /**
  * Singleton instance for Robot Implementation including subsystems, sensors, and other hardware.
@@ -18,6 +17,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.DroneLauncher;
 public class RobotImpl {
 
     public Alliance alliance = Alliance.RED;
+    public static Pose2d poseMemory = new Pose2d(0,0,0);
     private static RobotImpl instance = null;
     boolean showMatchNotifs = false; //Controls notifications lights for endgame and match end notifications
 
@@ -26,9 +26,9 @@ public class RobotImpl {
     }
 
     public static RobotImpl getInstance(HardwareMap hardwareMap){
-        if(instance == null){
+        //if(instance == null){ Right now, robot is having a hard time reassining motors. So we will force reinit and restore the state
             init(hardwareMap);
-        }
+        //}
         return instance;
     }
 
@@ -40,13 +40,13 @@ public class RobotImpl {
     public final CenterstageMecanumDrive drive;
     public final PrismSensor prismSensor;
     public final ColorSubsystem colorSubsystem;
-    public final newLinearSlides slides;
-    public final ElbowMotor elbowMotor;
-    public final ClawServo clawServo;
+    //public final newLinearSlides slides;
+   //public final ElbowMotor elbowMotor;
+    //public final ClawServo clawServo;
 
     public final VoltageSensor voltageSensor;
-    public final WristServo wristServo;
-    public final DroneLauncher droneLauncher;
+    //public final WristServo wristServo;
+    //public final DroneLauncher droneLauncher;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
@@ -54,11 +54,11 @@ public class RobotImpl {
         prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
-        slides = new newLinearSlides(hardwareMap);
-        wristServo = new WristServo(hardwareMap);
-        elbowMotor = new ElbowMotor(hardwareMap);
-        clawServo = new ClawServo(hardwareMap);
-        droneLauncher = new DroneLauncher(hardwareMap);
+        //slides = new newLinearSlides(hardwareMap);
+        //wristServo = new WristServo(hardwareMap);
+        //elbowMotor = new ElbowMotor(hardwareMap);
+        //clawServo = new ClawServo(hardwareMap);
+        //droneLauncher = new DroneLauncher(hardwareMap);
     }
 
     public void switchAlliance(){
@@ -66,8 +66,9 @@ public class RobotImpl {
     }
 
     public void update(){
-        prismSensor.update();
-        colorSubsystem.update();
+        //prismSensor.update();
+        //colorSubsystem.update();
+        //droneLauncher.update();
         drive.update();
         Colors status = Colors.OFF;
         if(drive.isBusy()){
@@ -75,6 +76,9 @@ public class RobotImpl {
         }
         if (showMatchNotifs){
             status = Colors.NOTIFICATION;
+        }
+        if (Math.abs(drive.getLocalizer().getPoseEstimate().getX()-TILE_WIDTH.toInches(-0.5)) <= TILE_WIDTH.toInches((double)2/3)){
+            status = Colors.BUSY;
         }
         //Check if linear slides are busy and set color to BUSY if true
 

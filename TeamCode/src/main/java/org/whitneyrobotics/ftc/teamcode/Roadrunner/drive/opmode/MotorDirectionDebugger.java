@@ -38,9 +38,8 @@ import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive
  *
  * Uncomment the @Disabled tag below to use this opmode.
  */
-@Disabled
 @Config
-@TeleOp(group = "drive")
+@TeleOp(name="MotorDirectionDebugger", group = "drive")
 public class MotorDirectionDebugger extends LinearOpMode {
     public static double MOTOR_POWER = 0.7;
 

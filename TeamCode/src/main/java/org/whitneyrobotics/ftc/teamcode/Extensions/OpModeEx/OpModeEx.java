@@ -53,6 +53,8 @@ public abstract class OpModeEx extends OpMode {
     protected Telemetry telemetry;
     protected TelemetryPacket packet = new TelemetryPacket();
 
+    protected boolean sendOpModeExTelemetryPacket = false;
+
     Map<Object, Pair<Field, String>> annotatedFields = new Hashtable();
 
     private void pairHubBehavior() {

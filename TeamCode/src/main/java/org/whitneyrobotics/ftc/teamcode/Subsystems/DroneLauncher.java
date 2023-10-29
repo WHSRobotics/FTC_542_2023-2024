@@ -1,11 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class DroneLauncher{
     private final Servo launcher;
@@ -31,7 +27,7 @@ public class DroneLauncher{
 
     public DroneLauncher(HardwareMap hardwareMap){
         launcher = hardwareMap.get(Servo.class,"wrist");
-        this.tick();
+        this.update();
     }
 
 
@@ -57,7 +53,7 @@ public class DroneLauncher{
     }
     public void forceOpen(){ override = true; }
 
-    public void tick() {
+    public void update() {
         if(override){
             launcher.setPosition(WristStates.OPEN.getPosition());
             //override should be updated every loop

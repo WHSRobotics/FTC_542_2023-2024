@@ -39,7 +39,7 @@ public class MotionProfileTest extends OpModeEx {
         if (GOAL != motionProfile.getGoal()) motionProfile.setGoal(GOAL);
 
         if(motionProfile.isFinished(stopwatch.seconds())){
-            motionProfile.setGoal(-GOAL);
+            GOAL = -GOAL;
             stopwatch.reset();
         }
 

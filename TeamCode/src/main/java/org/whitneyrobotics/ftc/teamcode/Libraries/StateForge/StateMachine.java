@@ -39,6 +39,23 @@ public class StateMachine<E extends Enum<E>> {
         currentState = linearStates.get(0);
     }
 
+    public void transitionNextLinear(){
+        this.currentState.forceTransition();
+    }
+
+
+    //Assumption: No transition  triples are added to the list after this method is called, since the temporary transition will not be properly removed
+    public void transitionTo(E state){
+        State<E> current = currentState;
+        currentState.getTransitions().add(new Triple<>(
+                () -> true,
+                state,
+                () -> {
+                    current.getTransitions().remove(current.getTransitions().size() - 1); //Should self destruct the transition after running once
+                }
+        ));
+    }
+
     public void synchronizeAllSubStateMachines(){
         for(State s : linearStates){
             if (s instanceof SubstateMachine) ((SubstateMachine)s).synchronize(active);

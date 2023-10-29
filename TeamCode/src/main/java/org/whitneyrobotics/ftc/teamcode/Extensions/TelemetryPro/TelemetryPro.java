@@ -146,6 +146,10 @@ public class TelemetryPro {
      */
     private GamepadEx interactingGamepad;
 
+    public void setInteractingGamepad(GamepadEx gamepadToCopy){
+        setInteractingGamepad(gamepadToCopy, g->g.DPAD_DOWN, g->g.DPAD_UP);
+    }
+
     /**
      * Creates a ghost {@link GamepadEx} instance in the telemetry to process gamepad interactions.
      * @param gamepadToCopy The gamepad instance to feed values off of. The gamepad will be copied so event listeners may still be attached

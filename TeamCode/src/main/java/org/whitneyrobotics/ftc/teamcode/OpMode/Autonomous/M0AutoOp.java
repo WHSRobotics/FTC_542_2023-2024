@@ -1,5 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.*;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -23,36 +25,45 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.List;
 
-@Autonomous(name="M0 Auto")
+@Autonomous(name="M0 Auto", preselectTeleOp="Centerstage TeleOp")
 public class M0AutoOp extends OpModeEx {
     RobotImpl robot;
     MultipleChoicePoll tileSelector;
+    String selectedTrajectory;
     @Override
     public void initInternal() {
-        robot = RobotImpl.getInstance(hardwareMap);
+        RobotImpl.init(hardwareMap);
+        robot = RobotImpl.getInstance();
+        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
+        robot.drive.enableRobotDrawing();
         telemetryPro.useTestManager()
                 .addTest("Gamepad 1 Initialization", () -> Tests.assertGamepadSetup(gamepad1, "Gamepad 1"))
                 .addTest("Gamepad 2 Initialization", () -> Tests.assertGamepadSetup(gamepad2, "Gamepad 2"))
                 .addTest("Battery voltage test", () -> Tests.assertBatteryCharged(hardwareMap.get(LynxModule.class, "Control Hub")));
-        telemetryPro.addItem(new KeyValueLine("Alliance", true, robot.alliance::name, (robot.alliance == Alliance.RED ? LineItem.Color.RED : LineItem.Color.BLUE)));
         tileSelector = new MultipleChoicePoll("Select Tile", false,
-                new MultipleChoicePoll.MultipleChoiceOption("Backstage" , 1),
-                new MultipleChoicePoll.MultipleChoiceOption("Audience",0));
+                new MultipleChoicePoll.MultipleChoiceOption<>("Backstage" , FieldConstants.FieldSide.BACKSTAGE),
+                new MultipleChoicePoll.MultipleChoiceOption<>("Audience",FieldConstants.FieldSide.AUDIENCE));
+        telemetryPro.setInteractingGamepad(gamepad1);
         gamepad1.CIRCLE.onPress(robot::switchAlliance);
+        telemetryPro.addItem(tileSelector);
+        telemetryPro.useDashboardTelemetry(dashboardTelemetry);
+        dashboardTelemetry.setMsTransmissionInterval(25);
     }
-
 
     @Override
     public void initInternalLoop(){
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
         ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
         if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
-            desiredColor = ColorSubsystem.Colors.ERROR_FLASHING;
+            desiredColor = ColorSubsystem.Colors.BUSY;
         }
         if(gamepad1.TRIANGLE.value()){ //Press and hold triangle to check alliance
             desiredColor = robot.alliance == Alliance.RED ? ColorSubsystem.Colors.RED : ColorSubsystem.Colors.BLUE;
         }
         robot.colorSubsystem.requestColor(desiredColor);
+        robot.colorSubsystem.update();
+        telemetryPro.addData("Alliance", robot.alliance.name(), (robot.alliance == Alliance.RED ? LineItem.Color.RED : LineItem.Color.BLUE));
+        robot.drive.sendPacket(packet);
     }
 
     @Override
@@ -63,12 +74,24 @@ public class M0AutoOp extends OpModeEx {
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     desiredTrajectory = AutoPaths.buildRedAudience(robot.drive);
-                } else desiredTrajectory = AutoPaths.buildRedBackstage(robot.drive);
+                    robot.drive.getLocalizer().setPoseEstimate(RED_F2.pose);
+                    selectedTrajectory = "RED AUDIENCE";
+                } else {
+                    desiredTrajectory = AutoPaths.buildRedBackstage(robot.drive);
+                    robot.drive.getLocalizer().setPoseEstimate(RED_F4.pose);
+                    selectedTrajectory = "RED BACKSTAGE";
+                }
                 break;
             case BLUE:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     desiredTrajectory = AutoPaths.buildBlueAudience(robot.drive);
-                } else desiredTrajectory = AutoPaths.buildBlueBackstage(robot.drive);
+                    robot.drive.getLocalizer().setPoseEstimate(BLUE_A2.pose);
+                    selectedTrajectory = "BLUE AUDIENCE";
+                } else {
+                    desiredTrajectory = AutoPaths.buildBlueBackstage(robot.drive);
+                    robot.drive.getLocalizer().setPoseEstimate(BLUE_A4.pose);
+                    selectedTrajectory = "BLUE BACKSTAGE";
+                }
                 break;
         }
         if(desiredTrajectory != null) robot.drive.followTrajectorySequenceAsync(desiredTrajectory);
@@ -76,6 +99,9 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
+        robot.drive.sendPacket(packet);
         robot.update();
+        telemetryPro.addData("Trajectory",selectedTrajectory);
+        RobotImpl.poseMemory = robot.drive.getPoseEstimate();
     }
 }

@@ -14,16 +14,22 @@ public class FieldConstants {
 
     //TODO: Switch headings if starting robot backwards
     public enum StartingTiles {
-        BLUE_A2(new Pose2d(-TILE_WIDTH.toInches(3)+ROBOT_LENGTH/2,
-                TILE_WIDTH.toInches(-1.5),
-                Math.PI)),
-        BLUE_A4(BLUE_A2.pose.plus(new Pose2d(0,TILE_WIDTH.toInches(2),0))),
+        BLUE_A2(new Pose2d(TILE_WIDTH.toInches(-1.5),
+                TILE_WIDTH.toInches(3)-ROBOT_LENGTH/2,
+                Math.PI/2)),
+        BLUE_A4(new Pose2d(TILE_WIDTH.toInches(0.5),
+                TILE_WIDTH.toInches(3)-ROBOT_LENGTH/2,
+            Math.PI/2)),
         RED_F2(new Pose2d(
-                TILE_WIDTH.toInches(3)+ROBOT_LENGTH/2,
                 TILE_WIDTH.toInches(-1.5),
-                Math.toRadians(0)
+                TILE_WIDTH.toInches(-3)+ROBOT_LENGTH/2,
+                -Math.PI/2
         )),
-        RED_F4(RED_F2.pose.plus(new Pose2d(0,TILE_WIDTH.toInches(2),0)));
+        RED_F4(new Pose2d(
+                TILE_WIDTH.toInches(0.5),
+                TILE_WIDTH.toInches(-3)+ROBOT_LENGTH/2,
+                -Math.PI/2
+        ));
         public final Pose2d pose;
         StartingTiles(Pose2d pose){
             this.pose = pose;

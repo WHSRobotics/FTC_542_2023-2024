@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ColorSubsystem {
     //Ineffective as of StateForge 0.0.1
-    private double refreshRateHz = 2.0d; //Hz
+    private double refreshRateHz = 1; //Hz
     private Gamepad[] gamepads = new Gamepad[0];
     private Colors currentStatus = Colors.OFF;
     private int[] RGBValues = new int[3];
@@ -43,16 +43,14 @@ public class ColorSubsystem {
         this.ledDriver = hardwareMap.getAll(RevBlinkinLedDriver.class).iterator().next(); // Get the first REV Blinkin defined
         stateMachine = new StateForge.StateMachineBuilder<Phases>()
                 .state(Phases.ON)
-                    .onEntry(() -> {
-                        setGamepadColors();
-                    })
+                    .onEntry(this::setGamepadColors)
                     .timedTransitionLinear(1/(refreshRateHz*2))
                     .fin()
                 .state(Phases.OFF)
                     .onEntry(() -> {
                         if(currentStatus.blink) disableGamepadColors();
                     })
-                .   timedTransitionLinear(1/(refreshRateHz*2))
+                    .timedTransitionLinear(1/(refreshRateHz*2))
                 .fin().build();
         requestColor(Colors.OFF);
         stateMachine.start();
@@ -74,6 +72,7 @@ public class ColorSubsystem {
     }
 
     public void requestColor(Colors c){
+        if(c == currentStatus) return;
         this.currentStatus = c;
         switch(currentStatus){
             case RED:

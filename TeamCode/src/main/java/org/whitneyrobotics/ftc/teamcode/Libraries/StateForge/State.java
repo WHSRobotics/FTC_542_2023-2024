@@ -14,6 +14,7 @@ public class State<E extends Enum<E>> {
 
     private Action periodic = null;
     public final boolean nonLinear;
+    private boolean forceTransition;
 
     private void validateTransitions(){
         for (Triple<TransitionCondition, E, Action> transition : transitions) {
@@ -48,8 +49,18 @@ public class State<E extends Enum<E>> {
         this.onEntryAction = onEntryAction;
         this.onExitAction = onExitAction;
         this.nonLinear = nonLinear;
+        transitions.add(new Triple<TransitionCondition, E, Action>(()->{
+            if (forceTransition){
+                forceTransition = false;
+                return true;
+            } return false;
+        }, null, null));
     }
 
+
+    public void forceTransition(){
+        this.forceTransition = true;
+    }
     public List<Triple<TransitionCondition, E, Action>> getTransitions() {
         return transitions;
     }

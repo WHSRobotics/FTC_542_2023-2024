@@ -3,6 +3,7 @@ package org.whitneyrobotics.ftc.teamcode.Roadrunner.drive;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
@@ -62,7 +63,11 @@ public class CenterstageMecanumDrive extends MecanumDrive {
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
+    TelemetryPacket packet;
+
     private TrajectorySequenceRunner trajectorySequenceRunner;
+
+
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
@@ -136,6 +141,7 @@ public class CenterstageMecanumDrive extends MecanumDrive {
                 follower, HEADING_PID, batteryVoltageSensor,
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
+        trajectorySequenceRunner.setPacketPromise(() -> packet);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -152,6 +158,10 @@ public class CenterstageMecanumDrive extends MecanumDrive {
 
     public void disableRobotDrawing(){
         trajectorySequenceRunner.setIsDrawingRobot(false);
+    }
+
+    public void enableRobotDrawing(){
+        trajectorySequenceRunner.setIsDrawingRobot(true);
     }
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
@@ -315,6 +325,10 @@ public class CenterstageMecanumDrive extends MecanumDrive {
 
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
+    }
+
+    public void sendPacket(TelemetryPacket packet){
+        this.packet = packet;
     }
 
     public void cancelTrajectory(){

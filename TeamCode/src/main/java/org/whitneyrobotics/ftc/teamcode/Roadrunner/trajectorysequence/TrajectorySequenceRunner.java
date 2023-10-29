@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Config
 public class TrajectorySequenceRunner {
@@ -50,6 +51,8 @@ public class TrajectorySequenceRunner {
     private final NanoClock clock;
 
     private boolean isDrawingRobot = true;
+
+    private Supplier<TelemetryPacket> packetPromise = () -> null;
 
     private TrajectorySequence currentTrajectorySequence;
     private double currentSegmentStartTime;
@@ -96,6 +99,10 @@ public class TrajectorySequenceRunner {
         lastSegmentIndex = -1;
     }
 
+    public void setPacketPromise(Supplier<TelemetryPacket> packetPromise){
+        this.packetPromise = packetPromise;
+    }
+
     public void setIsDrawingRobot(boolean isDrawingRobot) {
         this.isDrawingRobot = isDrawingRobot;
     }
@@ -105,7 +112,8 @@ public class TrajectorySequenceRunner {
         Pose2d targetPose = null;
         DriveSignal driveSignal = null;
 
-        TelemetryPacket packet = new TelemetryPacket();
+        TelemetryPacket packet = packetPromise.get();
+        if(packet == null) packet =  new TelemetryPacket();
         Canvas fieldOverlay = packet.fieldOverlay();
 
         SequenceSegment currentSegment = null;
