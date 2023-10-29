@@ -48,7 +48,6 @@ public class RobotImpl {
     //public final WristServo wristServo;
     //public final DroneLauncher droneLauncher;
 
-
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
         prismSensor = new PrismSensor(hardwareMap);

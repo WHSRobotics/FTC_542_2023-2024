@@ -9,10 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class WristServo{
     private final Servo wrist;
-    private double initializationCutoff = 5;
     private boolean override = false;
-
-    private Servo[] servos = new Servo[2];
 
     //For closing the grabber, issues with going all the way down. Should decrease Close position
     public enum WristStates {

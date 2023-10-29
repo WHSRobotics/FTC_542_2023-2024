@@ -5,17 +5,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class DroneLauncher{
     private final Servo launcher;
-    private double initializationCutoff = 5;
     private boolean override = false;
 
-    private Servo[] servos = new Servo[2];
-
     //For closing the grabber, issues with going all the way down. Should decrease Close position
-    public enum WristStates {
-        OPEN(0), CLOSE(0.5);
+    public enum ReleaseStates {
+        NON_RELEASE(0), RELEASE(0.5);
         //NEED TO FIGURE OUT ACTUAL NUMBERS
         private double position;
-        WristStates(double position){
+        ReleaseStates(double position){
             this.position = position;
         }
         public double getPosition() {
@@ -23,51 +20,39 @@ public class DroneLauncher{
         }
     }
 
-    public WristStates currentState = WristStates.OPEN;
+    public ReleaseStates currentState = ReleaseStates.NON_RELEASE;
 
     public DroneLauncher(HardwareMap hardwareMap){
-        launcher = hardwareMap.get(Servo.class,"wrist");
-        this.update();
+        launcher = hardwareMap.get(Servo.class,"droneLaunch");
+        launcher.setPosition(currentState.getPosition());
+
     }
 
 
     public void toggleState(){
-        currentState = (currentState == WristStates.OPEN ? WristStates.CLOSE : WristStates.OPEN);
+        currentState = (currentState == ReleaseStates.NON_RELEASE ? ReleaseStates.RELEASE : ReleaseStates.NON_RELEASE);
         launcher.setPosition(currentState.getPosition());
     }
 
-    public void setState(boolean opened){
-        currentState = (opened ? WristStates.CLOSE : WristStates.OPEN);
+    public void setState(boolean released){
+        currentState = (released ? ReleaseStates.RELEASE : ReleaseStates.NON_RELEASE);
     }
 
-    public void updateState(WristStates state){
+    public void updateState(ReleaseStates state){
         currentState = state;
     }
 
-    public void setForceOpen(boolean state){
-        override = state;
-    }
-
-    public void testSetPosition(double position) {
+    public void SetPosition(double position) {
         launcher.setPosition(position);
     }
-    public void forceOpen(){ override = true; }
 
-    public void update() {
-        if(override){
-            launcher.setPosition(WristStates.OPEN.getPosition());
-            //override should be updated every loop
-            override = false;
-        } else {
-            launcher.setPosition(currentState.getPosition());
-        }
-    }
+    //these are the getter methods for the ReleaseStates and Servo Objects
 
     public double getPosition(){
         return launcher.getPosition();
     }
 
-    public WristStates getCurrentState(){
+    public ReleaseStates getCurrentState(){
         return currentState;
     }
 
