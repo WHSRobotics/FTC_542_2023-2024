@@ -21,7 +21,7 @@ public class WHSTeleOp extends OpModeEx {
 
     boolean fieldCentric = true;
     RobotImpl robot;
-    private UnaryOperator<Float> scalingFunctionDefault = x -> (float)Math.pow(x, 3);
+    private final UnaryOperator<Float> scalingFunctionDefault = x -> (float)Math.pow(x, 3);
 
     @Override
     public void initInternal() {
@@ -37,7 +37,7 @@ public class WHSTeleOp extends OpModeEx {
             robot.drive.setPoseEstimate(new Pose2d(
                     previousPosition.getX(),
                     previousPosition.getY(),
-                    0 + (robot.alliance == Alliance.RED ? Math.PI : 0)
+                    0 + (robot.alliance == Alliance.RED ? Math.PI/2 : -Math.PI/2)
             ));
         });
         //gamepad1.CROSS.onPress(robot.droneLauncher::toggleState);
