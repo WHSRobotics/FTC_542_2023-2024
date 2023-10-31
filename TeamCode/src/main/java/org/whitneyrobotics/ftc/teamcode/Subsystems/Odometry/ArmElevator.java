@@ -38,6 +38,8 @@ public class ArmElevator {
 
     public static double kV = 0.65;
 
+    public static double kA = 0.0;
+
     private NanoStopwatch stopwatch = new NanoStopwatch();
 
     public final double totalTicksToInches(double ticks){
@@ -107,6 +109,7 @@ public class ArmElevator {
                         controller.calculate(errorFromExpected);
                         lSlides.setPower(
                                 kV*motionProfile.velocityAt(stopwatch.seconds())/V_MAX * NOMINAL_VOLTAGE/voltageSensor.getVoltage()+
+                                        kA*motionProfile.accelerationAt(stopwatch.seconds())/A_MAX+
                                         controller.getOutput());
                     })
                     .onExit(() -> currentTargetPositionInches= null)
@@ -145,11 +148,13 @@ public class ArmElevator {
     }
 
     public void setTargetPosition(Target target){
-        currentTargetPositionInches = target.pos;
+        setTargetPosition(target.pos);
     }
 
     public void setTargetPosition(double pos){
+        if(currentTargetPositionInches == pos) return;
         currentTargetPositionInches = pos;
+        update();
     }
 
     public void inputPower(double power){
@@ -165,7 +170,7 @@ public class ArmElevator {
     }
 
     public double getDesiredPosition(){
-        if(!isBusy()) return 0;
+        if(!isBusy()) return getPosition();
         return motionProfile.positionAt(stopwatch.seconds())+initialPosition;
     }
 
@@ -189,6 +194,10 @@ public class ArmElevator {
 
     public String getState(){
         return elevatorStatesStateMachine.getMachineState().name();
+    }
+
+    public void cancel(){
+        currentTargetPositionInches = null;
     }
 
     public void forceManualControl(){

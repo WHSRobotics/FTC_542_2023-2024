@@ -42,7 +42,7 @@ public class WHSTeleOp extends OpModeEx {
         });
         //gamepad1.CROSS.onPress(robot.droneLauncher::toggleState);
         gamepad1.BUMPER_RIGHT.onPress(() -> fieldCentric = !fieldCentric);
-        robot.drive.setPoseEstimate(RobotImpl.poseMemory);
+        robot.teleOpInit();
         setupNotifications();
     }
 
