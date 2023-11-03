@@ -15,6 +15,8 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.NanoStopwatch;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
+import java.util.function.Consumer;
+
 @Config
 public class ArmElevator {
     private DcMotorEx lSlides;
@@ -76,6 +78,11 @@ public class ArmElevator {
 
     private Double currentTargetPositionInches; //inches
     private double error, initialPosition;
+
+    public static double INTAKE_CUTOFF = Target.ONE.pos;
+    private boolean underIntakeCutoff;
+
+    private Consumer<Boolean> onZoneChangeConsumer;
 
     public ArmElevator(HardwareMap hardwareMap){
         lSlides = hardwareMap.get(DcMotorEx.class, "slidesMotor");
@@ -144,6 +151,11 @@ public class ArmElevator {
     }
 
     public void update(){
+        boolean zoneState = getPosition() <= INTAKE_CUTOFF;
+        if(onZoneChangeConsumer != null && zoneState != underIntakeCutoff){
+            onZoneChangeConsumer.accept(zoneState);
+            underIntakeCutoff = zoneState;
+        }
         elevatorStatesStateMachine.update();
     }
 
@@ -207,5 +219,9 @@ public class ArmElevator {
     public double getTargetPosition(){
         if(currentTargetPositionInches == null) return 0;
         return currentTargetPositionInches;
+    }
+
+    public void onZoneChange(Consumer<Boolean> consumer){
+        onZoneChangeConsumer = consumer;
     }
 }

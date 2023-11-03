@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * StateForge is a modified version of StateMachine for FIRST Tech Challenge
- * Learn more here: https://github.com/StateFactory-Dev/StateFactory
+ * Learn more here: <a href="https://github.com/StateFactory-Dev/StateFactory">StateFactory Repository</a>
  */
 public class StateMachine<E extends Enum<E>> {
     public List<State<E>> linearStates = new ArrayList<>();

@@ -119,6 +119,12 @@ public class TelemetryPro {
         });
     }
 
+    public void clear(){
+        items.clear();
+        interactables.forEach(Interactable::disconnect);
+        interactables.clear();
+    }
+
     private Interactable focused = null;
 
     private Interactable getNextInteractable(boolean dec){
