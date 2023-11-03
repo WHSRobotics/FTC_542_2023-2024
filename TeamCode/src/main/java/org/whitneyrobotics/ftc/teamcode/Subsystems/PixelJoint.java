@@ -15,6 +15,8 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateForge;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.NanoStopwatch;
 
+import java.util.function.Supplier;
+
 @Config
 public class PixelJoint {
     private DcMotorEx slidesJoint;
@@ -22,9 +24,9 @@ public class PixelJoint {
 
     private final double TICKS_PER_REV = 384.5;
 
-    public static double V_MAX = Math.PI, A_MAX = Math.PI/2; //in/s, in/s^2
+    public static double V_MAX = 2, A_MAX = Math.PI/2; //in/s, in/s^2
 
-    public static ControlConstants ROTATION_PID = new ControlConstants(0,0,0);
+    public static ControlConstants ROTATION_PID = new ControlConstants(1.2,0,0);
 
     private NanoStopwatch stopwatch = new NanoStopwatch();
 
@@ -46,20 +48,23 @@ public class PixelJoint {
         ROTATING
     }
 
-    public static double kV = 0;
-    public static double kA = 0;
+    public static double kV = 0.8;
+    public static double kA = 0.1;
     public static double kStatic = 0;
+
+    public static double INTAKE_SERVO_POSITION = -0.1, OUTTAKE_SERVO_POSITION = 0.3;
 
     public static double ACCEPTABLE_ERROR = Math.toRadians(1); //radians
     public static double TIMEOUT = 0.5; //seconds
 
     public enum ArmPositions {
-        INTAKE(0,0),
-        OUTTAKE(2*Math.PI/3,-0.5);
-        public final double angle, servoPosition;
-        ArmPositions(double p, double s){
+        INTAKE(0,() -> INTAKE_SERVO_POSITION),
+        OUTTAKE(2*Math.PI/3,() -> OUTTAKE_SERVO_POSITION);
+        public final double angle;
+        public final Supplier<Double> servoPositionFunction;
+        ArmPositions(double p, Supplier<Double> s){
             angle = p;
-            servoPosition = s;
+            servoPositionFunction = s;
         }
     }
 
@@ -72,6 +77,8 @@ public class PixelJoint {
 
     private boolean targetChanged;
 
+    private double targetServoPosition = INTAKE_SERVO_POSITION;
+
     public PixelJoint(HardwareMap hardwareMap){
         slidesJoint = hardwareMap.get(DcMotorEx.class, "slidesJoint");
         wristJoint = hardwareMap.get(Servo.class, "wristJoint");
@@ -81,10 +88,10 @@ public class PixelJoint {
         slidesJoint.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelJointStateMachine = new StateForge.StateMachineBuilder<States>()
                 .state(States.HOLD_POSITION)
-                .onEntry(() -> {
-                    slidesJoint.setPower(0);
-                })
-                .transitionLinear(() -> target != null)
+                    .periodic(() -> {
+                        slidesJoint.setPower(0);
+                    })
+                    .transitionLinear(() -> target != null)
                 .fin()
                 .state(States.ROTATING)
                 .onEntry(() -> {
@@ -106,11 +113,11 @@ public class PixelJoint {
                                     controller.getOutput() + kStatic);
                     calculateError();
                     if(Math.abs(error) < Math.toRadians(30) && target != null){
-                        wristJoint.setPosition(target.servoPosition);
+                        targetServoPosition = target.servoPositionFunction.get();
                     }
                 })
                 .onExit(() -> {
-                    target= null;
+                    target = null;
                     slidesJoint.setPower(0);
                 })
                 .transitionLinear(() -> {
@@ -119,20 +126,23 @@ public class PixelJoint {
                             motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition() //error from designed position
                     )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                 })
-                .transitionLinear(() -> targetChanged == true) // In case of a target changes midway through a motion profile
+                .transitionLinear(() -> targetChanged) // In case of a target changes midway through a motion profile
                 .transitionLinear(() -> target == null)
                 .fin().build();
         pixelJointStateMachine.start();
+        slidesJoint.setPower(0);
     }
 
     public void update(){
         pixelJointStateMachine.update();
+        wristJoint.setPosition(targetServoPosition); //continuously providing power to servo
     }
 
     public void setTarget(ArmPositions target){
         if(this.target == target) return;
         this.target = target;
         targetChanged = true;
+        update(); //weird bug forcing you to double press
     }
 
     public void setAngularOffset(double offset){
@@ -187,6 +197,10 @@ public class PixelJoint {
     public double getTargetPosition(){
         if(target == null) return getPosition();
         return target.angle;
+    }
+
+    public String getTarget(){
+        return target.name();
     }
 
     public double getServoPosition(){
