@@ -12,6 +12,7 @@ import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.function.UnaryOperator;
@@ -44,6 +45,16 @@ public class WHSTeleOp extends OpModeEx {
         gamepad1.BUMPER_RIGHT.onPress(() -> fieldCentric = !fieldCentric);
         robot.teleOpInit();
         setupNotifications();
+        gamepad2.DPAD_DOWN.onPress(robot.pixelGrabber::releaseBoth);
+        gamepad2.DPAD_UP.onPress(robot.pixelGrabber::grabOne);
+        gamepad2.BUMPER_LEFT.onPress(robot.pixelGrabber::grabBoth);
+        gamepad2.CROSS.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
+        gamepad2.SQUARE.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
+        gamepad2.TRIANGLE.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.TWO));
+        gamepad2.CIRCLE.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.THREE));
+        gamepad2.BUMPER_RIGHT.onPress(robot.elevator::slowModeOn);
+        gamepad2.BUMPER_RIGHT.onRelease(robot.elevator::slowModeOff);
+        gamepad2.DPAD_RIGHT.onPress(robot::flipArm);
     }
 
     void setupNotifications(){
@@ -88,6 +99,7 @@ public class WHSTeleOp extends OpModeEx {
                         scaling.apply(-gamepad1.RIGHT_STICK_X.value())
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading() + /*(robot.alliance == Alliance.BLUE ? Math.PI/2 : -Math.PI/2)*/Math.PI/2 : 0))
         );
+        robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
         robot.update();
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);

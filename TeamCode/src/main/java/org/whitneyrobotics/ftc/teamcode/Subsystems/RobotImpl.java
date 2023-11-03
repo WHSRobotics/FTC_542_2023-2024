@@ -60,6 +60,8 @@ public class RobotImpl {
     public final PixelJoint pixelJoint;
     public final PixelGrabber pixelGrabber;
 
+    private PixelJoint.ArmPositions lastTargetPosition;
+
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
         prismSensor = new PrismSensor(hardwareMap);
@@ -68,8 +70,18 @@ public class RobotImpl {
         elevator = new ArmElevator(hardwareMap);
         pixelJoint = new PixelJoint(hardwareMap);
         buildClawStateMachine();
-        clawStatesStateMachine.start();
+        //clawStatesStateMachine.start();
         pixelGrabber = new PixelGrabber(hardwareMap);
+        elevator.onZoneChange(underIntakeCutoff -> { //runs once
+            if(underIntakeCutoff){
+                pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
+                lastTargetPosition = PixelJoint.ArmPositions.INTAKE;
+            } else {
+                pixelJoint.setTarget(PixelJoint.ArmPositions.OUTTAKE);
+                lastTargetPosition = PixelJoint.ArmPositions.OUTTAKE;
+                pixelGrabber.grabBoth();
+            }
+        });
     }
 
     public void switchAlliance(){
@@ -90,7 +102,7 @@ public class RobotImpl {
     public void update(){
         pixelJoint.update();
         elevator.update();
-        clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
+        //clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
         drive.update();
         Colors status = Colors.OFF;
         if(drive.isBusy()){
@@ -127,5 +139,16 @@ public class RobotImpl {
                     .transitionLinear(()->elevator.getPosition()<1)
                     .fin()
                 .build();
+    }
+
+    public void flipArm(){
+        if(lastTargetPosition == PixelJoint.ArmPositions.INTAKE){
+            pixelJoint.setTarget(PixelJoint.ArmPositions.OUTTAKE);
+            lastTargetPosition = PixelJoint.ArmPositions.OUTTAKE;
+            pixelGrabber.grabBoth();
+        } else {
+            pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
+            lastTargetPosition = PixelJoint.ArmPositions.INTAKE;
+        }
     }
 }

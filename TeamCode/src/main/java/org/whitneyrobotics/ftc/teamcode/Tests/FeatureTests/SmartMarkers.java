@@ -14,7 +14,7 @@ import org.whitneyrobotics.ftc.teamcode.Tests.Test;
 @TeleOp(name="Smart Marker Test", group="Feature Tests")
 public class SmartMarkers extends OpModeEx {
     AllianceSensor allianceSensor;
-    Alliance alliance = RED;
+    public static Alliance alliance = RED;
 
     @Override
     public void initInternal() {
