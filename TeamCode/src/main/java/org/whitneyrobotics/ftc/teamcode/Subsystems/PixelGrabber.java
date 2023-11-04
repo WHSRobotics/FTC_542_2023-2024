@@ -1,4 +1,4 @@
-package org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry;
+package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class PixelGrabber {
 
-    public static double RELEASE_BOTH = 1, INTAKE_ONE = 0.5, INTAKE_BOTH = 0;
+    public static double RELEASE_BOTH = 0.69, INTAKE_ONE = 0.8, INTAKE_BOTH = 0.96;
     private Servo pixelGrabber;
 
     public PixelGrabber(HardwareMap hardwareMap){

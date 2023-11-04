@@ -3,6 +3,7 @@ package org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -90,6 +91,7 @@ public class ArmElevator {
         else voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lSlides.setDirection(DcMotorSimple.Direction.REVERSE);
         elevatorStatesStateMachine = new StateForge.StateMachineBuilder<ElevatorStates>()
                 .state(ElevatorStates.IDLE)
                     .onEntry(() -> {
@@ -164,7 +166,6 @@ public class ArmElevator {
     }
 
     public void setTargetPosition(double pos){
-        if(currentTargetPositionInches == pos) return;
         currentTargetPositionInches = pos;
         update();
     }

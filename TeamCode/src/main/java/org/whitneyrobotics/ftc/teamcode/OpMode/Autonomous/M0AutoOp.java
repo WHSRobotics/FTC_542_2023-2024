@@ -1,5 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import static org.whitneyrobotics.ftc.teamcode.Constants.Alliance.BLUE;
+import static org.whitneyrobotics.ftc.teamcode.Constants.Alliance.RED;
 import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.*;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -20,6 +22,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TelemetryPro;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TextLine;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TextLineLambda;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
@@ -30,6 +33,7 @@ public class M0AutoOp extends OpModeEx {
     RobotImpl robot;
     MultipleChoicePoll tileSelector;
     String selectedTrajectory;
+    AllianceSensor allianceSensor;
     @Override
     public void initInternal() {
         RobotImpl.init(hardwareMap);
@@ -48,10 +52,23 @@ public class M0AutoOp extends OpModeEx {
         telemetryPro.addItem(tileSelector);
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         dashboardTelemetry.setMsTransmissionInterval(25);
+        allianceSensor = new AllianceSensor(hardwareMap);
+        robot.alliance = allianceSensor.isRedAlliance() ? RED : BLUE;
+        telemetryPro.addData("Initial Alliance", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
+        allianceSensor.onChange(isRed -> {
+            robot.alliance = isRed ? RED : BLUE;
+            telemetryPro.addData("Alliance changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
+            playSound("chime");
+        });
+        gamepad1.A.onPress(() -> {
+            robot.alliance = robot.alliance == RED ? BLUE : RED;
+            telemetryPro.addData("Alliance manually changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE, LineItem.RichTextFormat.ITALICS).persistent();
+        });
     }
 
     @Override
     public void initInternalLoop(){
+        allianceSensor.update();
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
         ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
         if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){

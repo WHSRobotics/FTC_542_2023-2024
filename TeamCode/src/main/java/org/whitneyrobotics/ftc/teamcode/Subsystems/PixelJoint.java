@@ -24,9 +24,9 @@ public class PixelJoint {
 
     private final double TICKS_PER_REV = 384.5;
 
-    public static double V_MAX = 2, A_MAX = Math.PI/2; //in/s, in/s^2
+    public static double V_MAX = 1, A_MAX = 1; //in/s, in/s^2
 
-    public static ControlConstants ROTATION_PID = new ControlConstants(1.2,0,0);
+    public static ControlConstants ROTATION_PID = new ControlConstants(0.6,0,0.08);
 
     private NanoStopwatch stopwatch = new NanoStopwatch();
 
@@ -48,11 +48,15 @@ public class PixelJoint {
         ROTATING
     }
 
-    public static double kV = 0.8;
-    public static double kA = 0.1;
+    public static double kV = 0.6;
+    public static double kA = 0.002;
     public static double kStatic = 0;
 
-    public static double INTAKE_SERVO_POSITION = -0.1, OUTTAKE_SERVO_POSITION = 0.3;
+    public static ControlConstants HOLD_PID = new ControlConstants(0.7,0,0.02);
+
+    public PIDController fixedController = new PIDController(HOLD_PID);
+
+    public static double INTAKE_SERVO_POSITION = 0.9, OUTTAKE_SERVO_POSITION = 0.3;
 
     public static double ACCEPTABLE_ERROR = Math.toRadians(1); //radians
     public static double TIMEOUT = 0.5; //seconds
@@ -72,7 +76,9 @@ public class PixelJoint {
 
     private StateMachine<States> pixelJointStateMachine;
 
-    private ArmPositions target = null;
+    public ArmPositions target = null;
+
+    private double lastTarget;
     private double initialPosition;
 
     private boolean targetChanged;
@@ -88,21 +94,26 @@ public class PixelJoint {
         slidesJoint.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelJointStateMachine = new StateForge.StateMachineBuilder<States>()
                 .state(States.HOLD_POSITION)
+                    .onEntry(()->{
+                        fixedController.init(0);
+                    })
                     .periodic(() -> {
-                        slidesJoint.setPower(0);
+                        fixedController.calculate(lastTarget-getPosition());
+                        slidesJoint.setPower(fixedController.getOutput());
                     })
                     .transitionLinear(() -> target != null)
                 .fin()
                 .state(States.ROTATING)
                 .onEntry(() -> {
-                    calculateError();
                     initialPosition = getPosition();
                     controller.init(0);
                     motionProfile.setMaxAccel(A_MAX);
                     motionProfile.setMaxVelocity(V_MAX);
                     motionProfile.setGoal(error);
+                    calculateError();
                     stopwatch.reset();
                     targetChanged = false; //will ignore target changes from null to a target while resetting a previous transition
+                    targetServoPosition = target.servoPositionFunction.get();
                 })
                 .periodic(() -> {
                     double errorFromExpected = motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition();
@@ -112,9 +123,6 @@ public class PixelJoint {
                                     kA*motionProfile.accelerationAt(stopwatch.seconds())/A_MAX+
                                     controller.getOutput() + kStatic);
                     calculateError();
-                    if(Math.abs(error) < Math.toRadians(30) && target != null){
-                        targetServoPosition = target.servoPositionFunction.get();
-                    }
                 })
                 .onExit(() -> {
                     target = null;
@@ -122,11 +130,11 @@ public class PixelJoint {
                 })
                 .transitionLinear(() -> {
                     calculateError();
-                    return motionProfile.isFinished(stopwatch.seconds()) && (Math.abs(
+                    return motionProfile.isFinished(stopwatch.seconds()) && ((Math.abs(
                             motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition() //error from designed position
-                    )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
+                    )<=ACCEPTABLE_ERROR) || (stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration()));
                 })
-                .transitionLinear(() -> targetChanged) // In case of a target changes midway through a motion profile
+                //.transitionLinear(() -> targetChanged) // In case of a target changes midway through a motion profile
                 .transitionLinear(() -> target == null)
                 .fin().build();
         pixelJointStateMachine.start();
@@ -139,10 +147,12 @@ public class PixelJoint {
     }
 
     public void setTarget(ArmPositions target){
-        if(this.target == target) return;
+        cancel();
         this.target = target;
         targetChanged = true;
-        update(); //weird bug forcing you to double press
+        lastTarget = target.angle;
+        update();
+        //weird bug forcing you to double press
     }
 
     public void setAngularOffset(double offset){
@@ -205,5 +215,9 @@ public class PixelJoint {
 
     public double getServoPosition(){
         return wristJoint.getPosition();
+    }
+
+    public double getMotionProfileDuration(){
+        return motionProfile.getDuration();
     }
 }
