@@ -12,8 +12,6 @@ public class ClawServo{
     private double initializationCutoff = 5;
     private boolean override = false;
 
-    private Servo[] servos = new Servo[2];
-
     //For closing the grabber, issues with going all the way down. Should decrease Close position
     public enum WristStates {
         OPEN(0), CLOSE(0.83);

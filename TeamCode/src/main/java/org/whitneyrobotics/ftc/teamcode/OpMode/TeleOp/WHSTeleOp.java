@@ -11,8 +11,10 @@ import com.qualcomm.robotcore.robot.Robot;
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
+import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.State;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.PixelJoint;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.function.UnaryOperator;
@@ -55,6 +57,9 @@ public class WHSTeleOp extends OpModeEx {
         gamepad2.BUMPER_RIGHT.onPress(robot.elevator::slowModeOn);
         gamepad2.BUMPER_RIGHT.onRelease(robot.elevator::slowModeOff);
         gamepad2.DPAD_RIGHT.onPress(robot::flipArm);
+        gamepad2.DPAD_LEFT.onPress(robot.elbow::handleButtonPress);
+        gamepad2.LEFT_TRIGGER.onInteraction(() -> robot.pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE));
+        gamepad2.RIGHT_TRIGGER.onInteraction(() -> robot.pixelJoint.setTarget(PixelJoint.ArmPositions.OUTTAKE));
     }
 
     void setupNotifications(){
@@ -89,6 +94,7 @@ public class WHSTeleOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
+
         float brakePower = gamepad1.LEFT_TRIGGER.value();
         UnaryOperator<Float> scaling = scalingFunctionDefault;
         if(gamepad1.BUMPER_LEFT.value()) scaling = x -> x/2;
@@ -100,6 +106,7 @@ public class WHSTeleOp extends OpModeEx {
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading() + /*(robot.alliance == Alliance.BLUE ? Math.PI/2 : -Math.PI/2)*/Math.PI/2 : 0))
         );
         robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
+        if (!gamepad2.DPAD_LEFT.value()){robot.elbow.maintainPos();}
         robot.update();
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);

@@ -35,5 +35,7 @@ public class WristTest extends OpModeEx {
         telemetryPro.addData("Desired Velocity", wrist.getDesiredVelocity());
         telemetryPro.addData("Elevator Acceleration", wrist.getDesiredAcceleration());
         telemetryPro.addData("Target Position", wrist.getTargetPosition());
+        telemetryPro.addData("Motion Profile Duration", wrist.getMotionProfileDuration());
+        telemetryPro.addData("Target", wrist.target==null ? "null" : wrist.target);
     }
 }

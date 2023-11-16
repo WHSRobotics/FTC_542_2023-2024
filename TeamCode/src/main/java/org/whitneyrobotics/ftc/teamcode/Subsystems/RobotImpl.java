@@ -5,13 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
-import org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.Button;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateForge;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
-import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.PixelGrabber;
 
 import static org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit.TILE_WIDTH;
 import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
@@ -59,6 +56,7 @@ public class RobotImpl {
     public final ArmElevator elevator;
     public final PixelJoint pixelJoint;
     public final PixelGrabber pixelGrabber;
+    public final ElbowMotor elbow;
 
     private PixelJoint.ArmPositions lastTargetPosition;
 
@@ -72,6 +70,7 @@ public class RobotImpl {
         buildClawStateMachine();
         //clawStatesStateMachine.start();
         pixelGrabber = new PixelGrabber(hardwareMap);
+        elbow = new ElbowMotor(hardwareMap);
         elevator.onZoneChange(underIntakeCutoff -> { //runs once
             if(underIntakeCutoff){
                 pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
