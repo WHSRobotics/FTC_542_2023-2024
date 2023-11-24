@@ -34,8 +34,10 @@ public class M0AutoOp extends OpModeEx {
     MultipleChoicePoll tileSelector;
     String selectedTrajectory;
     AllianceSensor allianceSensor;
+    private int path_guess;
     @Override
     public void initInternal() {
+        path_guess = (int) Math.random()*4;
         RobotImpl.init(hardwareMap);
         robot = RobotImpl.getInstance();
         robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
@@ -90,22 +92,48 @@ public class M0AutoOp extends OpModeEx {
         switch (robot.alliance){
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
-                    desiredTrajectory = AutoPaths.buildRedAudience(robot.drive);
+                    if (path_guess == 1){
+                        desiredTrajectory = AutoPaths.RedAudienceLeft(robot.drive);
+                    }else if  (path_guess == 2){
+                        desiredTrajectory = AutoPaths.RedAudienceCenter(robot.drive);
+                    } else if (path_guess == 3){
+                        desiredTrajectory = AutoPaths.RedAudienceRight(robot.drive);
+
+                    }
                     robot.drive.getLocalizer().setPoseEstimate(RED_F2.pose);
                     selectedTrajectory = "RED AUDIENCE";
                 } else {
-                    desiredTrajectory = AutoPaths.buildRedBackstage(robot.drive);
+                    if (path_guess == 1){
+                        desiredTrajectory = AutoPaths.RedBackstageLeft(robot.drive);
+                    }else if  (path_guess == 2){
+                        desiredTrajectory = AutoPaths.RedBackstageCenter(robot.drive);
+                    } else if (path_guess == 3){
+                        desiredTrajectory = AutoPaths.RedBackstageRight(robot.drive);
+
+                    }
                     robot.drive.getLocalizer().setPoseEstimate(RED_F4.pose);
                     selectedTrajectory = "RED BACKSTAGE";
                 }
                 break;
             case BLUE:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
-                    desiredTrajectory = AutoPaths.buildBlueAudience(robot.drive);
+                    if (path_guess == 1){
+                        desiredTrajectory = AutoPaths.BlueAudienceLeft(robot.drive);
+                    }else if  (path_guess == 2){
+                        desiredTrajectory = AutoPaths.BlueAudienceCenter(robot.drive);
+                    } else if (path_guess == 3){
+                        desiredTrajectory = AutoPaths.BlueAudienceRight(robot.drive);
+                    }
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A2.pose);
                     selectedTrajectory = "BLUE AUDIENCE";
                 } else {
-                    desiredTrajectory = AutoPaths.buildBlueBackstage(robot.drive);
+                    if (path_guess == 1){
+                        desiredTrajectory = AutoPaths.BlueBackstageLeft(robot.drive);
+                    }else if  (path_guess == 2){
+                        desiredTrajectory = AutoPaths.BlueBackstageCenter(robot.drive);
+                    } else if (path_guess == 3){
+                        desiredTrajectory = AutoPaths.BlueBackstageRight(robot.drive);
+                    }
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A4.pose);
                     selectedTrajectory = "BLUE BACKSTAGE";
                 }

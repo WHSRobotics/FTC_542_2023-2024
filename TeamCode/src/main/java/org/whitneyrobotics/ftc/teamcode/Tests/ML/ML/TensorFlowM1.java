@@ -54,10 +54,13 @@ public class TensorFlowM1 extends LinearOpMode {
             if (recognition.getLabel().equals("Pixel")) {
                 double x = (recognition.getLeft() + recognition.getRight()) / 2;
                 if (x < 200) {
+                    //left
                     return 1;
                 } else if (x > 200 && x < 400) {
+                    //center
                     return 2;
                 } else if (x > 400) {
+                    //right
                     return 3;
                 }
             }

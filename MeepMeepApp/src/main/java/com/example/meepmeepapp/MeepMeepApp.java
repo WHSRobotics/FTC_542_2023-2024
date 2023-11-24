@@ -18,7 +18,7 @@ public class MeepMeepApp {
                                     //CLAW STUFF
                                 })
 
-                                .lineToLinearHeading(new Pose2d(47.5, 34.8,Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, 41.1,Math.toRadians(180)))
                                 .waitSeconds(1)
                                 .addTemporalMarker(() ->{
 
@@ -51,7 +51,7 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(47.5, 34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, 28.5, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -67,7 +67,7 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, -41.1,Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -82,7 +82,7 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, -28.5, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -114,6 +114,7 @@ public class MeepMeepApp {
                                 })
                                 .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
                                 .lineToLinearHeading(new Pose2d(47.5, 34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, 28.5, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -149,8 +150,7 @@ public class MeepMeepApp {
                                 })
                                 .splineToConstantHeading(new Vector2d(-36.4, 16.4), Math.toRadians(0))
                                 .splineToConstantHeading(new Vector2d(0, 4),Math.toRadians(0))
-                                .lineToLinearHeading(new Pose2d(47.5, 34.8, Math.toRadians(180)))
-
+                                .lineToLinearHeading(new Pose2d(47.5, 41.1,Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -167,6 +167,8 @@ public class MeepMeepApp {
                                 })
                                 .lineToLinearHeading(new Pose2d(-23.7, -35, Math.toRadians(180)))
                                 .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, -28.5, Math.toRadians(180)))
+
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -202,7 +204,7 @@ public class MeepMeepApp {
                                 })
                                 .splineToConstantHeading(new Vector2d(-36.4, -16.4), Math.toRadians(0))
                                 .splineToConstantHeading(new Vector2d(0, -4),Math.toRadians(0))
-                                .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(47.5, -41.1, Math.toRadians(180)))
 
                                 .addTemporalMarker(() ->{
 
@@ -217,30 +219,32 @@ public class MeepMeepApp {
 
 
                 //blue alliance backdrop
-                .addEntity(blueBotBackdrop1)
-                .addEntity(blueBotBackdrop2)
-                .addEntity(blueBotBackdrop3)
+                .addEntity(blueBotBackdrop1) //left
+                .addEntity(blueBotBackdrop2) //center
+                .addEntity(blueBotBackdrop3) //right
 
 
 
 
                 //red alliance, backdrop
-                .addEntity(redBotBackdrop1)
-                .addEntity(redBotBackdrop2)
-                .addEntity(redBotBackdrop3)
+                .addEntity(redBotBackdrop1) //right
+                .addEntity(redBotBackdrop2) //left
+                .addEntity(redBotBackdrop3) //center
 
 
 
                 //blue alliance, wall
-                .addEntity(blueBotWall1)
-                .addEntity(blueBotWall2)
-                .addEntity(blueBotWall3)
+                .addEntity(blueBotWall1) //right
+
+                .addEntity(blueBotWall2) //center
+
+                .addEntity(blueBotWall3) //left
 
 
-                .addEntity(redBotWall1)
-                .addEntity(redBotWall2)
-                .addEntity(redBotWall3)
 
+                .addEntity(redBotWall1)//left
+                .addEntity(redBotWall2)//center
+                .addEntity(redBotWall3)//right
 
 
 
