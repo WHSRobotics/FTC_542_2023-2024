@@ -25,6 +25,7 @@ import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.Trajectory
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
+import org.whitneyrobotics.ftc.teamcode.Tests.ML.ML.TensorFlowM1;
 
 import java.util.List;
 
@@ -34,10 +35,11 @@ public class M0AutoOp extends OpModeEx {
     MultipleChoicePoll tileSelector;
     String selectedTrajectory;
     AllianceSensor allianceSensor;
-    private int path_guess;
+
+    TensorFlowM1 cameraView;
+    private int path;
     @Override
     public void initInternal() {
-        path_guess = (int) Math.random()*4;
         RobotImpl.init(hardwareMap);
         robot = RobotImpl.getInstance();
         robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
@@ -55,6 +57,8 @@ public class M0AutoOp extends OpModeEx {
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         dashboardTelemetry.setMsTransmissionInterval(25);
         allianceSensor = new AllianceSensor(hardwareMap);
+        cameraView = new TensorFlowM1();
+        cameraView.initTfod();
         robot.alliance = allianceSensor.isRedAlliance() ? RED : BLUE;
         telemetryPro.addData("Initial Alliance", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
         allianceSensor.onChange(isRed -> {
@@ -71,6 +75,7 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void initInternalLoop(){
         allianceSensor.update();
+        path = cameraView.path();
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
         ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
         if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
@@ -92,22 +97,22 @@ public class M0AutoOp extends OpModeEx {
         switch (robot.alliance){
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
-                    if (path_guess == 1){
+                    if (path == 1){
                         desiredTrajectory = AutoPaths.RedAudienceLeft(robot.drive);
-                    }else if  (path_guess == 2){
+                    }else if  (path == 2){
                         desiredTrajectory = AutoPaths.RedAudienceCenter(robot.drive);
-                    } else if (path_guess == 3){
+                    } else if (path == 3){
                         desiredTrajectory = AutoPaths.RedAudienceRight(robot.drive);
 
                     }
                     robot.drive.getLocalizer().setPoseEstimate(RED_F2.pose);
                     selectedTrajectory = "RED AUDIENCE";
                 } else {
-                    if (path_guess == 1){
+                    if (path == 1){
                         desiredTrajectory = AutoPaths.RedBackstageLeft(robot.drive);
-                    }else if  (path_guess == 2){
+                    }else if  (path == 2){
                         desiredTrajectory = AutoPaths.RedBackstageCenter(robot.drive);
-                    } else if (path_guess == 3){
+                    } else if (path == 3){
                         desiredTrajectory = AutoPaths.RedBackstageRight(robot.drive);
 
                     }
@@ -117,21 +122,22 @@ public class M0AutoOp extends OpModeEx {
                 break;
             case BLUE:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
-                    if (path_guess == 1){
+                    if (path == 1){
                         desiredTrajectory = AutoPaths.BlueAudienceLeft(robot.drive);
-                    }else if  (path_guess == 2){
+                    }else if  (path == 2){
                         desiredTrajectory = AutoPaths.BlueAudienceCenter(robot.drive);
-                    } else if (path_guess == 3){
+                    } else if (path == 3){
                         desiredTrajectory = AutoPaths.BlueAudienceRight(robot.drive);
                     }
+
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A2.pose);
                     selectedTrajectory = "BLUE AUDIENCE";
                 } else {
-                    if (path_guess == 1){
+                    if (path == 1){
                         desiredTrajectory = AutoPaths.BlueBackstageLeft(robot.drive);
-                    }else if  (path_guess == 2){
+                    }else if  (path == 2){
                         desiredTrajectory = AutoPaths.BlueBackstageCenter(robot.drive);
-                    } else if (path_guess == 3){
+                    } else if (path == 3){
                         desiredTrajectory = AutoPaths.BlueBackstageRight(robot.drive);
                     }
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A4.pose);

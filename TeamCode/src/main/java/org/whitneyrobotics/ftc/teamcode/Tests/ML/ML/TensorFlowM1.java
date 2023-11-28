@@ -33,7 +33,7 @@ public class TensorFlowM1 extends LinearOpMode {
         }
         visionPortal.close();
     }
-    private void initTfod() {
+    public void initTfod() {
 
         tfod = new TfodProcessor.Builder()
 
