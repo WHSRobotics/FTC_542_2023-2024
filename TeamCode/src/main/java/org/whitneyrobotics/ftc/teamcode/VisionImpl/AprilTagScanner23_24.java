@@ -1,32 +1,38 @@
 package org.whitneyrobotics.ftc.teamcode.VisionImpl;
 
-import android.util.Size;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous.M0AutoOp;
+
+import java.util.List;
 
 public class AprilTagScanner23_24 {
-    private final AprilTagProcessor tagProcessor;
-    private final VisionPortal visionPortal;
+    public AprilTagProcessor tagProcessor;
+
+    //private final VisionPortal visionPortal;
     private double lastDistance;
 
-    public AprilTagScanner23_24(String webcam, HardwareMap hardwareMap){
+    private  List<AprilTagDetection> currentDetections;
+
+    private AprilTagDetection desiredTag;
+
+    public AprilTagScanner23_24(){
         lastDistance = -1;
-        tagProcessor = new AprilTagProcessor.Builder()
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
-                .build();
+
+        /*
         visionPortal = new VisionPortal.Builder()
                 .addProcessor(tagProcessor)
                 .setCamera(hardwareMap.get(WebcamName.class, webcam))
                 .setCameraResolution(new Size(800, 448))
                 .build();
+
+         */
     }
+
+    public void update(){
+        currentDetections = tagProcessor.getDetections();
+    }
+
 
     public Double getLastDistance(){return lastDistance;}
 
