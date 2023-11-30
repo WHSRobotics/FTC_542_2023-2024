@@ -50,11 +50,11 @@ public class AutoPaths {
 
     public static final TrajectorySequence RedBackstageLeft(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(12.5, -35.7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(12.5, -30.7, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(47.5, -28.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(38, -32.5, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -74,7 +74,7 @@ public class AutoPaths {
     }
     public static final TrajectorySequence RedBackstageRight(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(23, -42.1, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(30.3, -29.6, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
@@ -97,6 +97,7 @@ public class AutoPaths {
                 .addTemporalMarker(() ->{
 
                 })
+
                 .build();
     }
     public static final TrajectorySequence BlueAudienceCenter(CenterstageMecanumDrive drivetrain){
