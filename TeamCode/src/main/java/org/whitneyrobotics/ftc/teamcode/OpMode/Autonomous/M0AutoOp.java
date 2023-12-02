@@ -66,8 +66,7 @@ public class M0AutoOp extends OpModeEx {
         dashboardTelemetry.setMsTransmissionInterval(25);
         allianceSensor = new AllianceSensor(hardwareMap);
 
-        cameraView = new TensorFlowM1();
-        cameraView.initTfod();
+
 
         robot.alliance = allianceSensor.isRedAlliance() ? RED : BLUE;
         telemetryPro.addData("Initial Alliance", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
@@ -104,9 +103,10 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void startInternal() {
         gamepad1.CIRCLE.disconnectAllHandlers();
-        cameraView.updateAprilTagDetections();
+        //cameraView.updateAprilTagDetections();
         TrajectorySequence desiredTrajectory = null;
         switch (robot.alliance){
+            /*
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     if (numeric_path == 1){
@@ -155,6 +155,16 @@ public class M0AutoOp extends OpModeEx {
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A4.pose);
                     selectedTrajectory = "BLUE BACKSTAGE";
                 }
+                */
+            case RED:
+                if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
+                    desiredTrajectory = AutoPaths.buildRedAudience(robot.drive);
+                } else desiredTrajectory = AutoPaths.buildRedBackstage(robot.drive);
+                break;
+            case BLUE:
+                if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
+                    desiredTrajectory = AutoPaths.buildBlueAudience(robot.drive);
+                } else desiredTrajectory = AutoPaths.buildBlueBackstage(robot.drive);
                 break;
         }
         if(desiredTrajectory != null) robot.drive.followTrajectorySequenceAsync(desiredTrajectory);
