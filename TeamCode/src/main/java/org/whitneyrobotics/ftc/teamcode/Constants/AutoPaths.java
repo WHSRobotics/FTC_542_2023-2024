@@ -19,120 +19,109 @@ public class AutoPaths {
     public static final TrajectorySequence BlueBackstageLeft(CenterstageMecanumDrive drivetrain,
                                                              TensorFlowM1 camera) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
-<<<<<<< HEAD
-                .lineToLinearHeading(new Pose2d(32.9, 28.5, Math.toRadians(180)))
-=======
-<<<<<<< HEAD
-                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(1.5)))
-                .splineToSplineHeading(
-                        new Pose2d(TILE_WIDTH.toInches(2.5), TILE_WIDTH.toInches(0.5), -Math.PI),
-                        0
-                ).build();
-=======
-                .lineToLinearHeading(new Pose2d(23, 42.1, Math.toRadians(270)))
->>>>>>> main
+                .lineToLinearHeading(new Pose2d(32.9, 28.5, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
 
-                .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
     public static final TrajectorySequence BlueBackstageCenter(CenterstageMecanumDrive drivetrain,
                                                                TensorFlowM1 camera) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
-                .lineToLinearHeading(new Pose2d(23.3, 24, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(23.3, 24, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, 34.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 34.8, Math.toRadians(195.2)))
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
     public static final TrajectorySequence BlueBackstageRight(CenterstageMecanumDrive drivetrain,
                                                               TensorFlowM1 camera) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
-                .lineToLinearHeading(new Pose2d(12.5, 30.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(12.5, 30.8, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, 28, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 28, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(195.2)))
                 .back(15)
                 .build();
->>>>>>> 82c01dcac326b298c29d07b1b51d9557d6c477d3
     }
 
     public static final TrajectorySequence RedBackstageLeft(CenterstageMecanumDrive drivetrain,
                                                             TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(12.5, -28.5, Math.toRadians(180)))
+                .resetTurnConstraint()
+                .lineToLinearHeading(new Pose2d(12.5, -28.5, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
     public static final TrajectorySequence RedBackstageCenter(CenterstageMecanumDrive drivetrain,
                                                               TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(23.3, -24, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(23.3, -24, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
     public static final TrajectorySequence RedBackstageRight(CenterstageMecanumDrive drivetrain,
                                                              TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(12.5, -28.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(12.5, -28.5, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
@@ -140,24 +129,14 @@ public class AutoPaths {
     public static final TrajectorySequence BlueAudienceRight(CenterstageMecanumDrive drivetrain,
                                                              TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
-<<<<<<< HEAD
 
-                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(270)))
-                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(285.2)))
+                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(195.2)))
 
-=======
-<<<<<<< HEAD
-                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(-1.5), TILE_WIDTH.toInches(2.5)))
-                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(2.5)))
-                .lineToLinearHeading(new Pose2d(TILE_WIDTH.toInches(2), TILE_WIDTH.toInches(2), -Math.PI)
-                ).build();
-=======
-                .lineToLinearHeading(new Pose2d(-46.8, 43, Math.toRadians(270)))
->>>>>>> main
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(195.2)))
                 .strafeLeft(7)
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
@@ -165,7 +144,7 @@ public class AutoPaths {
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(195.2)))
                 .back(15)
 
                 .build();
@@ -173,45 +152,44 @@ public class AutoPaths {
     public static final TrajectorySequence BlueAudienceCenter(CenterstageMecanumDrive drivetrain,
                                                               TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
-                .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(195.2)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
                 .strafeRight(6)
                 .back(10)
-                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(195.2)))
+                .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(195.2)))
                 .back(15)
                 .build();
->>>>>>> 82c01dcac326b298c29d07b1b51d9557d6c477d3
     }
 
     public static final TrajectorySequence BlueAudienceLeft(CenterstageMecanumDrive drivetrain,
                                                             TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
-                .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(15.2)))
 
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
                 .strafeRight(20)
-                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
-                .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(180)))
+                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(15.2))
+                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(15.2))
+                .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
@@ -219,62 +197,62 @@ public class AutoPaths {
     public static final TrajectorySequence RedAudienceLeft(CenterstageMecanumDrive drivetrain,
                                                            TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
-                .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(15.2)))
 
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
                 .strafeLeft(20)
-                .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(0))
-                .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(180)))
+                .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(15.2))
+                .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(15.2))
+                .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
     public static final TrajectorySequence RedAudienceCenter(CenterstageMecanumDrive drivetrain,
                                                              TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
-                .lineToLinearHeading(new Pose2d(-35.3, -33.5, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-23.7, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-35.3, -33.5, Math.toRadians(105.2)))
+                .lineToLinearHeading(new Pose2d(-23.7, -35, Math.toRadians(195.2)))
 
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
 
-                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }
     public static final TrajectorySequence RedAudienceRight(CenterstageMecanumDrive drivetrain,
                                                             TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
-                .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(15.2)))
 
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
                 .strafeLeft(20)
-                .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(0))
-                .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(180)))
+                .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(15.2))
+                .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(15.2))
+                .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(195.2)))
                 //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
                 .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(195.2)))
                 .back(15)
                 .build();
     }

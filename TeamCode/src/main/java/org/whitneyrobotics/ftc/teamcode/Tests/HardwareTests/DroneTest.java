@@ -12,7 +12,7 @@ public class DroneTest extends OpModeEx {
     public void initInternal() {
         d = new Drone(hardwareMap);
         gamepad1.A.onPress(d::fire);
-        gamepad1.B.onPress(d::updateAngle);
+        gamepad1.B.onPress(d::updateMacroAngle);
     }
 
     @Override

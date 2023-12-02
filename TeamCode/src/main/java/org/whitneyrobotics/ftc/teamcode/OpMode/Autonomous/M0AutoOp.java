@@ -85,7 +85,8 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void initInternalLoop(){
         allianceSensor.update();
-        numeric_path = cameraView.path();
+        //numeric_path = cameraView.path();
+        numeric_path = 1;
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
         ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
         if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
@@ -103,11 +104,7 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void startInternal() {
         gamepad1.CIRCLE.disconnectAllHandlers();
-<<<<<<< HEAD
         cameraView.updateAprilTagDetections();
-=======
-        robot.pixelGrabber.releaseBoth();
->>>>>>> main
         TrajectorySequence desiredTrajectory = null;
         switch (robot.alliance){
             case RED:

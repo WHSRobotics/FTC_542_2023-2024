@@ -9,8 +9,8 @@ public class Drone {
     Servo angleServo;
 
     enum States {
-        PRIMED(0.1),
-        LAUNCHED(1);
+        PRIMED(0.42),
+        LAUNCHED(0.76);
         States(double pos){
             this.pos = pos;
         }
@@ -30,12 +30,24 @@ public class Drone {
         }
     }
 
+    enum BasicAngleMacros {
+        REST(0.33),
+        READY(0.14);
+
+        public final double pos;
+        BasicAngleMacros(double pos){
+            this.pos = pos;
+        }
+    }
+
     public States currentState = States.PRIMED;
     public Angles currentAngle = Angles.DEG_15;
+    public BasicAngleMacros currentMacro = BasicAngleMacros.REST;
 
     public Drone(HardwareMap hm){
         droneServo = hm.get(Servo.class, "droneServo");
         angleServo = hm.get(Servo.class, "angleServo");
+        //droneServo.scaleRange(0, 1000);
     }
 
     public void fire(){
@@ -43,11 +55,16 @@ public class Drone {
     }
 
     public void updateAngle(){
-        this.currentAngle = Angles.values()[currentAngle.ordinal() + 1 % (Angles.values().length)];
+        this.currentAngle = Angles.values()[(currentAngle.ordinal() + 1) % (Angles.values().length)];
+    }
+
+    public void updateMacroAngle(){
+        this.currentMacro = BasicAngleMacros.values()[(currentMacro.ordinal() + 1) % (BasicAngleMacros.values().length)];
     }
 
     public void update(){
         droneServo.setPosition(currentState.pos);
+        angleServo.setPosition(currentMacro.pos);
     }
 
     public String getState(){
