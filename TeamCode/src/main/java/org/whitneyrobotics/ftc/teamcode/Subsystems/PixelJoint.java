@@ -56,7 +56,7 @@ public class PixelJoint {
 
     public PIDController fixedController = new PIDController(HOLD_PID);
 
-    public static double INTAKE_SERVO_POSITION = 0.9, OUTTAKE_SERVO_POSITION = 0.3;
+    public static double INTAKE_SERVO_POSITION = -0.6, OUTTAKE_SERVO_POSITION = -1;
 
     public static double ACCEPTABLE_ERROR = Math.toRadians(1); //radians
     public static double TIMEOUT = 0.5; //seconds

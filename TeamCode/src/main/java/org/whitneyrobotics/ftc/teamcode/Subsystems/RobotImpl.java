@@ -27,6 +27,8 @@ public class RobotImpl {
     public Alliance alliance = Alliance.RED;
     public static Pose2d poseMemory = new Pose2d(0,0,0);
 
+    public static double heightMemory, angleMemory;
+
     //Must be updated in autonomous loop
     public static double slidesHeightMemory, wristAngleMemory = 0;
     private static RobotImpl instance = null;
@@ -96,6 +98,8 @@ public class RobotImpl {
         drive.setPoseEstimate(RobotImpl.poseMemory);
         elevator.setCalibrationOffset(slidesHeightMemory);
         pixelJoint.setAngularOffset(wristAngleMemory);
+        elevator.setCalibrationOffset(heightMemory);
+        pixelJoint.setAngularOffset(angleMemory);
     }
 
     public void update(){
@@ -149,5 +153,9 @@ public class RobotImpl {
             pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
             lastTargetPosition = PixelJoint.ArmPositions.INTAKE;
         }
+    }
+
+    public String lastTargetPosition(){
+        return lastTargetPosition == null ? "?" : lastTargetPosition.name();
     }
 }

@@ -86,6 +86,7 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void startInternal() {
         gamepad1.CIRCLE.disconnectAllHandlers();
+        robot.pixelGrabber.releaseBoth();
         TrajectorySequence desiredTrajectory = null;
         switch (robot.alliance){
             case RED:

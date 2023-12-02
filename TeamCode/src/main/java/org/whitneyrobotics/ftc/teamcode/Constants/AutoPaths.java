@@ -13,7 +13,7 @@ public class AutoPaths {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
                 .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(1.5)))
                 .splineToSplineHeading(
-                        new Pose2d(TILE_WIDTH.toInches(2.5), TILE_WIDTH.toInches(0.5), Math.PI),
+                        new Pose2d(TILE_WIDTH.toInches(2.5), TILE_WIDTH.toInches(0.5), -Math.PI),
                         0
                 ).build();
     }
@@ -31,7 +31,7 @@ public class AutoPaths {
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
                 .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(-1.5), TILE_WIDTH.toInches(2.5)))
                 .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(2.5)))
-                .lineToLinearHeading(new Pose2d(TILE_WIDTH.toInches(2), TILE_WIDTH.toInches(2), Math.PI)
+                .lineToLinearHeading(new Pose2d(TILE_WIDTH.toInches(2), TILE_WIDTH.toInches(2), -Math.PI)
                 ).build();
     }
 
