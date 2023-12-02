@@ -17,7 +17,7 @@ public enum DistanceUnit {
         return value * (this.conversionFactor / unit.conversionFactor);
     }
 
-    public double toInches(double value){
+    public double  toInches(double value){
         return value * this.conversionFactor;
     }
 

@@ -55,7 +55,7 @@ import static org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.DriveConstants.k
 @Config
 public class CenterstageMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(6.4, 0, 1);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0.4);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5.8, 0, 0.4);
 
     public static double LATERAL_MULTIPLIER = 1.414;
 

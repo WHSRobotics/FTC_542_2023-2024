@@ -9,38 +9,187 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 public class AutoPaths {
-    public static final TrajectorySequence buildBlueBackstage(CenterstageMecanumDrive drivetrain) {
+    public static final TrajectorySequence BlueBackstageLeft(CenterstageMecanumDrive drivetrain) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
+<<<<<<< HEAD
                 .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(1.5)))
                 .splineToSplineHeading(
                         new Pose2d(TILE_WIDTH.toInches(2.5), TILE_WIDTH.toInches(0.5), -Math.PI),
                         0
                 ).build();
+=======
+                .lineToLinearHeading(new Pose2d(23, 42.1, Math.toRadians(270)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+
+                .lineToLinearHeading(new Pose2d(47.5, 41.1,Math.toRadians(180)))
+                .waitSeconds(1)
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+    public static final TrajectorySequence BlueBackstageCenter(CenterstageMecanumDrive drivetrain) {
+        return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
+                .lineToLinearHeading(new Pose2d(12.5, 35.7, Math.toRadians(270)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(47.5, 34.8, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+    public static final TrajectorySequence BlueBackstageRight(CenterstageMecanumDrive drivetrain) {
+        return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
+                .lineToLinearHeading(new Pose2d(12.5, 35.7, Math.toRadians(180)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(47.5, 28.5, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+>>>>>>> 82c01dcac326b298c29d07b1b51d9557d6c477d3
     }
 
-    public static final TrajectorySequence buildRedBackstage(CenterstageMecanumDrive drivetrain){
+    public static final TrajectorySequence RedBackstageLeft(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(-1.5)))
-                .splineToSplineHeading(
-                        new Pose2d(TILE_WIDTH.toInches(2.5), TILE_WIDTH.toInches(-0.5), Math.PI),
-                        0
-                ).build();
+                .lineToLinearHeading(new Pose2d(12.5, -30.7, Math.toRadians(180)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(38, -32.5, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+    public static final TrajectorySequence RedBackstageCenter(CenterstageMecanumDrive drivetrain){
+        return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
+                .lineToLinearHeading(new Pose2d(12.5, -35.7, Math.toRadians(90)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+    public static final TrajectorySequence RedBackstageRight(CenterstageMecanumDrive drivetrain){
+        return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
+                .lineToLinearHeading(new Pose2d(30.3, -29.6, Math.toRadians(180)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(47.5, -41.1,Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
     }
 
-    public static final TrajectorySequence buildBlueAudience(CenterstageMecanumDrive drivetrain){
+    public static final TrajectorySequence BlueAudienceRight(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
+<<<<<<< HEAD
                 .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(-1.5), TILE_WIDTH.toInches(2.5)))
                 .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(2.5)))
                 .lineToLinearHeading(new Pose2d(TILE_WIDTH.toInches(2), TILE_WIDTH.toInches(2), -Math.PI)
                 ).build();
+=======
+                .lineToLinearHeading(new Pose2d(-46.8, 43, Math.toRadians(270)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(47.5, 34.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(47.5, 28.5, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+
+                .build();
+    }
+    public static final TrajectorySequence BlueAudienceCenter(CenterstageMecanumDrive drivetrain){
+        return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
+                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
+
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(47.5, 34.8, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+>>>>>>> 82c01dcac326b298c29d07b1b51d9557d6c477d3
     }
 
-    public static final TrajectorySequence buildRedAudience(CenterstageMecanumDrive drivetrain){
+    public static final TrajectorySequence BlueAudienceLeft(CenterstageMecanumDrive drivetrain){
+        return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
+                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(0)))
+
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .splineToConstantHeading(new Vector2d(-36.4, 16.4), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(0, 4),Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(47.5, 41.1,Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+
+    public static final TrajectorySequence RedAudienceLeft(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
-                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(-1.5), TILE_WIDTH.toInches(-2.5)))
-                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(-2.5)))
-                .lineToLinearHeading(new Pose2d(TILE_WIDTH.toInches(2), TILE_WIDTH.toInches(-2), Math.PI)
-                ).build();
+                .lineToLinearHeading(new Pose2d(-46.8, -43, Math.toRadians(90)))
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(-23.7, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(47.5, -28.5, Math.toRadians(180)))
+
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+    public static final TrajectorySequence RedAudienceCenter(CenterstageMecanumDrive drivetrain){
+        return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
+                .lineToLinearHeading(new Pose2d(-35.3, -33.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-23.7, -35, Math.toRadians(180)))
+
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .lineToLinearHeading(new Pose2d(47.5, -34.8, Math.toRadians(180)))
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
+    }
+    public static final TrajectorySequence RedAudienceRight(CenterstageMecanumDrive drivetrain){
+        return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
+                .lineToLinearHeading(new Pose2d(-35.3, -33.5, Math.toRadians(0)))
+
+                .addDisplacementMarker(() -> {
+                    //CLAW STUFF
+                })
+                .splineToConstantHeading(new Vector2d(-36.4, -16.4), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(0, -4),Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(47.5, -41.1, Math.toRadians(180)))
+
+                .addTemporalMarker(() ->{
+
+                })
+                .build();
     }
 
 }
