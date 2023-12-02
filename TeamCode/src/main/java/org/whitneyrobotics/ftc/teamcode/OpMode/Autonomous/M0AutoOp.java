@@ -103,7 +103,11 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void startInternal() {
         gamepad1.CIRCLE.disconnectAllHandlers();
+<<<<<<< HEAD
         cameraView.updateAprilTagDetections();
+=======
+        robot.pixelGrabber.releaseBoth();
+>>>>>>> main
         TrajectorySequence desiredTrajectory = null;
         switch (robot.alliance){
             case RED:

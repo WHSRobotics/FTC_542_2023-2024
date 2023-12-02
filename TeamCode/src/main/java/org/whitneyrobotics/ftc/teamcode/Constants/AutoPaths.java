@@ -19,7 +19,18 @@ public class AutoPaths {
     public static final TrajectorySequence BlueBackstageLeft(CenterstageMecanumDrive drivetrain,
                                                              TensorFlowM1 camera) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
+<<<<<<< HEAD
                 .lineToLinearHeading(new Pose2d(32.9, 28.5, Math.toRadians(180)))
+=======
+<<<<<<< HEAD
+                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(1.5)))
+                .splineToSplineHeading(
+                        new Pose2d(TILE_WIDTH.toInches(2.5), TILE_WIDTH.toInches(0.5), -Math.PI),
+                        0
+                ).build();
+=======
+                .lineToLinearHeading(new Pose2d(23, 42.1, Math.toRadians(270)))
+>>>>>>> main
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
@@ -69,6 +80,7 @@ public class AutoPaths {
                 .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
                 .back(15)
                 .build();
+>>>>>>> 82c01dcac326b298c29d07b1b51d9557d6c477d3
     }
 
     public static final TrajectorySequence RedBackstageLeft(CenterstageMecanumDrive drivetrain,
@@ -128,10 +140,20 @@ public class AutoPaths {
     public static final TrajectorySequence BlueAudienceRight(CenterstageMecanumDrive drivetrain,
                                                              TensorFlowM1 camera){
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
+<<<<<<< HEAD
 
                 .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(270)))
                 .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
 
+=======
+<<<<<<< HEAD
+                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(-1.5), TILE_WIDTH.toInches(2.5)))
+                .lineToConstantHeading(new Vector2d(TILE_WIDTH.toInches(0.5), TILE_WIDTH.toInches(2.5)))
+                .lineToLinearHeading(new Pose2d(TILE_WIDTH.toInches(2), TILE_WIDTH.toInches(2), -Math.PI)
+                ).build();
+=======
+                .lineToLinearHeading(new Pose2d(-46.8, 43, Math.toRadians(270)))
+>>>>>>> main
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
@@ -168,6 +190,7 @@ public class AutoPaths {
                 .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
                 .back(15)
                 .build();
+>>>>>>> 82c01dcac326b298c29d07b1b51d9557d6c477d3
     }
 
     public static final TrajectorySequence BlueAudienceLeft(CenterstageMecanumDrive drivetrain,
