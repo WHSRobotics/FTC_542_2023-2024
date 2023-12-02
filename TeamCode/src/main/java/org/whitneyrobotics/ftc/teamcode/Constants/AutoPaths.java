@@ -25,7 +25,7 @@ public class AutoPaths {
                 })
 
                 .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -60,7 +60,7 @@ public class AutoPaths {
                     //CLAW STUFF
                 })
                 .lineToLinearHeading(new Pose2d(42, 28, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -79,7 +79,7 @@ public class AutoPaths {
                     //CLAW STUFF
                 })
                 .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -97,7 +97,7 @@ public class AutoPaths {
                     //CLAW STUFF
                 })
                 .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -115,7 +115,7 @@ public class AutoPaths {
                     //CLAW STUFF
                 })
                 .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -137,7 +137,7 @@ public class AutoPaths {
                 })
                 .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)))
                 .strafeLeft(7)
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -159,7 +159,7 @@ public class AutoPaths {
                 .back(10)
                 .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
                 .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -182,7 +182,7 @@ public class AutoPaths {
                 .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
                 .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -205,7 +205,7 @@ public class AutoPaths {
                 .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(0))
                 .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -224,7 +224,7 @@ public class AutoPaths {
                     //CLAW STUFF
                 })
                 .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })
@@ -246,7 +246,7 @@ public class AutoPaths {
                 .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(0))
                 .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(180)))
-                .strafeLeft(camera.getDesiredTagX())
+                //.strafeLeft(camera.getDesiredTagX())
                 .addTemporalMarker(() ->{
 
                 })

@@ -38,7 +38,7 @@ public class TensorFlowM1 extends LinearOpMode {
         initTfod();
         waitForStart();
         if (opModeIsActive()) {
-
+            telemetryTfod();
         }
         visionPortal.close();
     }
@@ -106,6 +106,7 @@ public class TensorFlowM1 extends LinearOpMode {
     private void telemetryTfod() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
+        currentDetections = tags.getDetections();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
@@ -114,6 +115,13 @@ public class TensorFlowM1 extends LinearOpMode {
             telemetry.addData("X Pos", x);
             telemetry.addData("Y Pos", y);
         }
-
+//        for (AprilTagDetection detection : currentDetections) {
+//            if (detection.metadata != null) {
+//                if (detection.id == pathNum){
+//                    desiredTag = detection;
+//                    telemetry.addData("Offset:" , desiredTag.ftcPose.x + 5.45);
+//                }
+//            }
+//        }
     }
 }
