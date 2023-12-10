@@ -81,9 +81,11 @@ public class BackupClaw {
         if (stateInc && reset){
             gateState = 0;
             reset = false;
+            gate.setPosition(GatePositions.Open.pos);
         } else if (stateDec && reset){
             gateState = 0;
             reset = false;
+            gate.setPosition(GatePositions.Closed.pos);
         }
         if (!stateInc && !stateDec) {
             reset = true;
@@ -134,9 +136,9 @@ public class BackupClaw {
         }
         if (slideMode == 0){
             try {
-                operateLinearSlidesAuto(ClawMeetOne.SlidePositions.values()[linearSlideState].ordinal());
+                operateLinearSlidesAuto(BackupClaw.SlidePositions.values()[linearSlideState].ordinal());
             } catch (Exception e) {
-                operateLinearSlidesAuto(ClawMeetOne.SlidePositions.values()[linearSlideState].height + linearSlidePosition);
+                operateLinearSlidesAuto(BackupClaw.SlidePositions.values()[linearSlideState].height + linearSlidePosition);
             }
         } else if (slideMode == 1){
             operateLinearSlidesAuto(linearSlidePosition);
