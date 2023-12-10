@@ -79,10 +79,10 @@ public class BackupClaw {
     }
     public void operateGateTele(boolean stateDec, boolean stateInc){
         if (stateInc && reset){
-            gateState = (gateState + 1) % 3;
+            gateState = 0;
             reset = false;
         } else if (stateDec && reset){
-            gateState = (gateState - 1) % 3;
+            gateState = 0;
             reset = false;
         }
         if (!stateInc && !stateDec) {
@@ -91,10 +91,10 @@ public class BackupClaw {
     }
     public void operateWristTele(boolean stateDec, boolean stateInc){
         if (stateInc && reset){
-            wristState = (wristState + 1) % 3;
+            wristState = 1;
             reset = false;
         } else if (stateDec && reset){
-            wristState = (wristState - 1) % 3;
+            wristState = 0;
             reset = false;
         }
         if (!stateInc && !stateDec){
@@ -103,7 +103,7 @@ public class BackupClaw {
         if (wristState == 0){
             wrist.setPosition(WristPositions.INTAKING.wristPos);
         } else if (wristState == 1){
-            wrist.setPosition(WristPositions.INTAKING.wristPos);
+            wrist.setPosition(WristPositions.OUTTAKING.wristPos);
         }
     }
     public void operateLinearSlidesAuto(double height){
@@ -117,15 +117,15 @@ public class BackupClaw {
     }
     public void operateLinearSlidesMacroAndMicro(boolean changeMode, boolean dec, boolean inc, boolean microDec, boolean microInc){
         if (changeMode && resetSlides){
-            slideMode = (slideMode + 1) % 2;
+            slideMode = 1;
             resetSlides = false;
         }
         if (inc && resetSlides){
-            linearSlideState = (linearSlideState + 1) % 3;
+            linearSlideState = 1;
             linearSlidePosition = 0;
             resetSlides = false;
         } else if (dec && resetSlides){
-            linearSlideState = (linearSlideState - 1) % 3;
+            linearSlideState = 0;
             linearSlidePosition = 0;
             resetSlides = false;
         }
