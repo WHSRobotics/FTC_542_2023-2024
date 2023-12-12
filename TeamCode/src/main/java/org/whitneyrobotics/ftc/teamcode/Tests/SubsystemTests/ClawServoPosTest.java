@@ -31,6 +31,10 @@ public class ClawServoPosTest extends OpModeEx {
             reset = true;
         }
 
+        if (gamepad1.A.value()){
+            clawTestServo.setPosition(testPos);
+        }
+
         telemetryPro.addData("Test Position", testPos);
     }
 }

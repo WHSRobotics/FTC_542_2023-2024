@@ -28,9 +28,11 @@ public class ClawDualServoPosTest extends OpModeEx {
 
     @Override
     protected void loopInternal() {
+        //testPos = Math.round(testPos * 100) / 100;
+        //testPosTwo = Math.round(testPosTwo * 100) / 100;
         if (firstLoop){
-            testPos = 0.28;
-            testPosTwo = 0.42;
+            testPos = clawTestServo.getPosition();
+            testPosTwo = clawTestServoTwo.getPosition();
             firstLoop = false;
         }
 
@@ -57,8 +59,23 @@ public class ClawDualServoPosTest extends OpModeEx {
             resetTwo = true;
         }
 
-        clawTestServo.setPosition(testPos);
-        clawTestServoTwo.setPosition(testPosTwo);
+        if (gamepad1.TRIANGLE.value()){
+            clawTestServo.setPosition(testPos);
+            clawTestServoTwo.setPosition(testPosTwo);
+        }
+
+        if (gamepad1.CIRCLE.value()){
+            clawTestServo.setPosition(testPos);
+        }
+
+        if (gamepad1.SQUARE.value()){
+            clawTestServoTwo.setPosition(testPosTwo);
+        }
+
+        if (gamepad1.CROSS.value()){
+            testPos = clawTestServo.getPosition();
+            testPosTwo = clawTestServoTwo.getPosition();
+        }
 
         telemetryPro.addData("Test Position", testPos);
         telemetryPro.addData("Claw Position", clawTestServo.getPosition());
