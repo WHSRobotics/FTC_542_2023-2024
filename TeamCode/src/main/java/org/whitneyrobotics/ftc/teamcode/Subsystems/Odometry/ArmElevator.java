@@ -67,8 +67,8 @@ public class ArmElevator {
     }
 
     public enum Target {
-        RETRACT(1),
-        ONE(4),
+        RETRACT(0),
+        ONE(0.5),
         TWO(6),
         THREE(8);
         Target(double pos){
@@ -86,7 +86,7 @@ public class ArmElevator {
     private Consumer<Boolean> onZoneChangeConsumer;
 
     public ArmElevator(HardwareMap hardwareMap){
-        lSlides = hardwareMap.get(DcMotorEx.class, "slidesMotor");
+        lSlides = hardwareMap.get(DcMotorEx.class, "linearSlides");
         if(RobotImpl.getInstance() != null) voltageSensor = RobotImpl.getInstance().voltageSensor;
         else voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

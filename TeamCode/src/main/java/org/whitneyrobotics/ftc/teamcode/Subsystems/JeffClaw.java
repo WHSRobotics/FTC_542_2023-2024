@@ -40,14 +40,14 @@ public class JeffClaw {
     private PIDVACoefficients lSlidesCoeffs = new PIDVACoefficients();
 
     public JeffClaw(HardwareMap clawMap){
-        intake = clawMap.get(DcMotor.class, "Intake");
-        intakeHeight = clawMap.get(Servo.class, "Intake Servo");
-        gate = clawMap.get(Servo.class, "Gate");
-        wristOne = clawMap.get(Servo.class, "Wrist Left");
-        wristTwo = clawMap.get(Servo.class, "Wrist Right");
-        elbowOne = clawMap.get(Servo.class, "Elbow Left");
-        elbowTwo = clawMap.get(Servo.class, "Elbow Right");
-        linearSlides = clawMap.get(DcMotorEx.class, "Linear Slides");
+        intake = clawMap.get(DcMotor.class, "intake");
+        intakeHeight = clawMap.get(Servo.class, "intakeFlip");
+        gate = clawMap.get(Servo.class, "gate");
+        wristOne = clawMap.get(Servo.class, "wristLeft");
+        wristTwo = clawMap.get(Servo.class, "wristRight");
+        elbowOne = clawMap.get(Servo.class, "elbowLeft");
+        elbowTwo = clawMap.get(Servo.class, "elbowRight");
+        linearSlides = clawMap.get(DcMotorEx.class, "linearSlides");
 
         linearSlidesController = new PIDVAControllerNew(lSlidesCoeffs);
         lSlidesCoeffs.setKP(1)
@@ -61,8 +61,8 @@ public class JeffClaw {
     }
 
     public enum IntakeStates {
-        INTAKING(0.6),
-        OUTTAKING(-0.9), //if stuck
+        INTAKING(0.9),
+        OUTTAKING(-1), //if stuck
         OFF(0);
 
         double state;
@@ -84,8 +84,8 @@ public class JeffClaw {
     }
 
     public enum GatePositions {
-        OPEN(0.2),
-        CLOSED(0.8);
+        OPEN(0),
+        CLOSED(0.43);
 
         double GatePos;
         GatePositions(double GatePos){
@@ -94,8 +94,8 @@ public class JeffClaw {
     }
 
     public enum WristPositions {
-        INTAKING(0, 0),
-        OUTTAKING(0.7, 0.7);
+        INTAKING(1, 1),
+        OUTTAKING(0.275, 0.275);
 
         double wristOnePos;
         double wristTwoPos;
@@ -107,8 +107,8 @@ public class JeffClaw {
     }
 
     public enum ElbowPositions {
-        INTAKING(0, 0),
-        OUTTAKING(0.5, 0.5); // parallel to backdrop
+        INTAKING(1, 1),
+        OUTTAKING(0.9, 0.9); // parallel to backdrop
 
         double elbowOnePos;
         double elbowTwoPos;
