@@ -141,26 +141,17 @@ public class JeffClaw {
         intake.setPower(state.state);
         intakeState = state.ordinal();
     }
-    public void operateIntakeTele(boolean stateDec, boolean stateInc) {
-        if (stateInc && resetIntake){
-            intakeState = (intakeState + 1) % 3;
-            resetIntake = false;
-        } else if (stateDec && resetIntake){
-            intakeState = (intakeState - 1) % 3;
-            resetIntake = false;
-        }
-
-        if (!stateInc && !stateDec){
-            resetIntake = true;
-        }
+    public void operateIntakeTele() {
+        intakeState = (intakeState + 1) % 3;
 
         if (intakeState == 0){
             intake.setPower(IntakeStates.INTAKING.state);
-        } else if (intakeState == 1){
-            intake.setPower(IntakeStates.OUTTAKING.state);
-        } else if (intakeState == 2) {
+        } else if (intakeState == 1) {
             intake.setPower(IntakeStates.OFF.state);
         }
+    }
+    public void operateIntakeOutTele() {
+        intake.setPower(IntakeStates.OUTTAKING.state);
     }
 
 
@@ -168,7 +159,7 @@ public class JeffClaw {
         intakeHeight.setPosition(target.IHPos);
         intakeHeightState = target.ordinal();
     }
-        
+
     public void operateIntakeHeightTele(){
         intakeHeightState = (intakeHeightState + 1) % 5;
 
@@ -232,7 +223,7 @@ public class JeffClaw {
         }
     }
 
-    public void operateLinearSlidesAuto(SlidePositions height){
+   /* public void operateLinearSlidesAuto(SlidePositions height){
         linearSlidesController.calculate(linearSlides.getCurrentPosition(), height.height);
         double output = linearSlidesController.getOutput();
 
@@ -243,7 +234,7 @@ public class JeffClaw {
 
         linearSlideState = height.ordinal();
     }
-
+*/
     public void operateLinearSlidesAuto(double height){
         linearSlidesController.calculate(linearSlides.getCurrentPosition(), height);
         double output = linearSlidesController.getOutput();
@@ -254,7 +245,7 @@ public class JeffClaw {
         linearSlides.setPower(adjustedOutput);
     }
 
-    public void operateLinearSlidesMacroAndMicro(boolean changeMode, boolean dec, boolean inc, boolean microDec, boolean microInc){
+        public void operateLinearSlidesMacroAndMicro(boolean changeMode, boolean dec, boolean inc, boolean microDec, boolean microInc){
         if (changeMode && resetSlides){
             slideMode = (slideMode + 1) % 2;
             resetSlides = false;
@@ -276,12 +267,13 @@ public class JeffClaw {
 
         if (slideMode == 0){
             try {
-                operateLinearSlidesAuto(SlidePositions.values()[linearSlideState]);
+                operateLinearSlidesAuto(SlidePositions.values()[linearSlideState].ordinal());
             } catch (Exception e) {
                 operateLinearSlidesAuto(SlidePositions.values()[linearSlideState].height + linearSlidePosition);
             }
         } else if (slideMode == 1){
             operateLinearSlidesAuto(linearSlidePosition);
         }
-    }
+        }
+
 }

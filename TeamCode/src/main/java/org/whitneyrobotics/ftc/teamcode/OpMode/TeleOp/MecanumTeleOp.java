@@ -142,7 +142,7 @@ public class MecanumTeleOp extends OpModeEx {
                     //We use Y for our X movement as our drivers are aligned to a side of the field
                     new Pose2d(
                             scaling.apply(gamepad1.LEFT_STICK_Y.value()),
-                            scaling.apply(-gamepad1.LEFT_STICK_X.value()), //When on the left side of the field, our strafe controls are inverted
+                            scaling.apply(gamepad1.LEFT_STICK_X.value()), //When on the left side of the field, our strafe controls are inverted
                             scaling.apply(-gamepad1.RIGHT_STICK_X.value())
                     ).times(1-brakePower)
             );

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
-import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateForge;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
@@ -27,6 +26,8 @@ public class RobotImpl {
     public Alliance alliance = Alliance.RED;
     public static Pose2d poseMemory = new Pose2d(0,0,0);
 
+    public static double heightMemory, angleMemory;
+
     //Must be updated in autonomous loop
     public static double slidesHeightMemory, wristAngleMemory = 0;
     private static RobotImpl instance = null;
@@ -45,7 +46,7 @@ public class RobotImpl {
 
     //Call init in every autonomous, and in the event where instance does not exist
     public static void init(HardwareMap hardwareMap) {
-        instance = new RobotImpl(hardwareMap);
+        instance = new RobotImpl(hardwareMap, new BackupClaw(hardwareMap));
     }
 
     public final CenterstageMecanumDrive drive;
@@ -54,35 +55,21 @@ public class RobotImpl {
     public final VoltageSensor voltageSensor;
 
     public final ArmElevator elevator;
-    public final PixelJoint pixelJoint;
-    public final PixelGrabber pixelGrabber;
     public final ElbowMotor elbow;
+    public final Drone drone;
     public final JeffClaw claw;
 
-    private PixelJoint.ArmPositions lastTargetPosition;
 
-    private RobotImpl(HardwareMap hardwareMap) {
+    private RobotImpl(HardwareMap hardwareMap, BackupClaw backupClaw) {
         drive = new CenterstageMecanumDrive(hardwareMap);
         prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
-        pixelJoint = new PixelJoint(hardwareMap);
-        buildClawStateMachine();
-        //clawStatesStateMachine.start();
-        pixelGrabber = new PixelGrabber(hardwareMap);
-        elbow = new ElbowMotor(hardwareMap);
+        drone = new Drone(hardwareMap);
         claw = new JeffClaw(hardwareMap);
-        elevator.onZoneChange(underIntakeCutoff -> { //runs once
-            if(underIntakeCutoff){
-                pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
-                lastTargetPosition = PixelJoint.ArmPositions.INTAKE;
-            } else {
-                pixelJoint.setTarget(PixelJoint.ArmPositions.OUTTAKE);
-                lastTargetPosition = PixelJoint.ArmPositions.OUTTAKE;
-                pixelGrabber.grabBoth();
-            }
-        });
+        //clawStatesStateMachine.start();
+        elbow = new ElbowMotor(hardwareMap);
     }
 
     public void switchAlliance(){
@@ -91,20 +78,19 @@ public class RobotImpl {
 
     public void autonomousInit(){
         elevator.resetEncoders();
-        pixelJoint.resetEncoders();
     }
 
     public void teleOpInit(){ //Restore states of motors from memory
         drive.setPoseEstimate(RobotImpl.poseMemory);
         elevator.setCalibrationOffset(slidesHeightMemory);
-        pixelJoint.setAngularOffset(wristAngleMemory);
+        elevator.setCalibrationOffset(heightMemory);
     }
 
     public void update(){
-        pixelJoint.update();
         elevator.update();
         //clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
         drive.update();
+        drone.update();
         Colors status = Colors.OFF;
         if(drive.isBusy()){
             status = Colors.AUTO_RUNNING;
@@ -120,36 +106,7 @@ public class RobotImpl {
             }*/
         }
         //Check if linear slides are busy and set color to BUSY if true
-
-
         colorSubsystem.requestColor(status);
     }
 
-    private void buildClawStateMachine(){
-        clawStatesStateMachine = new StateForge.StateMachineBuilder<ClawStates>()
-                .state(ClawStates.REST)
-                    .onEntry(() -> pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE))
-                    .transitionLinear(() -> elevator.getPosition()>=1)
-                    .transitionLinear(elevator::isBusy)
-                    .fin()
-                .state(ClawStates.RAISED)
-                    .onEntry(() -> {
-                        pixelJoint.setTarget(PixelJoint.ArmPositions.OUTTAKE);
-                        pixelGrabber.grabBoth();
-                    })
-                    .transitionLinear(()->elevator.getPosition()<1)
-                    .fin()
-                .build();
-    }
-
-    public void flipArm(){
-        if(lastTargetPosition == PixelJoint.ArmPositions.INTAKE){
-            pixelJoint.setTarget(PixelJoint.ArmPositions.OUTTAKE);
-            lastTargetPosition = PixelJoint.ArmPositions.OUTTAKE;
-            pixelGrabber.grabBoth();
-        } else {
-            pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
-            lastTargetPosition = PixelJoint.ArmPositions.INTAKE;
-        }
-    }
 }

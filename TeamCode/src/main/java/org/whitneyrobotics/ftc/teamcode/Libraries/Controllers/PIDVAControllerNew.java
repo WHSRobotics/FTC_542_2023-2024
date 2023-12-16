@@ -45,6 +45,9 @@ public class PIDVAControllerNew {
 
     private double target = 0;
 
+    public PIDVAControllerNew(PIDVACoefficients lSlidesCoeffs, int i, int i1, int i2, int i3) {
+    }
+
     public long getIntegral() {
         return integral;
     }

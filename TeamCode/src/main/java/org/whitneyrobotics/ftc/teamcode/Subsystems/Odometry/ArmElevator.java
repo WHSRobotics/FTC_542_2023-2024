@@ -67,7 +67,7 @@ public class ArmElevator {
     }
 
     public enum Target {
-        RETRACT(0),
+        RETRACT(1),
         ONE(4),
         TWO(6),
         THREE(8);

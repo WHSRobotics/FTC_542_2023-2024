@@ -6,15 +6,12 @@ import static org.whitneyrobotics.ftc.teamcode.Extensions.GamepadEx.RumbleEffect
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.robot.Robot;
 
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
-import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.State;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.PixelJoint;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.function.UnaryOperator;
@@ -50,6 +47,12 @@ public class WHSTeleOp extends OpModeEx {
         setupNotifications();
         gamepad2.DPAD_DOWN.onPress(robot.claw::operateGateTele);
         gamepad2.DPAD_UP.onPress(robot.claw::operateWristTele);
+        gamepad2.DPAD_LEFT.onPress(robot.claw::operateElbowTele);
+        gamepad2.DPAD_RIGHT.onPress(robot.claw::operateIntakeTele);
+        gamepad2.TRIANGLE.onPress(robot.claw::operateIntakeOutTele);
+        gamepad2.CIRCLE.onPress(robot.claw::operateIntakeHeightTele);
+        gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
+        gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
     }
 
     void setupNotifications(){

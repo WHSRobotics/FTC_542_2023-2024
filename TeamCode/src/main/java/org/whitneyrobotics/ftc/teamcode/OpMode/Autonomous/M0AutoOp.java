@@ -2,33 +2,22 @@ package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
 import static org.whitneyrobotics.ftc.teamcode.Constants.Alliance.BLUE;
 import static org.whitneyrobotics.ftc.teamcode.Constants.Alliance.RED;
-import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.*;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Constants.AutoPaths;
 import org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants;
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting.TestManager;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting.Tests;
-import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.KeyValueLine;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.MultipleChoicePoll;
-import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TelemetryPro;
-import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TextLine;
-import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TextLineLambda;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
-import org.whitneyrobotics.ftc.teamcode.Tests.ML.ML.TensorFlowM1;
-import org.whitneyrobotics.ftc.teamcode.VisionImpl.AprilTagScanner23_24;
 
 import java.util.List;
 
@@ -38,8 +27,6 @@ public class M0AutoOp extends OpModeEx {
     MultipleChoicePoll tileSelector;
     String selectedTrajectory;
     AllianceSensor allianceSensor;
-
-    TensorFlowM1 cameraView;
 
 
     private int numeric_path;
