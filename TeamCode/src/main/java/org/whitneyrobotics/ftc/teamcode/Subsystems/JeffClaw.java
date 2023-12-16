@@ -71,7 +71,7 @@ public class JeffClaw {
         }
     }
     public enum IntakeHeightPositions {
-        ONE(0.1),
+        ONE(0.2),
         TWO(0.3),
         THREE(0.5),
         FOUR(0.7),
