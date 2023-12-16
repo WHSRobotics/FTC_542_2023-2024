@@ -24,6 +24,7 @@ public class WHSTeleOp extends OpModeEx {
 
     boolean fieldCentric = true;
     RobotImpl robot;
+    public boolean change = true;
     private final UnaryOperator<Float> scalingFunctionDefault = x -> (float)Math.pow(x, 3);
 
     @Override
@@ -47,20 +48,8 @@ public class WHSTeleOp extends OpModeEx {
         gamepad1.BUMPER_RIGHT.onPress(() -> fieldCentric = !fieldCentric);
         robot.teleOpInit();
         setupNotifications();
-        gamepad2.DPAD_DOWN.onPress(robot.pixelGrabber::releaseBoth);
-        gamepad2.DPAD_LEFT.onPress(robot.pixelGrabber::grabOne);
-        gamepad2.DPAD_UP.onPress(robot.pixelGrabber::grabBoth);
-        gamepad2.CROSS.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
-        gamepad2.SQUARE.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
-        gamepad2.TRIANGLE.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.TWO));
-        gamepad2.CIRCLE.onPress(()->robot.elevator.setTargetPosition(ArmElevator.Target.THREE));
-        gamepad2.BUMPER_LEFT.onPress(robot.elevator::slowModeOn);
-        gamepad2.BUMPER_LEFT.onRelease(robot.elevator::slowModeOff);
-        gamepad2.DPAD_RIGHT.onPress(robot::flipArm);
-        gamepad2.START.onPress(() -> {
-            robot.pixelJoint.resetEncoders();
-            robot.elevator.resetEncoders();
-        });
+        gamepad2.DPAD_DOWN.onPress(robot.claw::operateGateTele);
+        gamepad2.DPAD_UP.onPress(robot.claw::operateWristTele);
     }
 
     void setupNotifications(){
@@ -95,25 +84,20 @@ public class WHSTeleOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        if(gamepad2.RIGHT_TRIGGER.value() >= 1 && gamepad2.LEFT_TRIGGER.value() >= 1 && gamepad2.LEFT_STICK_DOWN.value() && gamepad2.RIGHT_STICK_DOWN.value()){
-            throw new RuntimeException("Robot Disabled.");
-        }
+
         float brakePower = gamepad1.LEFT_TRIGGER.value();
         UnaryOperator<Float> scaling = scalingFunctionDefault;
         if(gamepad1.BUMPER_LEFT.value()) scaling = x -> x/2;
         if (!robot.drive.isBusy()) robot.drive.setWeightedDrivePower(
                 Functions.rotateVectorCounterclockwise(new Pose2d(
                         scaling.apply(gamepad1.LEFT_STICK_Y.value()),
-                        scaling.apply(-gamepad1.LEFT_STICK_X.value() * (fieldCentric ? robot.alliance.allianceCoefficient : 1)),
+                        scaling.apply(-gamepad1.LEFT_STICK_X.value()),
                         scaling.apply(-gamepad1.RIGHT_STICK_X.value())
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading() + /*(robot.alliance == Alliance.BLUE ? Math.PI/2 : -Math.PI/2)*/Math.PI/2 : 0))
         );
         robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
+        if (!gamepad2.DPAD_LEFT.value()){robot.elbow.maintainPos();}
         robot.update();
-        telemetryPro.addData("Robot Heading", robot.drive.getPoseEstimate().getHeading());
-        telemetryPro.addData("Linear Slides Height", robot.elevator.getPosition());
-        telemetryPro.addData("Claw Position", robot.lastTargetPosition() != null ? "??" : robot.lastTargetPosition());
-        telemetryPro.addData("Claw State", robot.pixelGrabber.state);
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);
     }

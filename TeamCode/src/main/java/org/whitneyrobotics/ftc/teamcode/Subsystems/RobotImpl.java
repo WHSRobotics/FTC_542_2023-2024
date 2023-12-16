@@ -27,8 +27,6 @@ public class RobotImpl {
     public Alliance alliance = Alliance.RED;
     public static Pose2d poseMemory = new Pose2d(0,0,0);
 
-    public static double heightMemory, angleMemory;
-
     //Must be updated in autonomous loop
     public static double slidesHeightMemory, wristAngleMemory = 0;
     private static RobotImpl instance = null;
@@ -59,6 +57,7 @@ public class RobotImpl {
     public final PixelJoint pixelJoint;
     public final PixelGrabber pixelGrabber;
     public final ElbowMotor elbow;
+    public final JeffClaw claw;
 
     private PixelJoint.ArmPositions lastTargetPosition;
 
@@ -73,6 +72,7 @@ public class RobotImpl {
         //clawStatesStateMachine.start();
         pixelGrabber = new PixelGrabber(hardwareMap);
         elbow = new ElbowMotor(hardwareMap);
+        claw = new JeffClaw(hardwareMap);
         elevator.onZoneChange(underIntakeCutoff -> { //runs once
             if(underIntakeCutoff){
                 pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
@@ -98,8 +98,6 @@ public class RobotImpl {
         drive.setPoseEstimate(RobotImpl.poseMemory);
         elevator.setCalibrationOffset(slidesHeightMemory);
         pixelJoint.setAngularOffset(wristAngleMemory);
-        elevator.setCalibrationOffset(heightMemory);
-        pixelJoint.setAngularOffset(angleMemory);
     }
 
     public void update(){
@@ -153,9 +151,5 @@ public class RobotImpl {
             pixelJoint.setTarget(PixelJoint.ArmPositions.INTAKE);
             lastTargetPosition = PixelJoint.ArmPositions.INTAKE;
         }
-    }
-
-    public String lastTargetPosition(){
-        return lastTargetPosition == null ? "?" : lastTargetPosition.name();
     }
 }

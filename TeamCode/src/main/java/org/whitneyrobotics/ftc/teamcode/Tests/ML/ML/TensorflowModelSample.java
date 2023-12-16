@@ -34,13 +34,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.WhiteBalanceControl;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-@TeleOp(name = "TensorFlow Robot Detection Test", group = "Concept")
+@TeleOp(name = "TensorFlow Robot Detection Test", group = "1")
 public class TensorflowModelSample extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -136,6 +140,7 @@ public class TensorflowModelSample extends LinearOpMode {
             builder.setCamera(BuiltinCameraDirection.BACK);
         }
 
+
         // Choose a camera resolution. Not all cameras support all resolutions.
         //builder.setCameraResolution(new Size(640, 480));
 
@@ -172,15 +177,28 @@ public class TensorflowModelSample extends LinearOpMode {
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
+
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+            double usefullX = (recognition.getLeft() + recognition.getRight()) / 2;
+
+            if (usefullX < -70) {
+                telemetry.addData("Go left", x);
+            }
+            else if (usefullX > 70) {
+                telemetry.addData("Go Right", x);
+            }
+            else {
+                telemetry.addData("Your already there buddy, just go forward", x);
+            }
 
             telemetry.addData("Recognition Test","Working");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            telemetry.addData("Distance from AprilTag (X - RTL)", x);
         }
 
     }

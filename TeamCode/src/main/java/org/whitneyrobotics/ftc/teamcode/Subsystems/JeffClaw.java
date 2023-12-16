@@ -198,10 +198,8 @@ public class JeffClaw {
         gate.setPosition(target.GatePos);
         gateState = target.ordinal();
     }
-    public void operateGateTele(boolean change) {
-        if (change && resetGate){
-            gateState = (gateState + 1) % 2;
-        }
+    public void operateGateTele() {
+        gateState = (gateState + 1) % 2;
 
         if (gateState == 0){
             gate.setPosition(GatePositions.OPEN.GatePos);
@@ -215,11 +213,8 @@ public class JeffClaw {
         wristState = target.ordinal();
     }
 
-    public void operateWristTele(boolean change){
-        if (change && resetWrist){
-            wristState = (wristState + 1) % 2;
-        }
-
+    public void operateWristTele(){
+        wristState = (wristState + 1) % 2;
         if (wristState == 0){
             wristOne.setPosition(WristPositions.INTAKING.wristOnePos);
             wristTwo.setPosition(WristPositions.INTAKING.wristTwoPos);
