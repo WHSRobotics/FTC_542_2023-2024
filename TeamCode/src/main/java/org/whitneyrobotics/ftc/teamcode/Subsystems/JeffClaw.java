@@ -169,18 +169,8 @@ public class JeffClaw {
         intakeHeightState = target.ordinal();
     }
         
-    public void operateIntakeHeightTele(boolean stateDec, boolean stateInc){
-        if (stateInc && resetIntakeHeight){
-            intakeHeightState = (intakeHeightState + 1) % 5;
-            resetIntakeHeight = false;
-        } else if (stateDec && resetIntakeHeight){
-            intakeHeightState = (intakeHeightState - 1) % 5;
-            resetIntakeHeight = false;
-        }
-
-        if (!stateInc && !stateDec){
-            resetIntakeHeight = true;
-        }
+    public void operateIntakeHeightTele(){
+        intakeHeightState = (intakeHeightState + 1) % 5;
 
         if (intakeHeightState == 0){
             intakeHeight.setPosition(IntakeHeightPositions.ONE.IHPos);
@@ -230,10 +220,8 @@ public class JeffClaw {
         elbowState = target.ordinal();
     }
 
-    public void operateElbowTele(boolean change){
-        if (change && resetElbow){
-            elbowState = (elbowState + 1) % 2;
-        }
+    public void operateElbowTele(){
+        elbowState = (elbowState + 1) % 2;
 
         if (elbowState == 0){
             elbowOne.setPosition(ElbowPositions.INTAKING.elbowOnePos);
