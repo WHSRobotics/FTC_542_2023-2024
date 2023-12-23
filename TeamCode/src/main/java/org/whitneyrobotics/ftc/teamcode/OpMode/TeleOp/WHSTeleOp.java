@@ -38,7 +38,7 @@ public class WHSTeleOp extends OpModeEx {
             robot.drive.setPoseEstimate(new Pose2d(
                     previousPosition.getX(),
                     previousPosition.getY(),
-                    0 + (robot.alliance == Alliance.RED ? Math.PI/2 : -Math.PI/2)
+                    -25 + (robot.alliance == Alliance.RED ? Math.PI/2 : -Math.PI/2)
             ));
         });
         //gamepad1.CROSS.onPress(robot.droneLauncher::toggleState);
@@ -96,7 +96,7 @@ public class WHSTeleOp extends OpModeEx {
                 Functions.rotateVectorCounterclockwise(new Pose2d(
                         scaling.apply(-gamepad1.LEFT_STICK_Y.value()),
                         scaling.apply(gamepad1.LEFT_STICK_X.value()),
-                        scaling.apply(-gamepad1.RIGHT_STICK_X.value())
+                        scaling.apply(gamepad1.RIGHT_STICK_X.value())
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading() + (robot.alliance == Alliance.BLUE ? Math.PI/2 : -Math.PI/2) * Math.PI/2 : 0))
         );
         robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
