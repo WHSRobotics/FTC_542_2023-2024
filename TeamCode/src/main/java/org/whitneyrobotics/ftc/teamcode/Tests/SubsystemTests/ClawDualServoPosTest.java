@@ -22,8 +22,8 @@ public class ClawDualServoPosTest extends OpModeEx {
         clawTestServo = hardwareMap.get(Servo.class, "test");
         clawTestServoTwo = hardwareMap.get(Servo.class, "testTwo");
 
-        testPos = clawTestServo.getPosition();
-        testPosTwo = 0.42;
+        testPos = 0;
+        testPosTwo = 0;
     }
 
     @Override
@@ -31,8 +31,8 @@ public class ClawDualServoPosTest extends OpModeEx {
         //testPos = Math.round(testPos * 100) / 100;
         //testPosTwo = Math.round(testPosTwo * 100) / 100;
         if (firstLoop){
-            testPos = clawTestServo.getPosition();
-            testPosTwo = clawTestServoTwo.getPosition();
+            testPos = 0;
+            testPosTwo = 0;
             firstLoop = false;
         }
 
