@@ -1,11 +1,11 @@
 package org.whitneyrobotics.ftc.teamcode.Tests.HardwareTests;
 
-import static org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator.Target.*;
+import static org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator.Target.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 
 @TeleOp(name="Elevator Test", group="Hardware Tests")
 public class ElevatorTest extends OpModeEx {

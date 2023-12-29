@@ -1,5 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
+import static org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit.TILE_WIDTH;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -7,9 +9,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.ArmElevator;
-
-import static org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit.TILE_WIDTH;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 //import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 
 /**
@@ -50,24 +50,24 @@ public class RobotImpl {
     }
 
     public final CenterstageMecanumDrive drive;
-//    public final PrismSensor prismSensor;
-//    public final ColorSubsystem colorSubsystem;
+    public final PrismSensor prismSensor;
+    public final ColorSubsystem colorSubsystem;
     public final VoltageSensor voltageSensor;
 
     public final ArmElevator elevator;
 //    public final ElbowMotor elbow;
     public final Drone drone;
-    public final JeffClaw claw;
+    //public final JeffClaw claw;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
-//        prismSensor = new PrismSensor(hardwareMap);
+        prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
-//        colorSubsystem = new ColorSubsystem(hardwareMap);
+        colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
         drone = new Drone(hardwareMap);
-        claw = new JeffClaw(hardwareMap);
+        //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
 //        elbow = new ElbowMotor(hardwareMap);
     }
@@ -91,22 +91,22 @@ public class RobotImpl {
         //clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
         drive.update();
         drone.update();
-//        Colors status = Colors.OFF;
-//        if(drive.isBusy()){
-//            status = Colors.AUTO_RUNNING;
-//        }
-//        if (showMatchNotifs){
-//            status = Colors.NOTIFICATION;
-//        }
-//        if (Math.abs(drive.getLocalizer().getPoseEstimate().getX()-TILE_WIDTH.toInches(-0.5)) <= TILE_WIDTH.toInches((double)2/3)){
-//            status = Colors.BUSY;
-//            /*if(elevator.isBusy() || elevator.getPosition()>4){ //Auto retraction - UNTESTED
-//                elevator.cancel();
-//                elevator.setTargetPosition(ArmElevator.Target.RETRACT);
-//            }*/
-//        }
-//        //Check if linear slides are busy and set color to BUSY if true
-//        colorSubsystem.requestColor(status);
+        Colors status = Colors.OFF;
+        if(drive.isBusy()){
+            status = Colors.AUTO_RUNNING;
+        }
+        if (showMatchNotifs){
+            status = Colors.NOTIFICATION;
+        }
+        if (Math.abs(drive.getLocalizer().getPoseEstimate().getX()-TILE_WIDTH.toInches(-0.5)) <= TILE_WIDTH.toInches((double)2/3)){
+            status = Colors.BUSY;
+            /*if(elevator.isBusy() || elevator.getPosition()>4){ //Auto retraction - UNTESTED
+                elevator.cancel();
+                elevator.setTargetPosition(ArmElevator.Target.RETRACT);
+            }*/
+        }
+        //Check if linear slides are busy and set color to BUSY if true
+        colorSubsystem.requestColor(status);
     }
 
 }

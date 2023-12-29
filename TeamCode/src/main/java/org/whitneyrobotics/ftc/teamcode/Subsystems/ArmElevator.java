@@ -1,4 +1,4 @@
-package org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry;
+package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;

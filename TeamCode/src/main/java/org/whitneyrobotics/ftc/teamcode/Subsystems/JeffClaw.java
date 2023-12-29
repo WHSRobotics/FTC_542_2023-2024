@@ -41,7 +41,7 @@ public class JeffClaw {
 
     public JeffClaw(HardwareMap clawMap){
         intake = clawMap.get(DcMotor.class, "intake");
-        intakeHeight = clawMap.get(Servo.class, "intakeFlip");
+        intakeHeight = clawMap.get(Servo.class, "intakeServo");
         gate = clawMap.get(Servo.class, "gate");
         wristOne = clawMap.get(Servo.class, "wristLeft");
         wristTwo = clawMap.get(Servo.class, "wristRight");
