@@ -32,7 +32,7 @@ public class ClawDualServoPosTest extends OpModeEx {
         //testPosTwo = Math.round(testPosTwo * 100) / 100;
         if (firstLoop){
             testPos = 0;
-            testPosTwo = 0;
+            testPosTwo = 1;
             firstLoop = false;
         }
 

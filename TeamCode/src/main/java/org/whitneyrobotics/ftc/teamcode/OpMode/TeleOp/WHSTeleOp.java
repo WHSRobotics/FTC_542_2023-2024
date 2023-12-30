@@ -14,6 +14,11 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Intake;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
+
 import java.util.function.UnaryOperator;
 
 @TeleOp(name="Centerstage TeleOp", group="A")
@@ -24,10 +29,18 @@ public class WHSTeleOp extends OpModeEx {
     public boolean change = true;
     private final UnaryOperator<Float> scalingFunctionDefault = x -> (float)Math.pow(x, 3);
 
+    Elbow elbow;
+    Wrist wrist;
+    Gate gate;
+
+    Meet3Intake intake;
+    private int intakeState = 0;
+    private boolean unPressed = true;
+
     @Override
     public void initInternal() {
         robot = RobotImpl.getInstance(hardwareMap);
-//        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
+        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dashboardTelemetry.setMsTransmissionInterval(25);
@@ -51,9 +64,18 @@ public class WHSTeleOp extends OpModeEx {
 //        gamepad2.DPAD_RIGHT.onPress(robot.claw::operateIntakeTele);
 //        gamepad2.TRIANGLE.onPress(robot.claw::operateIntakeOutTele);
 //        gamepad2.CIRCLE.onPress(robot.claw::operateIntakeHeightTele);
-        gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
-        gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
-        gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
+        //gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
+        //gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
+        //gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
+        elbow = new Elbow(hardwareMap);
+        wrist = new Wrist(hardwareMap);
+        gate = new Gate(hardwareMap);
+
+        intake = new Meet3Intake(hardwareMap);
+
+        gamepad2.TRIANGLE.onPress(() -> elbow.update());
+        gamepad2.CIRCLE.onPress(() -> wrist.update());
+        gamepad2.CROSS.onPress(() -> gate.update());
     }
 
     void setupNotifications(){
@@ -99,7 +121,30 @@ public class WHSTeleOp extends OpModeEx {
                         scaling.apply(gamepad1.RIGHT_STICK_X.value())
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading()+robot.alliance.headingAngle : 0))
         );
-        robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
+        //robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
+
+        elbow.run();
+        wrist.run();
+        gate.run();
+        intake.update();
+
+        intake.stackPosition();
+
+        if (gamepad2.SQUARE.value() && unPressed){
+            intakeState = (intakeState + 1) % 2;
+            unPressed = false;
+        }
+
+        if (!gamepad2.SQUARE.value()){
+            unPressed = true;
+        }
+
+        if (!gamepad2.BUMPER_LEFT.value()){
+            intake.setReversed(false);
+            intake.setRPM(312 * intakeState);
+        } else {
+            intake.setReversed(true);
+        }
 
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);

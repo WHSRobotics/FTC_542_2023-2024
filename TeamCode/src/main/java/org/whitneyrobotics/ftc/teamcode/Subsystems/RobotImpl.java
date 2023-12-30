@@ -98,6 +98,7 @@ public class RobotImpl {
         if (showMatchNotifs){
             status = Colors.NOTIFICATION;
         }
+        
         if (Math.abs(drive.getLocalizer().getPoseEstimate().getX()-TILE_WIDTH.toInches(-0.5)) <= TILE_WIDTH.toInches((double)2/3)){
             status = Colors.BUSY;
             /*if(elevator.isBusy() || elevator.getPosition()>4){ //Auto retraction - UNTESTED
@@ -107,6 +108,7 @@ public class RobotImpl {
         }
         //Check if linear slides are busy and set color to BUSY if true
         colorSubsystem.requestColor(status);
+        colorSubsystem.update();
     }
 
 }
