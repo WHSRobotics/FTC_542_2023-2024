@@ -47,7 +47,7 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.8898; // in
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
+    public static double GEAR_RATIO = 0.8705299; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 17.13; // in
 
     /*
@@ -56,9 +56,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.0125;//1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0.0027;//0;
-    public static double kStatic = 0;
+    public static double kV = 0.01215;//1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = 0.0036;//0;
+    public static double kStatic = 0.0022;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -88,10 +88,10 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
      
      */
-    public static double MAX_VEL = 65;
+    public static double MAX_VEL = 58.92597832;
     public static double MAX_ACCEL = 65;
     public static double MAX_ANG_ACCEL = 5.468408160113869;//Math.toRadians(288.7552360511267);
-    public static double MAX_ANG_VEL = 4.797606123930268;//Math.toRadians(288.7552360511267);
+    public static double MAX_ANG_VEL = 4.022789714171758;//Math.toRadians(288.7552360511267);
 
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.UP;

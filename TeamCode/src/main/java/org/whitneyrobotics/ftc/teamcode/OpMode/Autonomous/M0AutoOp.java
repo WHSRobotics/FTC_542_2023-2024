@@ -2,6 +2,10 @@ package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
 import static org.whitneyrobotics.ftc.teamcode.Constants.Alliance.BLUE;
 import static org.whitneyrobotics.ftc.teamcode.Constants.Alliance.RED;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.BLUE_A2;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.BLUE_A4;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.RED_F2;
+import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.RED_F4;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -93,26 +97,26 @@ public class M0AutoOp extends OpModeEx {
         //cameraView.updateAprilTagDetections();
         TrajectorySequence desiredTrajectory = null;
         switch (robot.alliance){
-            /*
+
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     if (numeric_path == 1){
-                        desiredTrajectory = AutoPaths.RedAudienceLeft(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.RedAudienceLeft(robot.drive,robot.intake);
                     }else if  (numeric_path == 2){
-                        desiredTrajectory = AutoPaths.RedAudienceCenter(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.RedAudienceCenter(robot.drive);
                     } else if (numeric_path == 3){
-                        desiredTrajectory = AutoPaths.RedAudienceRight(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.RedAudienceRight(robot.drive);
 
                     }
                     robot.drive.getLocalizer().setPoseEstimate(RED_F2.pose);
                     selectedTrajectory = "RED AUDIENCE";
                 } else {
                     if (numeric_path == 1){
-                        desiredTrajectory = AutoPaths.RedBackstageLeft(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.RedBackstageLeft(robot.drive);
                     }else if  (numeric_path == 2){
-                        desiredTrajectory = AutoPaths.RedBackstageCenter(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.RedBackstageCenter(robot.drive);
                     } else if (numeric_path == 3){
-                        desiredTrajectory = AutoPaths.RedBackstageRight(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.RedBackstageRight(robot.drive);
 
                     }
                     robot.drive.getLocalizer().setPoseEstimate(RED_F4.pose);
@@ -122,27 +126,28 @@ public class M0AutoOp extends OpModeEx {
             case BLUE:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     if (numeric_path == 1){
-                        desiredTrajectory = AutoPaths.BlueAudienceLeft(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.BlueAudienceLeft(robot.drive);
                     }else if  (numeric_path == 2){
-                        desiredTrajectory = AutoPaths.BlueAudienceCenter(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.BlueAudienceCenter(robot.drive);
                     } else if (numeric_path == 3){
-                        desiredTrajectory = AutoPaths.BlueAudienceRight(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.BlueAudienceRight(robot.drive);
                     }
 
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A2.pose);
                     selectedTrajectory = "BLUE AUDIENCE";
                 } else {
                     if (numeric_path == 1){
-                        desiredTrajectory = AutoPaths.BlueBackstageLeft(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.BlueBackstageLeft(robot.drive);
                     }else if  (numeric_path == 2){
-                        desiredTrajectory = AutoPaths.BlueBackstageCenter(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.BlueBackstageCenter(robot.drive);
                     } else if (numeric_path == 3){
-                        desiredTrajectory = AutoPaths.BlueBackstageRight(robot.drive, cameraView);
+                        desiredTrajectory = AutoPaths.BlueBackstageRight(robot.drive);
                     }
                     robot.drive.getLocalizer().setPoseEstimate(BLUE_A4.pose);
                     selectedTrajectory = "BLUE BACKSTAGE";
                 }
-                */
+
+            /*
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     desiredTrajectory = AutoPaths.buildRedAudience(robot.drive);
@@ -153,6 +158,8 @@ public class M0AutoOp extends OpModeEx {
                     desiredTrajectory = AutoPaths.buildBlueAudience(robot.drive);
                 } else desiredTrajectory = AutoPaths.buildBlueBackstage(robot.drive);
                 break;
+
+             */
         }
         if(desiredTrajectory != null) robot.drive.followTrajectorySequenceAsync(desiredTrajectory);
 
