@@ -18,14 +18,11 @@ public class MeepMeepApp {
                                     //CLAW STUFF
                                 })
 
-                                .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, 42.5,Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
 
-                                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                .back(15)
                                 .build()
 
                 );
@@ -39,14 +36,10 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, 34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, 35, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
         RoadRunnerBotEntity blueBotBackdrop3 = new DefaultBotBuilder(meepMeep)
@@ -58,14 +51,10 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, 28, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, 28, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
 
@@ -78,14 +67,10 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, -42.5,Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, -42.5,Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
         RoadRunnerBotEntity redBotBackdrop2 = new DefaultBotBuilder(meepMeep)
@@ -97,14 +82,10 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, -27.5, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
         RoadRunnerBotEntity redBotBackdrop3 = new DefaultBotBuilder(meepMeep)
@@ -116,14 +97,10 @@ public class MeepMeepApp {
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, -35, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
         RoadRunnerBotEntity blueBotWall1 = new DefaultBotBuilder(meepMeep)
@@ -136,16 +113,18 @@ public class MeepMeepApp {
                                     //CLAW STUFF
                                 })
                                 .strafeRight(6)
-                                .back(10)
-                                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
-                                .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)))
+                                .back(78)
+                                .lineToLinearHeading(new Pose2d(45.3, 35, Math.toRadians(180)))
+                                //.lineToLinearHeading(new Pose2d(44.4, 35, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
 
-                                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                .back(15)
+
+                                //.lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
+                                //.back(15)
+
+
                                 .build()
                 );
 
@@ -156,44 +135,38 @@ public class MeepMeepApp {
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
 
                                 .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(-23.7, 35, Math.toRadians(180)))
-
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, 35, Math.toRadians(180)))
-                                .strafeLeft(7)
+                                .back(1.5)
+                                .strafeLeft(61.5)
+                                .waitSeconds(0.2)
+
+                                .lineToLinearHeading(new Pose2d(45.3, 28, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
         RoadRunnerBotEntity blueBotWall3 = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(0)))
+                                drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
+                                        .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(0)))
 
-                                .addDisplacementMarker(() -> {
-                                    //CLAW STUFF
-                                })
-                                .strafeRight(20)
-                                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
-                                .lineToLinearHeading(new Pose2d(42, 42.5,Math.toRadians(180)))
-                                .addTemporalMarker(() ->{
+                                        .addDisplacementMarker(() -> {
+                                            //CLAW STUFF
+                                        })
+                                        .strafeRight(18.5)
+//                                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
+//                                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
+                                        .forward(50)
+                                        .lineToLinearHeading(new Pose2d(45.3, 42.5,Math.toRadians(180)))
+                                        .addTemporalMarker(() ->{
 
-                                })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                .back(15)
-                                .build()
+                                        })
+                                        .build()
                 );
         RoadRunnerBotEntity redBotWall1 = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -205,16 +178,13 @@ public class MeepMeepApp {
                                     //CLAW STUFF
                                 })
                                 .strafeLeft(6)
-                                .lineToLinearHeading(new Pose2d(42, -34.8, Math.toRadians(180)))
-                                .lineToLinearHeading(new Pose2d(42, -27.5, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, -34.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, -27.5, Math.toRadians(180)))
 
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
 
-                                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
         RoadRunnerBotEntity redBotWall2 = new DefaultBotBuilder(meepMeep)
@@ -222,20 +192,19 @@ public class MeepMeepApp {
                 .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, -58, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(-35.3, -40.4, Math.toRadians(270)))
+                                .waitSeconds(0.2)
                                 .lineToLinearHeading(new Pose2d(-35.3, -33.5, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-23.7, -35, Math.toRadians(180)))
 
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(42, -35, Math.toRadians(180)))
+                                .back(1.5)
+                                .strafeRight(70)
+                                .lineToLinearHeading(new Pose2d(45.3, -35, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-
-                                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
 
@@ -250,18 +219,25 @@ public class MeepMeepApp {
                                     //CLAW STUFF
                                 })
                                 .strafeLeft(20)
-                                .splineToConstantHeading(new Vector2d(0.7, -7.8),Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(19, -18),Math.toRadians(0))
-                                .lineToLinearHeading(new Pose2d(42, -42.5, Math.toRadians(180)))
+                                .forward(61.5)
+                                .waitSeconds(0.2)
+
+
+                                .lineToLinearHeading(new Pose2d(45.3, -42.5, Math.toRadians(180)))
 
                                 .addTemporalMarker(() ->{
 
                                 })
-                                .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(42, -11,Math.toRadians(180)))
-                                .back(15)
                                 .build()
                 );
+        RoadRunnerBotEntity something = new DefaultBotBuilder(meepMeep)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-35.5, -58, Math.toRadians(270)))
+                                .splineToSplineHeading(new Pose2d(13.2,60.8, Math.toRadians(-90)),Math.toRadians(-180))
+                                .splineToSplineHeading(new Pose2d(32,30.8, Math.toRadians(-180)), Math.toRadians(-180))
+                                .splineToSplineHeading(new Pose2d(53.2,43.2, Math.toRadians(-99)), Math.toRadians(-180))
+                                .build());
+
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
@@ -281,6 +257,9 @@ public class MeepMeepApp {
                 .addEntity(redBotBackdrop2) //left
                 .addEntity(redBotBackdrop3) //center
 
+
+
+
                 //blue alliance, wall
                 .addEntity(blueBotWall1) //cente
                 .addEntity(blueBotWall2) //right (MIGHT COLLIDE WITH TRUSS)
@@ -292,7 +271,7 @@ public class MeepMeepApp {
                 .addEntity(redBotWall2)//center
                 .addEntity(redBotWall3)//right
 
-
+                //.addEntity(something)
 
                 .start();
     }
