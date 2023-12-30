@@ -54,12 +54,14 @@ public class RobotImpl {
     public final ColorSubsystem colorSubsystem;
     public final VoltageSensor voltageSensor;
 
+    public final Meet3Intake intake;
+
     public final ArmElevator elevator;
 //    public final ElbowMotor elbow;
     public final Drone drone;
     //public final JeffClaw claw;
 
-
+    
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
         prismSensor = new PrismSensor(hardwareMap);
@@ -67,6 +69,7 @@ public class RobotImpl {
         colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
         drone = new Drone(hardwareMap);
+        intake = new Meet3Intake(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
 //        elbow = new ElbowMotor(hardwareMap);
@@ -91,6 +94,7 @@ public class RobotImpl {
         //clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
         drive.update();
         drone.update();
+        intake.update();
         Colors status = Colors.OFF;
         if(drive.isBusy()){
             status = Colors.AUTO_RUNNING;

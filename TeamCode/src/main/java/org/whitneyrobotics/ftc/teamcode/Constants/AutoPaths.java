@@ -2,15 +2,15 @@ package org.whitneyrobotics.ftc.teamcode.Constants;
 
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Intake;
 
 import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.*;
-import static org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit.TILE_WIDTH;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 public class AutoPaths {
 
+    public static Meet3Intake intake;
 
     private double offset;
     public static final TrajectorySequence BlueBackstageLeft(CenterstageMecanumDrive drivetrain
@@ -19,6 +19,7 @@ public class AutoPaths {
                 .lineToLinearHeading(new Pose2d(32.9, 28.5, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
+                    intake.onePosition();
                 })
 
                 .lineToLinearHeading(new Pose2d(45.3, 42.5,Math.toRadians(180)))
@@ -145,12 +146,23 @@ public class AutoPaths {
                 .build();
     }
 
-    public static final TrajectorySequence RedAudienceLeft(CenterstageMecanumDrive drivetrain){
+    public static final TrajectorySequence RedAudienceLeft(CenterstageMecanumDrive drivetrain,
+                                                           Meet3Intake intake){
         return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
                 .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(180)))
-                .addDisplacementMarker(() -> {
-                    //CLAW STUFF
+                .addTemporalMarker(1.5,() -> {
+                    intake.onePosition();
+                    //intake.setReversed(true);
+                    intake.setRPM(-200);
+
                 })
+
+                .addTemporalMarker(3,() -> {
+                    intake.stackPosition();
+                    intake.setRPM(0);
+
+                })
+                .waitSeconds(2)
                 .strafeLeft(6)
                 .lineToLinearHeading(new Pose2d(45.3, -34.8, Math.toRadians(180)))
                 .lineToLinearHeading(new Pose2d(45.3, -27.5, Math.toRadians(180)))

@@ -101,7 +101,7 @@ public class M0AutoOp extends OpModeEx {
             case RED:
                 if(tileSelector.getSelected()[0].getValue() == FieldConstants.FieldSide.AUDIENCE){
                     if (numeric_path == 1){
-                        desiredTrajectory = AutoPaths.RedAudienceLeft(robot.drive);
+                        desiredTrajectory = AutoPaths.RedAudienceLeft(robot.drive,robot.intake);
                     }else if  (numeric_path == 2){
                         desiredTrajectory = AutoPaths.RedAudienceCenter(robot.drive);
                     } else if (numeric_path == 3){
