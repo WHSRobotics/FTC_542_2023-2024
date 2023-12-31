@@ -98,4 +98,8 @@ public class SubstateMachine<I extends Enum<I>, R extends Enum<R>> extends State
     public boolean isActive(){
         return embeddedStateMachine.isActive();
     }
+
+    public StateMachine<R> getEmbeddedStateMachine(){
+        return embeddedStateMachine;
+    }
 }

@@ -85,6 +85,10 @@ public class StateMachine<E extends Enum<E>> {
         return currentState.getState();
     }
 
+    public State<E> getState(){
+        return currentState;
+    }
+
     public void reset(){
         currentState = linearStates.get(0);
         active = true;

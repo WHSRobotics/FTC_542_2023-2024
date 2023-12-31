@@ -21,6 +21,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.MultipleChoicePo
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 //import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class M0AutoOp extends OpModeEx {
     public void initInternal() {
         RobotImpl.init(hardwareMap);
         robot = RobotImpl.getInstance();
-//        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
+        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.enableRobotDrawing();
         telemetryPro.useTestManager()
                 .addTest("Gamepad 1 Initialization", () -> Tests.assertGamepadSetup(gamepad1, "Gamepad 1"))
@@ -51,7 +52,6 @@ public class M0AutoOp extends OpModeEx {
                 new MultipleChoicePoll.MultipleChoiceOption<>("Backstage" , FieldConstants.FieldSide.BACKSTAGE),
                 new MultipleChoicePoll.MultipleChoiceOption<>("Audience",FieldConstants.FieldSide.AUDIENCE));
         telemetryPro.setInteractingGamepad(gamepad1);
-        gamepad1.CIRCLE.onPress(robot::switchAlliance);
         telemetryPro.addItem(tileSelector);
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         dashboardTelemetry.setMsTransmissionInterval(25);
@@ -66,8 +66,8 @@ public class M0AutoOp extends OpModeEx {
             telemetryPro.addData("Alliance changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
             playSound("chime");
         });
-        gamepad1.A.onPress(() -> {
-            robot.alliance = robot.alliance == RED ? BLUE : RED;
+        gamepad1.CIRCLE.onPress(() -> {
+            robot.switchAlliance();
             telemetryPro.addData("Alliance manually changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE, LineItem.RichTextFormat.ITALICS).persistent();
         });
     }
@@ -78,17 +78,17 @@ public class M0AutoOp extends OpModeEx {
         //numeric_path = cameraView.path();
         numeric_path = 1;
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
-//        ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
-//        if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
-//            desiredColor = ColorSubsystem.Colors.BUSY;
-//        }
-//        if(gamepad1.TRIANGLE.value()){ //Press and hold triangle to check alliance
-//            desiredColor = robot.alliance == Alliance.RED ? ColorSubsystem.Colors.RED : ColorSubsystem.Colors.BLUE;
-//        }
-//        robot.colorSubsystem.requestColor(desiredColor);
-//        robot.colorSubsystem.update();
-//        telemetryPro.addData("Alliance", robot.alliance.name(), (robot.alliance == Alliance.RED ? LineItem.Color.RED : LineItem.Color.BLUE));
-//        robot.drive.sendPacket(packet);
+        ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
+        if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
+            desiredColor = ColorSubsystem.Colors.BUSY;
+        }
+        if(gamepad1.TRIANGLE.value()){ //Press and hold triangle to check alliance
+            desiredColor = robot.alliance == Alliance.RED ? ColorSubsystem.Colors.RED : ColorSubsystem.Colors.BLUE;
+        }
+        robot.colorSubsystem.requestColor(desiredColor);
+        robot.colorSubsystem.update();
+        telemetryPro.addData("Alliance", robot.alliance.name(), (robot.alliance == Alliance.RED ? LineItem.Color.RED : LineItem.Color.BLUE));
+        robot.drive.sendPacket(packet);
     }
 
     @Override

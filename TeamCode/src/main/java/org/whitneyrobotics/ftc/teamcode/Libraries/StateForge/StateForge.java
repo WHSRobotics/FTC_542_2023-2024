@@ -137,8 +137,8 @@ public class StateForge {
          * @param builderCommands A lambda function that accepts a sequence of commands to build the embedded state machine
          * @return the instance
          */
-        public SubStateMachineBuilder<E,R> buildEmbeddedStateMachine(SubstateBuilder<R> builderCommands) {
-            embeddedMachine = builderCommands.useCommands(new StateMachineBuilder<>()).build();
+        public <K extends Enum<R>> SubStateMachineBuilder<E,?> buildEmbeddedStateMachine(SubstateBuilder builderCommands) {
+            embeddedMachine = builderCommands.useCommands(new StateMachineBuilder()).build();
             return this;
         }
 

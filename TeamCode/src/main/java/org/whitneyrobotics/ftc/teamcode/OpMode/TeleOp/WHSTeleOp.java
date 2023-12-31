@@ -12,6 +12,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ElbowWristImpl;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Intake;
@@ -29,8 +30,7 @@ public class WHSTeleOp extends OpModeEx {
     public boolean change = true;
     private final UnaryOperator<Float> scalingFunctionDefault = x -> (float)Math.pow(x, 3);
 
-    Elbow elbow;
-    Wrist wrist;
+    ElbowWristImpl elbowWrist;
     Gate gate;
 
     Meet3Intake intake;
@@ -67,15 +67,13 @@ public class WHSTeleOp extends OpModeEx {
         //gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
         //gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
         //gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
-        elbow = new Elbow(hardwareMap);
-        wrist = new Wrist(hardwareMap);
+        elbowWrist = new ElbowWristImpl(hardwareMap);
         gate = new Gate(hardwareMap);
 
         intake = new Meet3Intake(hardwareMap);
 
-        gamepad2.TRIANGLE.onPress(() -> elbow.update());
-        gamepad2.CIRCLE.onPress(() -> wrist.update());
-        gamepad2.CROSS.onPress(() -> gate.update());
+        gamepad2.SQUARE.onPress(elbowWrist::toggle);
+        gamepad2.CROSS.onPress(gate::update);
     }
 
     void setupNotifications(){
@@ -116,18 +114,16 @@ public class WHSTeleOp extends OpModeEx {
         if(gamepad1.BUMPER_LEFT.value()) scaling = x -> x/2;
         if (!robot.drive.isBusy()) robot.drive.setWeightedDrivePower(
                 Functions.rotateVectorCounterclockwise(new Pose2d(
-                        scaling.apply(-gamepad1.LEFT_STICK_Y.value()),
-                        scaling.apply(gamepad1.LEFT_STICK_X.value()),
-                        scaling.apply(gamepad1.RIGHT_STICK_X.value())
+                        scaling.apply(gamepad1.LEFT_STICK_Y.value()),
+                        scaling.apply(-gamepad1.LEFT_STICK_X.value()),
+                        scaling.apply(-gamepad1.RIGHT_STICK_X.value())
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading()+robot.alliance.headingAngle : 0))
         );
         //robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
 
-        elbow.run();
-        wrist.run();
         gate.run();
         intake.update();
-
+        elbowWrist.update();
         intake.stackPosition();
 
         if (gamepad2.SQUARE.value() && unPressed){

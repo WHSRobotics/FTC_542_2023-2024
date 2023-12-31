@@ -14,7 +14,6 @@ import org.whitneyrobotics.ftc.teamcode.Libraries.Motion.MotionProfileTrapezoida
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateForge;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.NanoStopwatch;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.function.Consumer;
 
@@ -25,11 +24,15 @@ public class ArmElevator {
     private double requestedPower;
     private boolean slowed;
 
+    private double GEAR_RATIO = 0.5;
+
     private StateMachine<ElevatorStates> elevatorStatesStateMachine;
     public static double V_MAX = 5, A_MAX = 5; //in/s, in/s^2
 
     //TODO: Potentially add gain scheduling for a gravitational constant
-    public static ControlConstants EXTENSION_PID= new ControlConstants(0.5,0,0.01);
+    public static ControlConstants EXTENSION_PID= new ControlConstants(0.5,0,0.001);
+
+    public static double kStatic = 0.05;
     public static MotionProfileTrapezoidal motionProfile = new MotionProfileTrapezoidal(V_MAX, A_MAX);
     private final double SPOOL_RADIUS = 1.27/2; //in
 
@@ -39,18 +42,18 @@ public class ArmElevator {
 
     public final double TICKS_PER_REV =	384.5;
 
-    public static double kV = 0.65;
+    public static double kV = 3.7;
 
-    public static double kA = 0.0;
+    public static double kA = 0.015;
 
     private NanoStopwatch stopwatch = new NanoStopwatch();
 
     public final double totalTicksToInches(double ticks){
-        return (ticks / TICKS_PER_REV) * (2 * Math.PI * SPOOL_RADIUS);
+        return (ticks / TICKS_PER_REV) * (2 * Math.PI * SPOOL_RADIUS) * GEAR_RATIO;
     }
 
     public final double angularToLinear(double angle){
-        return angle * SPOOL_RADIUS;
+        return angle * SPOOL_RADIUS * (1/GEAR_RATIO);
     }
 
     private final static double NOMINAL_VOLTAGE = 12.0;
@@ -63,7 +66,7 @@ public class ArmElevator {
 
     enum ElevatorStates {
         IDLE,
-        RISING
+        RISING,
     }
 
     public enum Target {
@@ -84,6 +87,7 @@ public class ArmElevator {
     private boolean underIntakeCutoff;
 
     private Consumer<Boolean> onZoneChangeConsumer;
+    public Double newTargetPosInches;
 
     public ArmElevator(HardwareMap hardwareMap){
         lSlides = hardwareMap.get(DcMotorEx.class, "linearSlides");
@@ -100,7 +104,11 @@ public class ArmElevator {
                     .periodic(() -> {
                         lSlides.setPower(requestedPower * (slowed ? 0.5 : 1));
                     })
-                    .transition(() -> currentTargetPositionInches != null, ElevatorStates.RISING)
+                    .onExit(() -> {
+                        currentTargetPositionInches = newTargetPosInches;
+                        newTargetPosInches = null;
+                    })
+                    .transition(() -> currentTargetPositionInches != null || newTargetPosInches != null, ElevatorStates.RISING)
                     .fin()
                 .state(ElevatorStates.RISING)
                     .onEntry(() -> {
@@ -119,7 +127,7 @@ public class ArmElevator {
                         lSlides.setPower(
                                 kV*motionProfile.velocityAt(stopwatch.seconds())/V_MAX * NOMINAL_VOLTAGE/voltageSensor.getVoltage()+
                                         kA*motionProfile.accelerationAt(stopwatch.seconds())/A_MAX+
-                                        controller.getOutput());
+                                        controller.getOutput()+kStatic);
                     })
                     .onExit(() -> currentTargetPositionInches= null)
                     .transition(() -> {
@@ -129,6 +137,7 @@ public class ArmElevator {
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
                     .transitionLinear(() -> Math.abs(requestedPower)>0 || currentTargetPositionInches == null)
+                    .transition(() -> newTargetPosInches != null, ElevatorStates.IDLE)
                     .fin()
                 .build();
         elevatorStatesStateMachine.start();
@@ -166,6 +175,7 @@ public class ArmElevator {
     }
 
     public void setTargetPosition(double pos){
+        newTargetPosInches = pos;
         currentTargetPositionInches = pos;
         update();
     }
