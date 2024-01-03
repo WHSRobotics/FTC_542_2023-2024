@@ -10,6 +10,9 @@ import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
 //import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 
 /**
@@ -60,7 +63,10 @@ public class RobotImpl {
 //    public final ElbowMotor elbow;
     public final Drone drone;
     //public final JeffClaw claw;
+    public final Wrist wrist;
 
+    public final Gate gate;
+    public final Elbow elbow;
     
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
@@ -70,6 +76,9 @@ public class RobotImpl {
         elevator = new ArmElevator(hardwareMap);
         drone = new Drone(hardwareMap);
         intake = new Meet3Intake(hardwareMap);
+        wrist = new Wrist(hardwareMap);
+        gate = new Gate(hardwareMap);
+        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
 //        elbow = new ElbowMotor(hardwareMap);
@@ -95,6 +104,7 @@ public class RobotImpl {
         drive.update();
         drone.update();
         intake.update();
+
         Colors status = Colors.OFF;
         if(drive.isBusy()){
             status = Colors.AUTO_RUNNING;

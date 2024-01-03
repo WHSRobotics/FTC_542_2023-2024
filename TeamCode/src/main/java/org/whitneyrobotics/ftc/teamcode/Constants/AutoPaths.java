@@ -3,6 +3,9 @@ package org.whitneyrobotics.ftc.teamcode.Constants;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Intake;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
 
 import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.*;
 
@@ -10,19 +13,33 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 public class AutoPaths {
 
-    public static Meet3Intake intake;
 
-    private double offset;
+    private  static Meet3Intake intake;
+    private  static Elbow   elbow;
+    private  static Gate gate;
+    private static Wrist wrist;
+
+    public static void setAutoSubsystems(Meet3Intake in, Elbow el, Gate gte, Wrist wri) {
+        intake = in;
+        elbow = el;
+        gate = gte;
+        wrist = wri;
+    }
+
+    private static final double distFromBackdrop = 53.5;
+
+
+
     public static final TrajectorySequence BlueBackstageLeft(CenterstageMecanumDrive drivetrain
                                                              ) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
                 .lineToLinearHeading(new Pose2d(32.9, 28.5, Math.toRadians(180)))
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
-                    intake.onePosition();
+
                 })
 
-                .lineToLinearHeading(new Pose2d(45.3, 42.5,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 42.5,Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -36,7 +53,7 @@ public class AutoPaths {
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(45.3, 35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 35, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -49,7 +66,7 @@ public class AutoPaths {
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(45.3, 28, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 28, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -63,7 +80,7 @@ public class AutoPaths {
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(45.3, -27.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -27.5, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -76,7 +93,7 @@ public class AutoPaths {
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(45.3, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -35, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -88,7 +105,7 @@ public class AutoPaths {
                 .addDisplacementMarker(() -> {
                     //CLAW STUFF
                 })
-                .lineToLinearHeading(new Pose2d(45.3, -42.5,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -42.5,Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -106,7 +123,7 @@ public class AutoPaths {
                 .strafeLeft(61.5)
                 .waitSeconds(0.2)
 
-                .lineToLinearHeading(new Pose2d(45.3, 28, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 28, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -120,7 +137,7 @@ public class AutoPaths {
                 })
                 .strafeRight(6)
                 .back(78)
-                .lineToLinearHeading(new Pose2d(45.3, 35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 35, Math.toRadians(180)))
                 //.lineToLinearHeading(new Pose2d(44.4, 35, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
@@ -139,21 +156,20 @@ public class AutoPaths {
 //                                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
 //                                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
                 .forward(50)
-                .lineToLinearHeading(new Pose2d(45.3, 42.5,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 42.5,Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
                 .build();
     }
 
-    public static final TrajectorySequence RedAudienceLeft(CenterstageMecanumDrive drivetrain,
-                                                           Meet3Intake intake){
+    public static final TrajectorySequence RedAudienceLeft(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F2.pose)
                 .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(180)))
                 .addTemporalMarker(1.5,() -> {
                     intake.onePosition();
-                    //intake.setReversed(true);
-                    intake.setRPM(-200);
+                    intake.setRPM(-140);
+
 
                 })
 
@@ -164,13 +180,39 @@ public class AutoPaths {
                 })
                 .waitSeconds(2)
                 .strafeLeft(6)
-                .lineToLinearHeading(new Pose2d(45.3, -34.8, Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(45.3, -27.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -34.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -29.7, Math.toRadians(180)))
 
-                .addTemporalMarker(() ->{
+                .addTemporalMarker(6.4,() ->{
+                    elbow.update();
+                    elbow.run();
+
+                })
+                .addTemporalMarker(6.8,() ->{
+                    //switches from intaking to outtaking
+                    wrist.update();
+                    wrist.run();
+
+                })
+                .addTemporalMarker(7.4,() ->{
+                    //switches from intaking to outtaking
+                    gate.run();
+
+                })
+                .addTemporalMarker(7.8,() ->{
+                    //switches from intaking to outtaking
+                    wrist.update();
+                    elbow.update();
+                    wrist.run();
+
+                })
+                .addTemporalMarker(8.4,() ->{
+                    //switches from intaking to outtaking
+                    elbow.run();
 
                 })
 
+                .waitSeconds(5)
                 .build();
     }
     public static final TrajectorySequence RedAudienceCenter(CenterstageMecanumDrive drivetrain){
@@ -184,7 +226,7 @@ public class AutoPaths {
                 })
                 .back(1.5)
                 .strafeRight(70)
-                .lineToLinearHeading(new Pose2d(45.3, -35, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -35, Math.toRadians(180)))
                 .addTemporalMarker(() ->{
 
                 })
@@ -202,7 +244,7 @@ public class AutoPaths {
                 .waitSeconds(0.2)
 
 
-                .lineToLinearHeading(new Pose2d(45.3, -42.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, -42.5, Math.toRadians(180)))
 
                 .addTemporalMarker(() ->{
 
