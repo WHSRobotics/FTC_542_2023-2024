@@ -26,7 +26,7 @@ public class AutoPaths {
         wrist = wri;
     }
 
-    private static final double distFromBackdrop = 53.5;
+    private static final double distFromBackdrop = 52.8;
 
 
 
@@ -168,7 +168,7 @@ public class AutoPaths {
                 .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(180)))
                 .addTemporalMarker(1.5,() -> {
                     intake.onePosition();
-                    intake.setRPM(-140);
+                    intake.setRPM(-125);
 
 
                 })

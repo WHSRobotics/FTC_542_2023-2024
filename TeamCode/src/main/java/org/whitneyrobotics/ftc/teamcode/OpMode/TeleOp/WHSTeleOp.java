@@ -37,9 +37,11 @@ public class WHSTeleOp extends OpModeEx {
     private int intakeState = 0;
     private boolean unPressed = true;
 
+    private double triggerValue = 0;
     @Override
     public void initInternal() {
         robot = RobotImpl.getInstance(hardwareMap);
+
         robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -67,13 +69,22 @@ public class WHSTeleOp extends OpModeEx {
         //gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
         //gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
         //gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
-        elbowWrist = new ElbowWristImpl(hardwareMap);
-        gate = new Gate(hardwareMap);
+        //gamepad2.CIRCLE.onPress(robot.intake::onePosition);
+//        gamepad2.SQUARE.onPress(robot.intake::stackPosition);
+//        gamepad1.TRIANGLE.onPress(() -> robot.elbow.update());
+//        gamepad2.CIRCLE.onPress(robot.wrist::update);
+//        gamepad2.SQUARE.onPress(robot.gate::update);
+//        gamepad2.DPAD_UP.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.THREE));
+//        gamepad2.DPAD_RIGHT.onPress((e -> robot.elevator.setTargetPosition(ArmElevator.Target.TWO)));
+//        gamepad2.DPAD_DOWN.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
+//        gamepad2.DPAD_LEFT.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
+//        gamepad2.BUMPER_RIGHT.onPress(robot.intake::update);
 
-        intake = new Meet3Intake(hardwareMap);
+        gamepad2.TRIANGLE.onPress(robot.elbowWrist::toggle);
+        gamepad2.CROSS.onPress(() -> robot.gate.update());
+        robot.intake.onePosition();
 
-        gamepad2.SQUARE.onPress(elbowWrist::toggle);
-        gamepad2.CROSS.onPress(gate::update);
+
     }
 
     void setupNotifications(){
@@ -109,6 +120,22 @@ public class WHSTeleOp extends OpModeEx {
     @Override
     protected void loopInternal() {
         robot.update();
+        robot.elbowWrist.update();
+        gamepad2.CIRCLE.onPress(robot.intake::stackPosition);
+          gamepad2.SQUARE.onPress(robot.intake::onePosition);
+        if (gamepad2.RIGHT_TRIGGER.value() > 0) {
+            robot.intake.setReversed(false);
+            triggerValue = gamepad2.RIGHT_TRIGGER.value();
+        }else if (gamepad2.LEFT_TRIGGER.value() > 0) {
+            robot.intake.setReversed(true);
+            triggerValue = gamepad2.LEFT_TRIGGER.value();
+        }
+        if (gamepad2.RIGHT_TRIGGER.value() <= 0 && gamepad2.LEFT_TRIGGER.value() <= 0){
+            triggerValue = 0;
+        }
+        robot.intake.setRPM(Math.sqrt(triggerValue) * Meet3Intake.MAX_RPM);
+
+
         float brakePower = gamepad1.LEFT_TRIGGER.value();
         UnaryOperator<Float> scaling = scalingFunctionDefault;
         if(gamepad1.BUMPER_LEFT.value()) scaling = x -> x/2;
@@ -120,27 +147,6 @@ public class WHSTeleOp extends OpModeEx {
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading()+robot.alliance.headingAngle : 0))
         );
         //robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
-
-        gate.run();
-        intake.update();
-        elbowWrist.update();
-        intake.stackPosition();
-
-        if (gamepad2.SQUARE.value() && unPressed){
-            intakeState = (intakeState + 1) % 2;
-            unPressed = false;
-        }
-
-        if (!gamepad2.SQUARE.value()){
-            unPressed = true;
-        }
-
-        if (!gamepad2.BUMPER_LEFT.value()){
-            intake.setReversed(false);
-            intake.setRPM(312 * intakeState);
-        } else {
-            intake.setReversed(true);
-        }
 
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);

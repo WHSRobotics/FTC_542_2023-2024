@@ -3,6 +3,7 @@ package org.whitneyrobotics.ftc.teamcode.Subsystems;
 import static org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.UnitConversion.DistanceUnit.TILE_WIDTH;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -67,7 +68,8 @@ public class RobotImpl {
 
     public final Gate gate;
     public final Elbow elbow;
-    
+    public final ElbowWristImpl elbowWrist;
+
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
         prismSensor = new PrismSensor(hardwareMap);
@@ -75,6 +77,7 @@ public class RobotImpl {
         colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
         drone = new Drone(hardwareMap);
+        elbowWrist = new ElbowWristImpl(hardwareMap);
         intake = new Meet3Intake(hardwareMap);
         wrist = new Wrist(hardwareMap);
         gate = new Gate(hardwareMap);
@@ -97,13 +100,16 @@ public class RobotImpl {
         elevator.setCalibrationOffset(slidesHeightMemory);
         elevator.setCalibrationOffset(heightMemory);
     }
-
     public void update(){
         elevator.update();
         //clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
         drive.update();
         drone.update();
+        wrist.run();
+        elbow.run();
         intake.update();
+        gate.run();
+
 
         Colors status = Colors.OFF;
         if(drive.isBusy()){

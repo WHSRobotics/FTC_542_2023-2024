@@ -26,7 +26,7 @@ public class ElbowWristImpl {
     boolean toggle = false;
     boolean substateCompleted = false;
 
-    private StateMachine<ElbowWristStates> stateMachine;
+    public static StateMachine<ElbowWristStates> stateMachine;
     public ElbowWristImpl(HardwareMap hardwareMap){
         elbow = new Elbow(hardwareMap);
         wrist = new Wrist(hardwareMap);
@@ -39,11 +39,11 @@ public class ElbowWristImpl {
                             .fin()
                             .state(INTAKE_SUBSTATES.ELBOW_EXTEND)
                             .onEntry(() -> elbow.currentState = Elbow.ElbowPositions.ANGLED)
-                            .timedTransitionLinear(0.4)
+                            .timedTransitionLinear(0.1)
                             .fin()
                             .state(INTAKE_SUBSTATES.WRIST_FOLD)
                             .onEntry(() -> wrist.currentState = Wrist.WristPositions.OUTTAKING)
-                            .timedTransitionLinear(0.1)
+                            .timedTransitionLinear(0.01)
                             .fin()
                             .state(INTAKE_SUBSTATES.COMPLETE)
                             .transitionLinear(() -> true)
@@ -86,6 +86,7 @@ public class ElbowWristImpl {
     public void update(){
         stateMachine.update();
         elbow.run();
+
         wrist.run();
     }
 
