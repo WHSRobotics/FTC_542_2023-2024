@@ -40,7 +40,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-public class Pathfinder extends LinearOpMode {
+public class Pathfinder {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -56,7 +56,22 @@ public class Pathfinder extends LinearOpMode {
     private TfodProcessor tfod;
 
     private VisionPortal visionPortal;
-    
+    @Override
+    public void runOpMode() {
+
+        initTfod();
+
+        waitForStart();
+
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+
+                telemetryTfod();
+
+                sleep(20);
+            }
+        }
+
     private void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
@@ -137,7 +152,5 @@ public class Pathfinder extends LinearOpMode {
             path = 0;
         }
         return path;
-
-
     }
 }
