@@ -57,20 +57,6 @@ public class Pathfinder {
 
     private VisionPortal visionPortal;
     @Override
-    public void runOpMode() {
-
-        initTfod();
-
-        waitForStart();
-
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
-
-                telemetryTfod();
-
-                sleep(20);
-            }
-        }
 
     private void initTfod() {
 
