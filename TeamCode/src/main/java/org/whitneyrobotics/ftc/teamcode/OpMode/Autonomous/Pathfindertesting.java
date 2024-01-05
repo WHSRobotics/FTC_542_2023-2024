@@ -40,7 +40,8 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-public class Pathfinder {
+@Teleop(name = "Pathfinder Testing", group = "Linear Opmode")
+public class Pathfindertesting extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -49,12 +50,83 @@ public class Pathfinder {
     private static final String TFOD_MODEL_ASSET = "CenterStageRedModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
+    private static final String[] LABELS = {
+            "Red Prop",
+    };
 
+    /**
+     * The variable to store our instance of the TensorFlow Object Detection processor.
+     */
     private TfodProcessor tfod;
 
+    /**
+     * The variable to store our instance of the vision portal.
+     */
     private VisionPortal visionPortal;
-    @Override
 
+    @Override
+    public void runOpMode() {
+
+        initTfod();
+
+        // Wait for the DS start button to be touched.
+        telemetry.addData(path());
+        telemetry.update();
+        waitForStart();
+
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+
+                telemetry.addData(path());
+                telemetry.update();
+                telemetryTfod();
+
+                // Push telemetry to the Driver Station.
+                telemetry.update();
+
+                // Save CPU resources; can resume streaming when needed.
+                if (gamepad1.dpad_down) {
+                    visionPortal.stopStreaming();
+                } else if (gamepad1.dpad_up) {
+                    visionPortal.resumeStreaming();
+                }
+
+                // Share the CPU.
+                sleep(20);
+            }
+        }
+        public int path(){
+            int path = 0;
+            List<Recognition> currentRecognitions = tfod.getRecognitions();
+            if (currentRecognitions.size() == 0){
+                path = 0;
+            }
+            else if (currentRecognitions.size() == 1){
+                Recognition recognition = currentRecognitions.get(0);
+                double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+                if (x < 320){
+                    path = 1;
+                }
+                else if (x > 320){
+                    path = 2;
+                }
+            }
+            else {
+                path = 0;
+            }
+            return path;
+
+
+        }
+
+        // Save more CPU resources when camera is no longer needed.
+        visionPortal.close();
+
+    }   // end runOpMode()
+
+    /**
+     * Initialize the TensorFlow Object Detection processor.
+     */
     private void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
@@ -115,25 +187,9 @@ public class Pathfinder {
         //visionPortal.setProcessorEnabled(tfod, true);
 
     }   // end method initTfod()
-    public int path(){
-        int path = 0;
-        List<Recognition> currentRecognitions = tfod.getRecognitions();
-        if (currentRecognitions.size() == 0){
-            path = 0;
-        }
-        else if (currentRecognitions.size() == 1){
-            Recognition recognition = currentRecognitions.get(0);
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            if (x < 320){
-                path = 1;
-            }
-            else if (x > 320){
-                path = 2;
-            }
-        }
-        else {
-            path = 0;
-        }
-        return path;
-    }
+
+    /**
+     * Send some useful information via telemetry.
+     */
+
 }
