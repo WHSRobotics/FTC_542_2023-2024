@@ -29,6 +29,10 @@
 
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+import android.util.Size;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -53,8 +57,6 @@ public class Pathfinder {
     private TfodProcessor tfod;
 
     private VisionPortal visionPortal;
-    @Override
-
     private void initTfod() {
 
         // Create the TensorFlow processor by using a builder.

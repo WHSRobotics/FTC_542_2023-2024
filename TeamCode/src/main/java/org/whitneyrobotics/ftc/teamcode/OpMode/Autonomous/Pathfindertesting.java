@@ -29,6 +29,8 @@
 
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import android.util.Size;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -40,7 +42,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Teleop(name = "Pathfinder Testing", group = "Linear Opmode")
+@TeleOp(name = "Pathfinder Testing", group = "Linear Opmode")
 public class Pathfindertesting extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -70,63 +72,62 @@ public class Pathfindertesting extends LinearOpMode {
         initTfod();
 
         // Wait for the DS start button to be touched.
-        telemetry.addData(path());
-        telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+        while (opModeIsActive()) {
 
-                telemetry.addData(path());
-                telemetry.update();
-                telemetryTfod();
+            telemetry.addData("path number", path());
+            telemetry.update();
+            initTfod();
 
-                // Push telemetry to the Driver Station.
-                telemetry.update();
+            // Push telemetry to the Driver Station.
+            telemetry.update();
 
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
-
-                // Share the CPU.
-                sleep(20);
+            // Save CPU resources; can resume streaming when needed.
+            if (gamepad1.dpad_down) {
+                visionPortal.stopStreaming();
+            } else if (gamepad1.dpad_up) {
+                visionPortal.resumeStreaming();
             }
+
+            // Share the CPU.
+            sleep(20);
         }
-        public int path(){
-            int path = 0;
-            List<Recognition> currentRecognitions = tfod.getRecognitions();
-            if (currentRecognitions.size() == 0){
-                path = 0;
-            }
-            else if (currentRecognitions.size() == 1){
-                Recognition recognition = currentRecognitions.get(0);
-                double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-                if (x < 320){
-                    path = 1;
-                }
-                else if (x > 320){
-                    path = 2;
-                }
-            }
-            else {
-                path = 0;
-            }
-            return path;
+    
 
 
-        }
-
-        // Save more CPU resources when camera is no longer needed.
+    // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
+}
 
-    }   // end runOpMode()
+       // end runOpMode()
 
     /**
      * Initialize the TensorFlow Object Detection processor.
      */
+    public int path(){
+        int path = 0;
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        if (currentRecognitions.size() == 0){
+            path = 0;
+        }
+        else if (currentRecognitions.size() == 1){
+            Recognition recognition = currentRecognitions.get(0);
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            if (x < 320){
+                path = 1;
+            }
+            else if (x > 320){
+                path = 2;
+            }
+        }
+        else {
+            path = 0;
+        }
+        return path;
+
+
+    }
     private void initTfod() {
 
         // Create the TensorFlow processor by using a builder.

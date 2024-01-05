@@ -29,6 +29,8 @@
 
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import android.util.Size;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -181,7 +183,7 @@ public class xDistanceCalculator extends LinearOpMode {
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-            telemetry.addData("- X Distance [IMPORTANT]", x)
+            telemetry.addData("- X Distance [IMPORTANT]", x);
         }
 
     }
