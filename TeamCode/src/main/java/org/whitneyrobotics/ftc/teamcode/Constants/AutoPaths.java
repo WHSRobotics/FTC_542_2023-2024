@@ -15,7 +15,7 @@ public class AutoPaths {
 
 
     private  static Meet3Intake intake;
-    private  static Elbow   elbow;
+    private  static Elbow elbow;
     private  static Gate gate;
     private static Wrist wrist;
 
