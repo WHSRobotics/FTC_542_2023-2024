@@ -122,7 +122,7 @@ public class WHSTeleOp extends OpModeEx {
         robot.update();
         robot.elbowWrist.update();
         gamepad2.CIRCLE.onPress(robot.intake::stackPosition);
-          gamepad2.SQUARE.onPress(robot.intake::onePosition);
+        gamepad2.SQUARE.onPress(robot.intake::onePosition);
         if (gamepad2.RIGHT_TRIGGER.value() > 0) {
             robot.intake.setReversed(false);
             triggerValue = gamepad2.RIGHT_TRIGGER.value();
@@ -134,6 +134,7 @@ public class WHSTeleOp extends OpModeEx {
             triggerValue = 0;
         }
         robot.intake.setRPM(Math.sqrt(triggerValue) * Meet3Intake.MAX_RPM);
+        robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
 
 
         float brakePower = gamepad1.LEFT_TRIGGER.value();
@@ -146,7 +147,6 @@ public class WHSTeleOp extends OpModeEx {
                         scaling.apply(-gamepad1.RIGHT_STICK_X.value())
                 ).times(1-brakePower), (fieldCentric ? -robot.drive.getPoseEstimate().getHeading()+robot.alliance.headingAngle : 0))
         );
-        //robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
 
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);
