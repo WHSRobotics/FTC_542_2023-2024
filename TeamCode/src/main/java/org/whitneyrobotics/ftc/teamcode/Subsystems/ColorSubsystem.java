@@ -108,11 +108,11 @@ public class ColorSubsystem {
                 RGBValues = new int[] {255, 255, 0};
                 break;
             case BUSY:
-                ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE);
+                ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_LARSON_SCANNER);
                 RGBValues = new int[] {255, 255, 0};
                 break;
             case AUTO_RUNNING:
-                ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_SHOT);
+                ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_HEARTBEAT_MEDIUM);
                 RGBValues = new int[] {0, 255, 255};
                 break;
             default: //Unimplemented colors will default to black
