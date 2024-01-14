@@ -32,7 +32,7 @@ public class OpenCVRed {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
         camera.setPipeline(new Pipeline());
         camera.openCameraDevice();
-        camera.startStreaming(1280, 720);
+        camera.startStreaming(1920, 1080);
     }
 
     public static void stopCamera(){
