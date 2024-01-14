@@ -5,6 +5,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class MeepMeepApp {
+    public static double extraDistance = 3;
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 
@@ -12,8 +13,8 @@ public class MeepMeepApp {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(11, 58.3, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(32.9, 28.5, Math.toRadians(180)))
+                        drive.trajectorySequenceBuilder(new Pose2d(11, 58.3 , Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(32.9, 36.5, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
@@ -32,11 +33,11 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(11, 58.3, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(23.3, 24, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(23.3, 30, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .lineToLinearHeading(new Pose2d(45.3, 35, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, 35.5, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
                                 })
@@ -47,7 +48,7 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(11, 58.3, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(12.5, 30.8, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(12.5, 36.8, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
@@ -55,6 +56,10 @@ public class MeepMeepApp {
                                 .addTemporalMarker(() ->{
 
                                 })
+                                .waitSeconds(2)
+                                .lineToLinearHeading(new Pose2d(47.0, 10.3, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(58, 10.3, Math.toRadians(180)))
+
                                 .build()
                 );
 
@@ -63,7 +68,7 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(12.5, -58.3, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(32.9, -28.5, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(32.9, -23, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
@@ -71,6 +76,9 @@ public class MeepMeepApp {
                                 .addTemporalMarker(() ->{
 
                                 })
+                                .waitSeconds(2)
+                                .lineToLinearHeading(new Pose2d(45.3, -10.3, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(58, -10.3, Math.toRadians(180)))
                                 .build()
                 );
         RoadRunnerBotEntity redBotBackdrop2 = new DefaultBotBuilder(meepMeep)
@@ -78,7 +86,7 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(12.5, -58.3, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(12.5, -28.5, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(12.5, -23.5, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
@@ -93,7 +101,7 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(11, -58.3, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(23.3, -24, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(23.3, -17.5, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
@@ -108,13 +116,13 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(-35.3, 36.5, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .strafeRight(6)
+                                .strafeLeft(1.2)
                                 .back(78)
-                                .lineToLinearHeading(new Pose2d(45.3, 35, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(45.3, 35.5, Math.toRadians(180)))
                                 //.lineToLinearHeading(new Pose2d(44.4, 35, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
 
@@ -134,12 +142,15 @@ public class MeepMeepApp {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
 
-                                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(-46.8, 18, Math.toRadians(0)))
+                                .waitSeconds(1)
+                                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(90)))
+
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .back(1.5)
-                                .strafeLeft(61.5)
+                                .forward(1.5)
+                                .strafeRight(70)
                                 .waitSeconds(0.2)
 
                                 .lineToLinearHeading(new Pose2d(45.3, 28, Math.toRadians(180)))
@@ -153,12 +164,12 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
-                                        .lineToLinearHeading(new Pose2d(-35.3, 29, Math.toRadians(0)))
+                                        .lineToLinearHeading(new Pose2d(-35.3, 23, Math.toRadians(0)))
 
                                         .addDisplacementMarker(() -> {
                                             //CLAW STUFF
                                         })
-                                        .strafeRight(18.5)
+                                        .strafeLeft(12.3)
 //                                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
 //                                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
                                         .forward(50)
@@ -173,17 +184,18 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, -58, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(-35.3, -22, Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .strafeLeft(6)
+                                .strafeLeft(13.2)
                                 .lineToLinearHeading(new Pose2d(45.3, -34.8, Math.toRadians(180)))
                                 .lineToLinearHeading(new Pose2d(45.3, -27.5, Math.toRadians(180)))
 
                                 .addTemporalMarker(() ->{
 
                                 })
+
 
                                 .build()
                 );
@@ -192,14 +204,13 @@ public class MeepMeepApp {
                 .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, -58, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(-35.3, -40.4, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(-46.8, -30.5, Math.toRadians(0)))
                                 .waitSeconds(0.2)
-                                .lineToLinearHeading(new Pose2d(-35.3, -33.5, Math.toRadians(90)))
-
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .back(1.5)
+                                .lineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(90)))
+
                                 .strafeRight(70)
                                 .lineToLinearHeading(new Pose2d(45.3, -35, Math.toRadians(180)))
                                 .addTemporalMarker(() ->{
@@ -213,13 +224,16 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, -58, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(-35.3, -29, Math.toRadians(0)))
+                                .back(15)
+                                .lineToLinearHeading(new Pose2d(-35.3, -37, Math.toRadians(0)))
 
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .strafeLeft(20)
-                                .forward(61.5)
+                                .strafeLeft(16)
+                                .lineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(90)))
+
+                                .strafeRight(70)
                                 .waitSeconds(0.2)
 
 
@@ -246,28 +260,28 @@ public class MeepMeepApp {
 
 
                 //blue alliance backdrop
-                .addEntity(blueBotBackdrop1) //left
+                //.addEntity(blueBotBackdrop1) //left
                 .addEntity(blueBotBackdrop2) //center
-                .addEntity(blueBotBackdrop3) //right(MIGHT COLLIDE WITH TRUSS)
+                //.addEntity(blueBotBackdrop3) //right(MIGHT COLLIDE WITH TRUSS)
 
 
 
                 //red alliance, backdrop
-                .addEntity(redBotBackdrop1) //right
-                .addEntity(redBotBackdrop2) //left
-                .addEntity(redBotBackdrop3) //center
-
-
-
-
-                //blue alliance, wall
-                .addEntity(blueBotWall1) //cente
-                .addEntity(blueBotWall2) //right (MIGHT COLLIDE WITH TRUSS)
+                 //.addEntity(redBotBackdrop1) //right
+                //.addEntity(redBotBackdrop2) //left
+                //.addEntity(redBotBackdrop3) //center
+//
+//
+//
+//
+//                //blue alliance, wall
+                .addEntity(blueBotWall1) //right
+                 .addEntity(blueBotWall2) //center (MIGHT COLLIDE WITH TRUSS)
                 .addEntity(blueBotWall3) //left (MIGHT HIT TRUSS)
-
-
-
-                .addEntity(redBotWall1)//left
+//
+//
+//
+                    //.addEntity(redBotWall1)//left
                 .addEntity(redBotWall2)//center
                 .addEntity(redBotWall3)//right
 

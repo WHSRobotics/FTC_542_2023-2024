@@ -1,5 +1,6 @@
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,10 +18,12 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 @TeleOp(name = "CenterStage OpenCV Red", group = "Concept")
-public class CenterStageOpenCVRed extends LinearOpMode {
+@Config
+public class CenterStageOpenCVRedTest extends LinearOpMode {
 
     private OpenCvCamera camera;
     public int path;
+    public static double potentiometer = 0.7;
 
     @Override
     public void runOpMode() {
@@ -48,6 +51,7 @@ public class CenterStageOpenCVRed extends LinearOpMode {
     }
 
     static class Pipeline extends OpenCvPipeline {
+
         private static Position position = Position.RIGHT;
         private static double leftIntensity = 0.0;
         private static double rightIntensity = 0.0;
@@ -78,12 +82,13 @@ public class CenterStageOpenCVRed extends LinearOpMode {
 
             double meanRedIntensity = Core.mean(redChannel).val[0];
 
-            dynamicThreshold = meanRedIntensity * 1; // ADJUST THIS
+            dynamicThreshold = meanRedIntensity * potentiometer; // ADJUST THIS
 
             //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
-            if (leftIntensity < dynamicThreshold && (rightIntensity - 22) < dynamicThreshold) {
+
+            if ((leftIntensity) < dynamicThreshold && (rightIntensity-22) < dynamicThreshold) {
                 position = Position.RIGHT;
-            } else if (leftIntensity < rightIntensity) {
+            }else if (leftIntensity < rightIntensity) {
                 position = Position.LEFT;
             } else if (rightIntensity < leftIntensity) {
                 position = Position.CENTER;

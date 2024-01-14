@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TeleOp(name = "CenterStage OpenCV Blue", group = "Concept")
-public class CenterStageOpenCVBlue extends LinearOpMode {
+public class CenterStageOpenCVBlueTest extends LinearOpMode {
 
     private OpenCvCamera camera;
     public int path;

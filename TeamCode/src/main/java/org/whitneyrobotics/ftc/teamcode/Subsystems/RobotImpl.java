@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
+import org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous.OpenCVRed;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
@@ -54,34 +56,34 @@ public class RobotImpl {
     }
 
     public final CenterstageMecanumDrive drive;
-    public final PrismSensor prismSensor;
+//    public final PrismSensor prismSensor;
     public final ColorSubsystem colorSubsystem;
     public final VoltageSensor voltageSensor;
 
     public final Meet3Intake intake;
 
     public final ArmElevator elevator;
-//    public final ElbowMotor elbow;
     public final Drone drone;
-    //public final JeffClaw claw;
-    public final Wrist wrist;
 
     public final Gate gate;
-    public final Elbow elbow;
     public final ElbowWristImpl elbowWrist;
+
+    public final PurpleServo purpleAuto;
+
 
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
-        prismSensor = new PrismSensor(hardwareMap);
+        //prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
         drone = new Drone(hardwareMap);
         elbowWrist = new ElbowWristImpl(hardwareMap);
         intake = new Meet3Intake(hardwareMap);
-        wrist = new Wrist(hardwareMap);
+//        wrist = new Wrist(hardwareMap);
         gate = new Gate(hardwareMap);
-        elbow = new Elbow(hardwareMap);
+        purpleAuto = new PurpleServo(hardwareMap);
+//        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
 //        elbow = new ElbowMotor(hardwareMap);
@@ -105,11 +107,12 @@ public class RobotImpl {
         //clawStatesStateMachine.update();//Will automatically move the arm depending on elevator height
         drive.update();
         drone.update();
-        wrist.run();
-        elbow.run();
+//        wrist.run();
+//        elbow.run();
         intake.update();
         gate.run();
-
+        elbowWrist.update();
+        purpleAuto.update();
 
         Colors status = Colors.OFF;
         if(drive.isBusy()){

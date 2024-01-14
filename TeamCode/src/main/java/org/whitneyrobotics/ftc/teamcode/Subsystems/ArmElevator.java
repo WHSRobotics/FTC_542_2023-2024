@@ -180,7 +180,7 @@ public class ArmElevator {
         update();
     }
 
-    public void inputPower(double power){
+    public void  inputPower(double power){
         requestedPower = power;
     }
 

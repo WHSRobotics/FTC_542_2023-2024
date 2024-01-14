@@ -120,7 +120,8 @@ public class WHSTeleOp extends OpModeEx {
     @Override
     protected void loopInternal() {
         robot.update();
-        robot.elbowWrist.update();
+        //robot.elbowWrist.update();
+        //robot.elbowWrist.update();
         gamepad2.CIRCLE.onPress(robot.intake::stackPosition);
         gamepad2.SQUARE.onPress(robot.intake::onePosition);
         if (gamepad2.RIGHT_TRIGGER.value() > 0) {
