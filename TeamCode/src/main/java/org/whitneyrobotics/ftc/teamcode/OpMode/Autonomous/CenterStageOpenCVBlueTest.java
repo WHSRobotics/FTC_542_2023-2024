@@ -1,5 +1,6 @@
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -16,12 +17,26 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Config
 @TeleOp(name = "CenterStage OpenCV Blue", group = "Concept")
 public class CenterStageOpenCVBlueTest extends LinearOpMode {
 
     private OpenCvCamera camera;
     public int path;
+    public static double potentiometer = 0.7;
+    public static double rightRegionX = 0.0;
+    public static double rightRegionY = 0.0;
+    public static double rightRegionWidth = 0.0;
+    public static double rightRegionHeight = 0.0;
+    public static double centerRegionX = 0.0;
+    public static double centerRegionY = 0.0;
+    public static double centerRegionWidth = 0.0;
+    public static double centerRegionHeight = 0.0;
+    public static double leftRegionX = 0.0;
+    public static double leftRegionY = 0.0;
+    public static double leftRegionWidth = 0.0;
+    public static double leftRegionHeight = 0.0;
+
 
     @Override
     public void runOpMode() {
@@ -31,7 +46,7 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
         camera.setPipeline(new Pipeline());
         camera.openCameraDevice();
-        camera.startStreaming(1280, 720);
+        camera.startStreaming(1920, 1080);
 
         waitForStart();
 
@@ -39,7 +54,8 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
             telemetry.addData("Position: ", Pipeline.getPosition());
             telemetry.addData("Path: ", path);
             telemetry.addData("Left Intensity: ", Pipeline.getLeftIntensity());
-            telemetry.addData("Right Intensity: ", (Pipeline.getRightIntensity()) - 22);
+            telemetry.addData("Right Intensity: ", Pipeline.getRightIntensity());
+            telemetry.addData("Center Intensity: ", Pipeline.getCenterIntensity());
             telemetry.addData("Dynamic Threshold: ", Pipeline.getDynamicThreshold());
             telemetry.update();
             path = Pipeline.convertEnumToInteger();
@@ -49,9 +65,11 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
     }
 
     static class Pipeline extends OpenCvPipeline {
+
         private static Position position = Position.RIGHT;
         private static double leftIntensity = 0.0;
         private static double rightIntensity = 0.0;
+        private static double centerIntensity = 0.0;
         private static double dynamicThreshold = 0.0;
 
         @Override
@@ -60,33 +78,43 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
             Core.flip(input.t(), input, 2);
             Core.split(input, channels);
 
-            Mat blueChannel = channels.get(0);
+            Mat redChannel = channels.get(2);
 
-            Rect leftRegion = new Rect(input.width() / 4, 45, 270, 260);
-            Rect rightRegion = new Rect(950, 0, 270, 270);
-            Mat leftBlueRegion = new Mat(blueChannel, leftRegion);
-            Mat rightBlueRegion = new Mat(blueChannel, rightRegion);
-            Scalar leftMean = Core.mean(leftBlueRegion);
-            Scalar rightMean = Core.mean(rightBlueRegion);
+            Rect leftRegion = new Rect(350, 45, 270, 260);
+            Rect centerRegion = new Rect(((input.width() / 2) - 135), 200, 270, 260);
+            Rect rightRegion = new Rect(990, 200, 270, 270);
+//            Rect leftRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
+//            Rect centerRegion = new Rect((int) centerRegionX, (int) centerRegionY, (int) centerRegionWidth, (int) centerRegionHeight);
+//            Rect rightRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
+            Mat leftRedRegion = new Mat(redChannel, leftRegion);
+            Mat centerRedRegion = new Mat(redChannel, centerRegion);
+            Mat rightRedRegion = new Mat(redChannel, rightRegion);
+            Scalar leftMean = Core.mean(leftRedRegion);
+            Scalar centerMean = Core.mean(centerRedRegion);
+            Scalar rightMean = Core.mean(rightRedRegion);
             double leftIntensityValue = leftMean.val[0];
+            double centerIntensityValue = centerMean.val[0];
             double rightIntensityValue = rightMean.val[0];
 
             leftIntensity = leftIntensityValue;
+            centerIntensity = centerIntensityValue;
             rightIntensity = rightIntensityValue;
 
             Imgproc.rectangle(input, leftRegion.tl(), leftRegion.br(), new Scalar(0, 255, 0), 2);
+            Imgproc.rectangle(input, centerRegion.tl(), centerRegion.br(), new Scalar(0, 255, 0), 2);
             Imgproc.rectangle(input, rightRegion.tl(), rightRegion.br(), new Scalar(0, 255, 0), 2);
 
-            double meanBlueIntensity = Core.mean(blueChannel).val[0];
+            double meanRedIntensity = Core.mean(redChannel).val[0];
 
-            dynamicThreshold = meanBlueIntensity * 1; // ADJUST THIS
+            dynamicThreshold = meanRedIntensity * potentiometer; // ADJUST THIS
 
-            // rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the spike mark than left can
-            if (leftIntensity < dynamicThreshold && (rightIntensity - 22) < dynamicThreshold) {
+            //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
+
+            if (rightIntensity > leftIntensity && rightIntensity > centerIntensity) {
                 position = Position.RIGHT;
-            } else if (leftIntensity < rightIntensity) {
+            }else if (leftIntensity > rightIntensity && leftIntensity > centerIntensity) {
                 position = Position.LEFT;
-            } else if (rightIntensity < leftIntensity) {
+            } else {
                 position = Position.CENTER;
             }
 
@@ -103,6 +131,9 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
 
         public static double getRightIntensity() {
             return rightIntensity;
+        }
+        public static double getCenterIntensity() {
+            return centerIntensity;
         }
 
         public static double getDynamicThreshold() {

@@ -42,6 +42,7 @@ public class OpenCVRed {
         private static CenterStageOpenCVRedTest.Pipeline.Position position = CenterStageOpenCVRedTest.Pipeline.Position.RIGHT;
         private static double leftIntensity = 0.0;
         private static double rightIntensity = 0.0;
+        private static double centerIntensity = 0.0;
         private static double dynamicThreshold = 0.0;
 
         @Override
@@ -53,15 +54,20 @@ public class OpenCVRed {
             Mat redChannel = channels.get(2);
 
             Rect leftRegion = new Rect(input.width() / 4, 45, 270, 260);
+            Rect centerRegion = new Rect(input.width() / 2, 45, 270, 260);
             Rect rightRegion = new Rect(950, 0, 270, 270);
             Mat leftRedRegion = new Mat(redChannel, leftRegion);
+            Mat centerRedRegion = new Mat(redChannel, centerRegion);
             Mat rightRedRegion = new Mat(redChannel, rightRegion);
             Scalar leftMean = Core.mean(leftRedRegion);
+            Scalar centerMean = Core.mean(centerRedRegion);
             Scalar rightMean = Core.mean(rightRedRegion);
             double leftIntensityValue = leftMean.val[0];
+            double centerIntensityValue = centerMean.val[0];
             double rightIntensityValue = rightMean.val[0];
 
             leftIntensity = leftIntensityValue;
+            centerIntensity = centerIntensityValue;
             rightIntensity = rightIntensityValue;
 
             Imgproc.rectangle(input, leftRegion.tl(), leftRegion.br(), new Scalar(0, 255, 0), 2);
@@ -72,11 +78,11 @@ public class OpenCVRed {
             dynamicThreshold = meanRedIntensity * 0.5; // ADJUST THIS
 
             //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
-            if (leftIntensity < dynamicThreshold && (rightIntensity - 22) < dynamicThreshold) {
-                position = CenterStageOpenCVRedTest.Pipeline.Position.RIGHT;
-            } else if (leftIntensity < rightIntensity) {
+            if (leftIntensity > centerIntensity && leftIntensity > rightIntensity) {
                 position = CenterStageOpenCVRedTest.Pipeline.Position.LEFT;
-            } else if (rightIntensity < leftIntensity) {
+            } else if (rightIntensity > leftIntensity && rightIntensity > centerIntensity) {
+                position = CenterStageOpenCVRedTest.Pipeline.Position.RIGHT;
+            } else {
                 position = CenterStageOpenCVRedTest.Pipeline.Position.CENTER;
             }
 
