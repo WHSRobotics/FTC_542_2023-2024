@@ -80,13 +80,11 @@ public class RobotImpl {
         drone = new Drone(hardwareMap);
         elbowWrist = new ElbowWristImpl(hardwareMap);
         intake = new Meet3Intake(hardwareMap);
-//        wrist = new Wrist(hardwareMap);
         gate = new Gate(hardwareMap);
         purpleAuto = new PurpleServo(hardwareMap);
 //        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
-//        elbow = new ElbowMotor(hardwareMap);
     }
 
     public void switchAlliance(){
