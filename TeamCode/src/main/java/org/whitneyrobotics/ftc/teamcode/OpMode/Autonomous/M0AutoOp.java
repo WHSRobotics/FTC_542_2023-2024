@@ -48,6 +48,8 @@ public class M0AutoOp extends OpModeEx {
         robot = RobotImpl.getInstance();
         robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.enableRobotDrawing();
+        robot.drone.init();
+
         telemetryPro.useTestManager()
                 .addTest("Gamepad 1 Initialization", () -> Tests.assertGamepadSetup(gamepad1, "Gamepad 1"))
                 .addTest("Gamepad 2 Initialization", () -> Tests.assertGamepadSetup(gamepad2, "Gamepad 2"))
@@ -88,11 +90,11 @@ public class M0AutoOp extends OpModeEx {
             telemetryPro.addData("Numeric Path",numeric_path);
             telemetryPro.addData(" Path",OpenCVRed.Pipeline.getPosition());
         }else if (robot.alliance == BLUE){
-            telemetryPro.addData("BLUE CAMERA HASN'T BEEN ADDED YET",null);
-        }
+            numeric_path = OpenCVRed.Pipeline.convertEnumToInteger();
+            telemetryPro.addData("Numeric Path",numeric_path);
+            telemetryPro.addData(" Path",OpenCVRed.Pipeline.getPosition());        }
 
         //numeric_path = cameraView.path();
-        numeric_path = 2;
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
         ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
         if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
@@ -103,7 +105,8 @@ public class M0AutoOp extends OpModeEx {
         }
         robot.colorSubsystem.requestColor(desiredColor);
         robot.colorSubsystem.update();
-
+        robot.intake.raisedPosition();
+        robot.intake.update();
         telemetryPro.addData("Alliance", robot.alliance.name(), (robot.alliance == Alliance.RED ? LineItem.Color.RED : LineItem.Color.BLUE));
         robot.drive.sendPacket(packet);
 
@@ -188,7 +191,7 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        AutoPaths.setAutoSubsystems(robot.purpleAuto,robot.elbowWrist,robot.gate);
+        AutoPaths.setAutoSubsystems(robot.purpleAuto,robot.elbowWrist,robot.gate, robot.intake);
         robot.drive.sendPacket(packet);
         robot.update();
         telemetryPro.addData("Trajectory",selectedTrajectory);

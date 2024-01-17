@@ -1,10 +1,12 @@
 package org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -55,7 +57,7 @@ public class CenterStageOpenCVRedTest extends LinearOpMode {
             telemetry.addData("Path: ", path);
             telemetry.addData("Left Intensity: ", Pipeline.getLeftIntensity());
             telemetry.addData("Right Intensity: ", Pipeline.getRightIntensity());
-            telemetry.addData("Center Intensity: ", Pipeline.getCenterIntensity());
+            telemetry.addData("Center Intensity: ", (Pipeline.getCenterIntensity()));
             telemetry.addData("Dynamic Threshold: ", Pipeline.getDynamicThreshold());
             telemetry.update();
             path = Pipeline.convertEnumToInteger();
@@ -80,9 +82,9 @@ public class CenterStageOpenCVRedTest extends LinearOpMode {
 
             Mat redChannel = channels.get(2);
 
-            Rect leftRegion = new Rect(350, 45, 270, 260);
-            Rect centerRegion = new Rect(((input.width() / 2) - 135), 200, 270, 260);
-            Rect rightRegion = new Rect(990, 200, 270, 270);
+            Rect leftRegion = new Rect(150, 20, 240, 260);
+            Rect centerRegion = new Rect(798, 50, 242, 245);
+            Rect rightRegion = new Rect(1465, 140, 270, 270);
 //            Rect leftRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
 //            Rect centerRegion = new Rect((int) centerRegionX, (int) centerRegionY, (int) centerRegionWidth, (int) centerRegionHeight);
 //            Rect rightRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
@@ -97,7 +99,7 @@ public class CenterStageOpenCVRedTest extends LinearOpMode {
             double rightIntensityValue = rightMean.val[0];
 
             leftIntensity = leftIntensityValue;
-            centerIntensity = centerIntensityValue;
+            centerIntensity = (centerIntensityValue);
             rightIntensity = rightIntensityValue;
 
             Imgproc.rectangle(input, leftRegion.tl(), leftRegion.br(), new Scalar(0, 255, 0), 2);
@@ -110,9 +112,9 @@ public class CenterStageOpenCVRedTest extends LinearOpMode {
 
             //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
 
-            if (rightIntensity > leftIntensity && rightIntensity > centerIntensity) {
+            if (rightIntensity < leftIntensity && rightIntensity < centerIntensity) {
                 position = Position.RIGHT;
-            }else if (leftIntensity > rightIntensity && leftIntensity > centerIntensity) {
+            }else if (leftIntensity < rightIntensity && leftIntensity < centerIntensity) {
                 position = Position.LEFT;
             } else {
                 position = Position.CENTER;

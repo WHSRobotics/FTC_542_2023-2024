@@ -81,6 +81,7 @@ public class DroneB implements SubsystemIterative {
         this.fire.setPosition(firingPosition);
     }
 
+
     public double getAngle(){
         return angleNumeric;
     }

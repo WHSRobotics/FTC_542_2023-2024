@@ -39,7 +39,7 @@ public class OpenCVRed {
         camera.stopStreaming();
     }
     static class Pipeline extends OpenCvPipeline {
-        private static CenterStageOpenCVRedTest.Pipeline.Position position = CenterStageOpenCVRedTest.Pipeline.Position.RIGHT;
+        private static Position position = Position.RIGHT;
         private static double leftIntensity = 0.0;
         private static double rightIntensity = 0.0;
         private static double centerIntensity = 0.0;
@@ -53,9 +53,12 @@ public class OpenCVRed {
 
             Mat redChannel = channels.get(2);
 
-            Rect leftRegion = new Rect(input.width() / 4, 45, 270, 260);
-            Rect centerRegion = new Rect(input.width() / 2, 45, 270, 260);
-            Rect rightRegion = new Rect(950, 0, 270, 270);
+            Rect leftRegion = new Rect(150, 20, 240, 260);
+            Rect centerRegion = new Rect(798, 50, 242, 245);
+            Rect rightRegion = new Rect(1465, 140, 270, 270);
+//            Rect leftRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
+//            Rect centerRegion = new Rect((int) centerRegionX, (int) centerRegionY, (int) centerRegionWidth, (int) centerRegionHeight);
+//            Rect rightRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
             Mat leftRedRegion = new Mat(redChannel, leftRegion);
             Mat centerRedRegion = new Mat(redChannel, centerRegion);
             Mat rightRedRegion = new Mat(redChannel, rightRegion);
@@ -67,7 +70,7 @@ public class OpenCVRed {
             double rightIntensityValue = rightMean.val[0];
 
             leftIntensity = leftIntensityValue;
-            centerIntensity = centerIntensityValue;
+            centerIntensity = (centerIntensityValue);
             rightIntensity = rightIntensityValue;
 
             Imgproc.rectangle(input, leftRegion.tl(), leftRegion.br(), new Scalar(0, 255, 0), 2);
@@ -76,21 +79,20 @@ public class OpenCVRed {
 
             double meanRedIntensity = Core.mean(redChannel).val[0];
 
-            dynamicThreshold = meanRedIntensity * 0.5; // ADJUST THIS
-
             //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
-            if (leftIntensity > centerIntensity && leftIntensity > rightIntensity) {
-                position = CenterStageOpenCVRedTest.Pipeline.Position.LEFT;
-            } else if (rightIntensity > leftIntensity && rightIntensity > centerIntensity) {
-                position = CenterStageOpenCVRedTest.Pipeline.Position.RIGHT;
+
+            if (rightIntensity < leftIntensity && rightIntensity < centerIntensity) {
+                position = Position.RIGHT;
+            }else if (leftIntensity < rightIntensity && leftIntensity < centerIntensity) {
+                position = Position.LEFT;
             } else {
-                position = CenterStageOpenCVRedTest.Pipeline.Position.CENTER;
+                position = Position.CENTER;
             }
 
             return input;
         }
 
-        public static CenterStageOpenCVRedTest.Pipeline.Position getPosition() {
+        public static Position getPosition() {
             return position;
         }
 
@@ -117,11 +119,6 @@ public class OpenCVRed {
             }
         }
 
-        public enum Position {
-            LEFT,
-            CENTER,
-            RIGHT
-        }
     }
 
 }

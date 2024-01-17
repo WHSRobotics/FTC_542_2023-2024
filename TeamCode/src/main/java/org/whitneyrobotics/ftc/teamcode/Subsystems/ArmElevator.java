@@ -32,7 +32,6 @@ public class ArmElevator {
     //TODO: Potentially add gain scheduling for a gravitational constant
     public static ControlConstants EXTENSION_PID= new ControlConstants(0.5,0,0.001);
 
-    public static double kStatic = 0.05;
     public static MotionProfileTrapezoidal motionProfile = new MotionProfileTrapezoidal(V_MAX, A_MAX);
     private final double SPOOL_RADIUS = 1.27/2; //in
 
@@ -42,9 +41,11 @@ public class ArmElevator {
 
     public final double TICKS_PER_REV =	384.5;
 
-    public static double kV = 3.7;
+    public static double kStatic = 0.9465;
 
-    public static double kA = 0.015;
+    public static double kV = 2.25;
+
+    public static double kA = 0.0127;
 
     private NanoStopwatch stopwatch = new NanoStopwatch();
 

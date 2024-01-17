@@ -267,8 +267,8 @@ public class MeepMeepApp {
 
 
                 //red alliance, backdrop
-                 //.addEntity(redBotBackdrop1) //right
-                //.addEntity(redBotBackdrop2) //left
+                 .addEntity(redBotBackdrop1) //right
+                .addEntity(redBotBackdrop2) //left
                 //.addEntity(redBotBackdrop3) //center
 //
 //

@@ -11,7 +11,7 @@ public class PurpleServo {
 
     public enum PurplePositions{
         OPEN(0.45),
-        CLOSED(0.75);
+        CLOSED(1);
 
         double pos;
 

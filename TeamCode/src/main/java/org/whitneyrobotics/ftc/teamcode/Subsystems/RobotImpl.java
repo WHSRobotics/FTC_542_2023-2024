@@ -16,6 +16,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.DroneB;
 //import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 
 /**
@@ -63,7 +64,7 @@ public class RobotImpl {
     public final Meet3Intake intake;
 
     public final ArmElevator elevator;
-    public final Drone drone;
+    public final DroneB drone;
 
     public final Gate gate;
     public final ElbowWristImpl elbowWrist;
@@ -77,7 +78,7 @@ public class RobotImpl {
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
-        drone = new Drone(hardwareMap);
+        drone = new DroneB(hardwareMap);
         elbowWrist = new ElbowWristImpl(hardwareMap);
         intake = new Meet3Intake(hardwareMap);
         gate = new Gate(hardwareMap);
@@ -111,6 +112,7 @@ public class RobotImpl {
         gate.run();
         elbowWrist.update();
         purpleAuto.update();
+        drone.update();
 
         Colors status = Colors.OFF;
         if(drive.isBusy()){

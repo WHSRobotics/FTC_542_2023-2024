@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Gate {
     public Servo gate;
 
-    public GatePositions currentState = GatePositions.OPEN;
+    public GatePositions currentState = GatePositions.CLOSED;
 
     public enum GatePositions{
         OPEN(0.10),

@@ -80,11 +80,12 @@ public class WHSTeleOp extends OpModeEx {
 //        gamepad2.DPAD_LEFT.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
 //        gamepad2.BUMPER_RIGHT.onPress(robot.intake::update);
 
+        robot.intake.onePosition();
         gamepad2.TRIANGLE.onPress(robot.elbowWrist::toggle);
         gamepad2.CROSS.onPress(() -> robot.gate.update());
-        robot.intake.onePosition();
-
-
+        gamepad2.BUMPER_RIGHT.onPress(robot.drone::nextDefinedAngle);
+        gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
+        robot.drone.init();
     }
 
     void setupNotifications(){
@@ -120,8 +121,6 @@ public class WHSTeleOp extends OpModeEx {
     @Override
     protected void loopInternal() {
         robot.update();
-        //robot.elbowWrist.update();
-        //robot.elbowWrist.update();
         gamepad2.CIRCLE.onPress(robot.intake::stackPosition);
         gamepad2.SQUARE.onPress(robot.intake::onePosition);
         if (gamepad2.RIGHT_TRIGGER.value() > 0) {
@@ -134,6 +133,7 @@ public class WHSTeleOp extends OpModeEx {
         if (gamepad2.RIGHT_TRIGGER.value() <= 0 && gamepad2.LEFT_TRIGGER.value() <= 0){
             triggerValue = 0;
         }
+
         robot.intake.setRPM(Math.sqrt(triggerValue) * Meet3Intake.MAX_RPM);
         robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
 
