@@ -18,6 +18,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting.Tests;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.MultipleChoicePoll;
+import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.NumberSliderPoll;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TelemetryPro;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
@@ -31,6 +32,7 @@ import java.util.List;
 public class M0AutoOp extends OpModeEx {
     RobotImpl robot;
     MultipleChoicePoll tileSelector;
+    NumberSliderPoll delaySelector;
     String selectedTrajectory;
     AllianceSensor allianceSensor;
     OpenCVRed cameraRed;
@@ -57,8 +59,17 @@ public class M0AutoOp extends OpModeEx {
         tileSelector = new MultipleChoicePoll("Select Tile", false,
                 new MultipleChoicePoll.MultipleChoiceOption<>("Backstage" , FieldConstants.FieldSide.BACKSTAGE),
                 new MultipleChoicePoll.MultipleChoiceOption<>("Audience",FieldConstants.FieldSide.AUDIENCE));
+        delaySelector = new NumberSliderPoll.NumberSliderPollBuilder("Select delay (for audience side)", LineItem.Color.ROBOTICS, LineItem.RichTextFormat.ITALICS)
+                .allowWrap(true)
+                .setLargeStep(1)
+                .setLargeStep(3)
+                .setMin(0)
+                .setInitial(3)
+                .setMax(10)
+                .build();
         telemetryPro.setInteractingGamepad(gamepad1);
         telemetryPro.addItem(tileSelector);
+        //telemetryPro.addItem(delaySelector);
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         dashboardTelemetry.setMsTransmissionInterval(25);
         allianceSensor = new AllianceSensor(hardwareMap);
