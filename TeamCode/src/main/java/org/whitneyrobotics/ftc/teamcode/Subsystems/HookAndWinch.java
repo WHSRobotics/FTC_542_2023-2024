@@ -9,9 +9,11 @@ public class HookAndWinch implements SubsystemIterative {
     private DcMotorEx winch;
     private Servo hook;
     private HookPositions targetPosition = HookPositions.DEFAULT;
+
     public void setServoPosition(HookPositions hookPositions) {
         this.targetPosition = hookPositions;
     }
+
     private double motorPower;
     public void setPower(double motorPower) {
         this.motorPower = motorPower;
@@ -25,10 +27,12 @@ public class HookAndWinch implements SubsystemIterative {
             this.position = position;
         }
     }
+
     public HookAndWinch(HardwareMap hardwareMap){
         winch = hardwareMap.get(DcMotorEx.class, "lift");
         hook = hardwareMap.get(Servo.class, "hook");
     }
+
     @Override
     public void init() {
 
@@ -57,5 +61,9 @@ public class HookAndWinch implements SubsystemIterative {
     }
     public String getServoPosition(){
         return targetPosition.name();
+    }
+
+    public void toggleHook(){
+        targetPosition = HookPositions.values()[(targetPosition.ordinal() + 1) % 2];
     }
 }
