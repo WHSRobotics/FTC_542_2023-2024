@@ -16,6 +16,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.DroneB;
 //import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 
 /**
@@ -63,12 +64,14 @@ public class RobotImpl {
     public final Meet3Intake intake;
 
     public final ArmElevator elevator;
-    public final Drone drone;
+    public final DroneB drone;
 
     public final Gate gate;
     public final ElbowWristImpl elbowWrist;
 
     public final PurpleServo purpleAuto;
+
+    public final HookAndWinch hookAndWinch;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
@@ -77,11 +80,12 @@ public class RobotImpl {
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
-        drone = new Drone(hardwareMap);
+        drone = new DroneB(hardwareMap);
         elbowWrist = new ElbowWristImpl(hardwareMap);
         intake = new Meet3Intake(hardwareMap);
         gate = new Gate(hardwareMap);
         purpleAuto = new PurpleServo(hardwareMap);
+        hookAndWinch = new HookAndWinch(hardwareMap);
 //        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
@@ -99,6 +103,8 @@ public class RobotImpl {
         drive.setPoseEstimate(RobotImpl.poseMemory);
         elevator.setCalibrationOffset(slidesHeightMemory);
         elevator.setCalibrationOffset(heightMemory);
+        drone.init();
+        hookAndWinch.init();
     }
     public void update(){
         elevator.update();
@@ -111,6 +117,7 @@ public class RobotImpl {
         gate.run();
         elbowWrist.update();
         purpleAuto.update();
+        hookAndWinch.update();
 
         Colors status = Colors.OFF;
         if(drive.isBusy()){

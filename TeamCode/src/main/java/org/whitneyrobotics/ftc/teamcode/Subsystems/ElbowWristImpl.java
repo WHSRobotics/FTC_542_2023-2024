@@ -90,6 +90,10 @@ public class ElbowWristImpl {
         wrist.run();
     }
 
+    public void endgameFlipBucket(){
+        wrist.currentState = Wrist.WristPositions.INTAKING;
+    }
+
     public String getState(){
         String s =  stateMachine.getMachineState().name();
         if(stateMachine.getState() instanceof SubstateMachine){
