@@ -1,17 +1,31 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+@Config
 public class HookAndWinch implements SubsystemIterative {
     private DcMotorEx winch;
     private Servo hook;
     private HookPositions targetPosition = HookPositions.DEFAULT;
 
+    public static double GEAR_RATIO = 1.0/104;
+    public static double RPM = 6600;
+    public static double TICKS_PER_REV = 7 / GEAR_RATIO;
+
+    public static double SPOOL_RADIUS = 1.27/2; //inches
+
     public void setServoPosition(HookPositions hookPositions) {
         this.targetPosition = hookPositions;
+    }
+
+    public void toggleServoPosition(){
+        targetPosition = HookPositions.values()[(targetPosition.ordinal() + 1) % 2];
     }
 
     private double motorPower;
@@ -20,11 +34,11 @@ public class HookAndWinch implements SubsystemIterative {
     }
 
     private enum HookPositions{
-        DEFAULT(0.5),
+        DEFAULT(0.38),
         ACTIVE(0.24);
         private double position;
-        private HookPositions(double positon){
-            this.position = position;
+         HookPositions(double pos){
+            this.position = pos;
         }
     }
 
@@ -56,8 +70,16 @@ public class HookAndWinch implements SubsystemIterative {
         hook.setPosition(HookPositions.DEFAULT.position);
     }
 
-    public double getPosition(){
-        return winch.getCurrentPosition();
+    public double getRevolutions(){
+        return winch.getCurrentPosition()/TICKS_PER_REV;
+    }
+
+    public double getDistanceTravelled(){
+        return getRevolutions() * 2 * Math.PI * SPOOL_RADIUS;
+    }
+
+    public double getLinearVelocity(){
+        return winch.getVelocity(AngleUnit.RADIANS) * SPOOL_RADIUS;
     }
     public String getServoPosition(){
         return targetPosition.name();
@@ -65,5 +87,9 @@ public class HookAndWinch implements SubsystemIterative {
 
     public void toggleHook(){
         targetPosition = HookPositions.values()[(targetPosition.ordinal() + 1) % 2];
+    }
+
+    public boolean hookReleased(){
+        return targetPosition.ordinal() == 1;
     }
 }

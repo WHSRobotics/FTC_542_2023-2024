@@ -71,6 +71,8 @@ public class RobotImpl {
 
     public final PurpleServo purpleAuto;
 
+    public final HookAndWinch hookAndWinch;
+
 
     private RobotImpl(HardwareMap hardwareMap) {
         drive = new CenterstageMecanumDrive(hardwareMap);
@@ -83,6 +85,7 @@ public class RobotImpl {
         intake = new Meet3Intake(hardwareMap);
         gate = new Gate(hardwareMap);
         purpleAuto = new PurpleServo(hardwareMap);
+        hookAndWinch = new HookAndWinch(hardwareMap);
 //        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
@@ -100,6 +103,8 @@ public class RobotImpl {
         drive.setPoseEstimate(RobotImpl.poseMemory);
         elevator.setCalibrationOffset(slidesHeightMemory);
         elevator.setCalibrationOffset(heightMemory);
+        drone.init();
+        hookAndWinch.init();
     }
     public void update(){
         elevator.update();
@@ -112,7 +117,7 @@ public class RobotImpl {
         gate.run();
         elbowWrist.update();
         purpleAuto.update();
-        drone.update();
+        hookAndWinch.update();
 
         Colors status = Colors.OFF;
         if(drive.isBusy()){

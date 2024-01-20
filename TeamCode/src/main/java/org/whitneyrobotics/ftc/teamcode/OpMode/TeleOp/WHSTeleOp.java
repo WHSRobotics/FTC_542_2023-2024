@@ -31,13 +31,10 @@ public class WHSTeleOp extends OpModeEx {
     private final UnaryOperator<Float> scalingFunctionDefault = x -> (float)Math.pow(x, 3);
 
     ElbowWristImpl elbowWrist;
-    Gate gate;
 
     Meet3Intake intake;
     private int intakeState = 0;
     private boolean unPressed = true;
-
-    private double triggerValue = 0;
     @Override
     public void initInternal() {
         robot = RobotImpl.getInstance(hardwareMap);
@@ -60,12 +57,6 @@ public class WHSTeleOp extends OpModeEx {
         gamepad1.BUMPER_RIGHT.onPress(() -> fieldCentric = !fieldCentric);
         robot.teleOpInit();
         setupNotifications();
-//        gamepad2.DPAD_DOWN.onPress(robot.claw::operateGateTele);
-//        gamepad2.DPAD_UP.onPress(robot.claw::operateWristTele);
-//        gamepad2.DPAD_LEFT.onPress(robot.claw::operateElbowTele);
-//        gamepad2.DPAD_RIGHT.onPress(robot.claw::operateIntakeTele);
-//        gamepad2.TRIANGLE.onPress(robot.claw::operateIntakeOutTele);
-//        gamepad2.CIRCLE.onPress(robot.claw::operateIntakeHeightTele);
         //gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
         //gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
         //gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
@@ -80,12 +71,32 @@ public class WHSTeleOp extends OpModeEx {
 //        gamepad2.DPAD_LEFT.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
 //        gamepad2.BUMPER_RIGHT.onPress(robot.intake::update);
 
+        gamepad2.DPAD_UP.onPress(() -> {
+            robot.hookAndWinch.toggleHook();
+            robot.elbowWrist.endgameFlipBucket();
+        });
+        gamepad2.DPAD_DOWN.onPress(() -> robot.gate.update());
+        gamepad1.SQUARE.onPress(robot.intake::stackPosition);
+        gamepad1.CROSS.onPress(robot.intake::onePosition);
+        gamepad1.CIRCLE.onPress(robot.drone::nextDefinedAngle);
+        gamepad1.DPAD_RIGHT.onPress(robot.drone::fire);
+        gamepad1.TOUCHPAD.onPress(robot.drone::reset);
+        gamepad1.SHARE.onPress(robot.drone::init);
+        gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
+        gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
+        gamepad2.TRIANGLE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.TWO));
+        gamepad2.CIRCLE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.THREE));
+        gamepad2.BUMPER_RIGHT.onPress(robot.elbowWrist::toggle);
+        gamepad2.START.onPress(robot.elevator::resetEncoders);
+        gamepad2.SELECT.onPress(robot.hookAndWinch::reset);
+        gamepad2.BUMPER_LEFT.onPress(robot.elevator::slowModeOn);
+        gamepad2.BUMPER_LEFT.onRelease(robot.elevator::slowModeOff);
+        gamepad2.DPAD_RIGHT.onPress(() -> {
+            robot.hookAndWinch.toggleHook();
+            robot.elbowWrist.endgameFlipBucket();
+        });
         robot.intake.onePosition();
-        gamepad2.TRIANGLE.onPress(robot.elbowWrist::toggle);
-        gamepad2.CROSS.onPress(() -> robot.gate.update());
-        gamepad2.BUMPER_RIGHT.onPress(robot.drone::nextDefinedAngle);
-        gamepad2.BUMPER_LEFT.onPress(robot.drone::fire);
-        robot.drone.init();
+
     }
 
     void setupNotifications(){
@@ -121,21 +132,10 @@ public class WHSTeleOp extends OpModeEx {
     @Override
     protected void loopInternal() {
         robot.update();
-        gamepad2.CIRCLE.onPress(robot.intake::stackPosition);
-        gamepad2.SQUARE.onPress(robot.intake::onePosition);
-        if (gamepad2.RIGHT_TRIGGER.value() > 0) {
-            robot.intake.setReversed(false);
-            triggerValue = gamepad2.RIGHT_TRIGGER.value();
-        }else if (gamepad2.LEFT_TRIGGER.value() > 0) {
-            robot.intake.setReversed(true);
-            triggerValue = gamepad2.LEFT_TRIGGER.value();
-        }
-        if (gamepad2.RIGHT_TRIGGER.value() <= 0 && gamepad2.LEFT_TRIGGER.value() <= 0){
-            triggerValue = 0;
-        }
-
-        robot.intake.setRPM(Math.sqrt(triggerValue) * Meet3Intake.MAX_RPM);
+        robot.intake.setRPM(Math.sqrt(gamepad1.RIGHT_TRIGGER.value()) * Meet3Intake.MAX_RPM);
+        robot.intake.setReversed(gamepad1.TRIANGLE.value());
         robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
+        if (robot.hookAndWinch.hookReleased()) robot.hookAndWinch.setPower(gamepad2.RIGHT_STICK_Y.value());
 
 
         float brakePower = gamepad1.LEFT_TRIGGER.value();
@@ -152,5 +152,10 @@ public class WHSTeleOp extends OpModeEx {
         if(fieldCentric) telemetryPro.addLine("FIELD CENTRIC ENABLED", LineItem.Color.YELLOW, LineItem.RichTextFormat.BOLD);
         telemetryPro.addData("brake", brakePower);
         telemetryPro.addData("angle", Math.toDegrees(robot.drive.getPoseEstimate().getHeading()));
+        telemetryPro.addData("Slides height", robot.elevator.getPosition());
+        telemetryPro.addData("Slides target", robot.elevator.getState());
+        telemetryPro.addData("Gate open",robot.gate.currentState, (robot.gate.currentState == Gate.GatePositions.OPEN || robot.gate.currentState == null ? LineItem.Color.GREEN : LineItem.Color.RED));
+        telemetryPro.addData("Lifting height", robot.hookAndWinch.getDistanceTravelled());
+        telemetryPro.addData("Drone Angle", robot.drone.getAngle());
     }
 }
