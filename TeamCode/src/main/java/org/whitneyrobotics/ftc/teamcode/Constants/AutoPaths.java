@@ -39,7 +39,7 @@ public class AutoPaths {
     }
 
 
-    private static final double distFromBackdrop = 48.45;
+    private static final double distFromBackdrop = 49.1;
 
 
 

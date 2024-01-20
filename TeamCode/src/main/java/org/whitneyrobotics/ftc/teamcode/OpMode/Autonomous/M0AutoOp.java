@@ -215,4 +215,9 @@ public class M0AutoOp extends OpModeEx {
         telemetryPro.addData("Trajectory",selectedTrajectory);
         RobotImpl.poseMemory = robot.drive.getPoseEstimate();
     }
+
+    @Override
+    public void stop() {
+        RobotImpl.slidesHeightMemory = robot.elevator.getPosition();
+    }
 }

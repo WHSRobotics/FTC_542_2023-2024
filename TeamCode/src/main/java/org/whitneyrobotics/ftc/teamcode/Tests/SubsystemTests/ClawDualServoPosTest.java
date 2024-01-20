@@ -19,8 +19,8 @@ public class ClawDualServoPosTest extends OpModeEx {
 
     @Override
     public void initInternal() {
-        clawTestServo = hardwareMap.get(Servo.class, "test");
-        clawTestServoTwo = hardwareMap.get(Servo.class, "testTwo");
+        clawTestServo = hardwareMap.get(Servo.class, "angle");
+        clawTestServoTwo = hardwareMap.get(Servo.class, "drone");
 
         testPos = 0;
         testPosTwo = 0;

@@ -25,18 +25,18 @@ public class DroneB implements SubsystemIterative {
 
     //Regression constants for angles
     //See https://www.desmos.com/calculator/ow5xt1unvc
-    public static double A = 0.840039;
-    public static double B = -0.0203668;
-    public static double C = 0.000301712;
-    public static double D = -0.00000173691;
+    public static double A = 0.860005;
+    public static double B = -0.00786413;
+    public static double C = 0.0000596671;
+    public static double D = -2.9912e-7;
 
     public void fire(){
-        firingPosition = 0.255;
+        firingPosition = 0.26;
     }
 
     public void retract(){
         setAngle(0.0d);
-        firingPosition = 0.68;
+        firingPosition = 0.69;
         i = 1;
     }
 
@@ -118,10 +118,10 @@ public class DroneB implements SubsystemIterative {
     @Override
     public void reset() {
         anglePositions.clear();
-        anglePositions.put(0.0, 0.84);
-        anglePositions.put(30.0, 0.54);
-        anglePositions.put(45.0, 0.46);
-        anglePositions.put(50.0,0.439);
-        anglePositions.put(60.0, 0.40);
+        anglePositions.put(0.0, 0.86);
+        anglePositions.put(30.0, 0.67);
+        anglePositions.put(45.0, 0.60);
+        anglePositions.put(50.0,0.58);
+        anglePositions.put(60.0, 0.54);
     }
 }
