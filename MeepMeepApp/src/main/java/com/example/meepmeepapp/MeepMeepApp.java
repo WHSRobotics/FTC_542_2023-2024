@@ -116,22 +116,14 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-35.3, 36.5, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(-41.5, 22, Math.toRadians(90)))
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .strafeLeft(1.2)
-                                .back(78)
-                                .lineToLinearHeading(new Pose2d(45.3, 35.5, Math.toRadians(180)))
-                                //.lineToLinearHeading(new Pose2d(44.4, 35, Math.toRadians(180)))
-                                .addTemporalMarker(() ->{
-
-                                })
-
-
-                                //.lineToLinearHeading(new Pose2d(42, 12.7,Math.toRadians(180)))
-                                //.back(15)
-
+                                .lineToLinearHeading(new Pose2d(-36, 9, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(15, 9, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(34.1, 24, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(48.45, 27.8, Math.toRadians(180)))
 
                                 .build()
                 );
@@ -141,22 +133,18 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-50, 21, Math.toRadians(0)))
 
-                                .lineToLinearHeading(new Pose2d(-46.8, 18, Math.toRadians(0)))
+                                .lineToLinearHeading(new Pose2d(-36, 9, Math.toRadians(90)))
                                 .waitSeconds(1)
-                                .lineToLinearHeading(new Pose2d(-35.3, 33.5, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(15, 9, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(34.1, 24, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(48.45, 30.8, Math.toRadians(180)))
 
                                 .addDisplacementMarker(() -> {
                                     //CLAW STUFF
                                 })
-                                .forward(1.5)
-                                .strafeRight(70)
-                                .waitSeconds(0.2)
 
-                                .lineToLinearHeading(new Pose2d(45.3, 28, Math.toRadians(180)))
-                                .addTemporalMarker(() ->{
-
-                                })
                                 .build()
                 );
         RoadRunnerBotEntity blueBotWall3 = new DefaultBotBuilder(meepMeep)
@@ -164,16 +152,24 @@ public class MeepMeepApp {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(-35.5, 58, Math.toRadians(90)))
-                                        .lineToLinearHeading(new Pose2d(-35.3, 23, Math.toRadians(0)))
+                                        .lineToLinearHeading(new Pose2d(-42, 24, Math.toRadians(0)))
+                                        .lineToLinearHeading(new Pose2d(-34.3, 24, Math.toRadians(0)))
 
+                                        .back(6.5)
                                         .addDisplacementMarker(() -> {
                                             //CLAW STUFF
                                         })
-                                        .strafeLeft(12.3)
-//                                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
-                                        .forward(50)
-                                        .lineToLinearHeading(new Pose2d(45.3, 42.5,Math.toRadians(180)))
+//                                        .strafeLeft(12.3)
+////                                .splineToConstantHeading(new Vector2d(0.7, 7.8),Math.toRadians(0))
+////                                .splineToConstantHeading(new Vector2d(19, 18),Math.toRadians(0))
+//                                        .forward(50)
+                                        .lineToLinearHeading(new Pose2d(-46.3, 24, Math.toRadians(0)))
+                                        .lineToLinearHeading(new Pose2d(-36, 9, Math.toRadians(90)))
+                                        .lineToLinearHeading(new Pose2d(15, 9, Math.toRadians(90)))
+                                        .lineToLinearHeading(new Pose2d(34.1, 24, Math.toRadians(180)))
+                                        .lineToLinearHeading(new Pose2d(48.45, 35.8, Math.toRadians(180)))
+
+
                                         .addTemporalMarker(() ->{
 
                                         })
@@ -276,14 +272,14 @@ public class MeepMeepApp {
 //
 //                //blue alliance, wall
                 .addEntity(blueBotWall1) //right
-                 .addEntity(blueBotWall2) //center (MIGHT COLLIDE WITH TRUSS)
+                .addEntity(blueBotWall2) //center (MIGHT COLLIDE WITH TRUSS)
                 .addEntity(blueBotWall3) //left (MIGHT HIT TRUSS)
 //
 //
 //
                     //.addEntity(redBotWall1)//left
-                .addEntity(redBotWall2)//center
-                .addEntity(redBotWall3)//right
+                //.addEntity(redBotWall2)//center
+                //.addEntity(redBotWall3)//right
 
                 //.addEntity(something)
 
