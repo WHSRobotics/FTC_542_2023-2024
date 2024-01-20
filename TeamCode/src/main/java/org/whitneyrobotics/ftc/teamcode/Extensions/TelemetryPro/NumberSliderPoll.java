@@ -101,7 +101,7 @@ public class NumberSliderPoll extends Interactable{
         gp = null;
     }
 
-    private void onChange(Consumer<Double> valueConsumer) {
+    public void onChange(Consumer<Double> valueConsumer) {
         this.valueConsumer = valueConsumer;
     }
 

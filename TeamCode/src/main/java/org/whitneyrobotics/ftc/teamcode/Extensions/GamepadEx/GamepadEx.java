@@ -44,6 +44,8 @@ public class GamepadEx {
     public final Button BUMPER_LEFT = new Button();
     public final Button BUMPER_RIGHT = new Button();
 
+    public final Button TOUCHPAD = new Button();
+
     @GamepadScalarHardware.LimitSensitivity
     public final GamepadScalarHardware LEFT_STICK_X = new GamepadScalarHardware();
     @GamepadScalarHardware.LimitSensitivity
@@ -120,6 +122,7 @@ public class GamepadEx {
         LEFT_TRIGGER.update(gamepad.left_trigger);
         RIGHT_TRIGGER.update(gamepad.right_trigger);
         BACK.update(gamepad.back);
+        TOUCHPAD.update(gamepad.touchpad);
     }
 
 }

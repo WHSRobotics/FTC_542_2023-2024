@@ -20,6 +20,7 @@ public class Gate {
     }
 
     public Gate (HardwareMap gateMap){
+
         gate = gateMap.get(Servo.class, "gate");
     }
 

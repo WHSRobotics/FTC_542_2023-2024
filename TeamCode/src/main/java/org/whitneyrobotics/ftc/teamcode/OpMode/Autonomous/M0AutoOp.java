@@ -18,6 +18,8 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting.Tests;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.MultipleChoicePoll;
+import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.NumberSliderPoll;
+import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TelemetryPro;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 //import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
@@ -30,10 +32,13 @@ import java.util.List;
 public class M0AutoOp extends OpModeEx {
     RobotImpl robot;
     MultipleChoicePoll tileSelector;
+    NumberSliderPoll delaySelector;
     String selectedTrajectory;
     AllianceSensor allianceSensor;
+    OpenCVRed cameraRed;
 
     AutoPaths paths;
+
 
     private int numeric_path;
 
@@ -52,11 +57,21 @@ public class M0AutoOp extends OpModeEx {
         tileSelector = new MultipleChoicePoll("Select Tile", false,
                 new MultipleChoicePoll.MultipleChoiceOption<>("Backstage" , FieldConstants.FieldSide.BACKSTAGE),
                 new MultipleChoicePoll.MultipleChoiceOption<>("Audience",FieldConstants.FieldSide.AUDIENCE));
+        delaySelector = new NumberSliderPoll.NumberSliderPollBuilder("Select delay (for audience side)", LineItem.Color.ROBOTICS, LineItem.RichTextFormat.ITALICS)
+                .allowWrap(true)
+                .setLargeStep(1)
+                .setLargeStep(3)
+                .setMin(0)
+                .setInitial(3)
+                .setMax(10)
+                .build();
         telemetryPro.setInteractingGamepad(gamepad1);
         telemetryPro.addItem(tileSelector);
+        //telemetryPro.addItem(delaySelector);
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         dashboardTelemetry.setMsTransmissionInterval(25);
         allianceSensor = new AllianceSensor(hardwareMap);
+
         robot.alliance = allianceSensor.isRedAlliance() ? RED : BLUE;
 
         telemetryPro.addData("Initial Alliance", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
@@ -69,14 +84,26 @@ public class M0AutoOp extends OpModeEx {
             robot.switchAlliance();
             telemetryPro.addData("Alliance manually changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE, LineItem.RichTextFormat.ITALICS).persistent();
         });
+        OpenCVRed.initalizeCamCV(hardwareMap);
+
+
 
     }
 
     @Override
     public void initInternalLoop(){
         allianceSensor.update();
+
+        if (robot.alliance == RED){
+            numeric_path = OpenCVRed.Pipeline.convertEnumToInteger();
+            telemetryPro.addData("Numeric Path",numeric_path);
+            telemetryPro.addData(" Path",OpenCVRed.Pipeline.getPosition());
+        }else if (robot.alliance == BLUE){
+            telemetryPro.addData("BLUE CAMERA HASN'T BEEN ADDED YET",null);
+        }
+
         //numeric_path = cameraView.path();
-        numeric_path = 1;
+        numeric_path = 2;
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
         ColorSubsystem.Colors desiredColor = ColorSubsystem.Colors.GREEN_PIXEL;
         if(results.stream().anyMatch(test -> test.getWarning() || test.getFailed())){
@@ -96,6 +123,7 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     public void startInternal() {
+        OpenCVRed.stopCamera();
         gamepad1.CIRCLE.disconnectAllHandlers();
         //cameraView.updateAprilTagDetections();
         TrajectorySequence desiredTrajectory = null;
@@ -171,7 +199,7 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        AutoPaths.setAutoSubsystems(robot.intake,robot.elbow,robot.gate,robot.wrist);
+        AutoPaths.setAutoSubsystems(robot.purpleAuto,robot.elbowWrist,robot.gate);
         robot.drive.sendPacket(packet);
         robot.update();
         telemetryPro.addData("Trajectory",selectedTrajectory);
