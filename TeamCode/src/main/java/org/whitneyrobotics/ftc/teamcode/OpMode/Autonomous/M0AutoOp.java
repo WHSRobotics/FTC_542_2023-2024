@@ -35,7 +35,6 @@ public class M0AutoOp extends OpModeEx {
     NumberSliderPoll delaySelector;
     String selectedTrajectory;
     AllianceSensor allianceSensor;
-    OpenCVRed cameraRed;
 
     AutoPaths paths;
 
@@ -69,11 +68,11 @@ public class M0AutoOp extends OpModeEx {
                 .build();
         telemetryPro.setInteractingGamepad(gamepad1);
         telemetryPro.addItem(tileSelector);
-        //telemetryPro.addItem(delaySelector);
+        telemetryPro.addItem(delaySelector);
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
         dashboardTelemetry.setMsTransmissionInterval(25);
         allianceSensor = new AllianceSensor(hardwareMap);
-
+        delaySelector.onChange(AutoPaths::setDelay);
         robot.alliance = allianceSensor.isRedAlliance() ? RED : BLUE;
 
         telemetryPro.addData("Initial Alliance", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
@@ -86,7 +85,11 @@ public class M0AutoOp extends OpModeEx {
             robot.switchAlliance();
             telemetryPro.addData("Alliance manually changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE, LineItem.RichTextFormat.ITALICS).persistent();
         });
-        OpenCVRed.initalizeCamCV(hardwareMap);
+        if (robot.alliance == RED){
+            OpenCVRed.initalizeCamCV(hardwareMap);
+        }else if (robot.alliance == BLUE){
+            OpenCVBlue.initalizeCamCV(hardwareMap);
+        }
 
 
 
@@ -101,9 +104,9 @@ public class M0AutoOp extends OpModeEx {
             telemetryPro.addData("Numeric Path",numeric_path);
             telemetryPro.addData(" Path",OpenCVRed.Pipeline.getPosition());
         }else if (robot.alliance == BLUE){
-            numeric_path = OpenCVRed.Pipeline.convertEnumToInteger();
+            numeric_path = OpenCVBlue.Pipeline.convertEnumToInteger();
             telemetryPro.addData("Numeric Path",numeric_path);
-            telemetryPro.addData(" Path",OpenCVRed.Pipeline.getPosition());        }
+            telemetryPro.addData(" Path",OpenCVBlue.Pipeline.getPosition());        }
 
         //numeric_path = cameraView.path();
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
@@ -126,7 +129,11 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     public void startInternal() {
-        OpenCVRed.stopCamera();
+        if (robot.alliance == RED){
+            OpenCVRed.stopCamera();
+        }else if (robot.alliance == BLUE){
+            OpenCVBlue.stopCamera();
+        }
         gamepad1.CIRCLE.disconnectAllHandlers();
         //cameraView.updateAprilTagDetections();
         TrajectorySequence desiredTrajectory = null;

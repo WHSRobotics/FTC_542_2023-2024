@@ -23,6 +23,8 @@ public class AutoPaths {
 
     private static Meet3Intake intake;
 
+    private static double delay;
+
     private static TrajectoryVelocityConstraint VEL;
 
     public static void setAutoSubsystems(PurpleServo purple, ElbowWristImpl el, Gate gte, Meet3Intake in) {
@@ -32,7 +34,12 @@ public class AutoPaths {
         intake = in;
     }
 
-    private static final double distFromBackdrop = 49.7;
+    public static void setDelay(double del){
+        delay = del;
+    }
+
+
+    private static final double distFromBackdrop = 48.45;
 
 
 
@@ -324,7 +331,7 @@ public class AutoPaths {
                 .waitSeconds(2)
                 .waitSeconds(0.35)
                 .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(270)))
-                .waitSeconds(7.5)
+                .waitSeconds(delay)
                 .lineToLinearHeading(new Pose2d(15, -9, Math.toRadians(270)))
                 .waitSeconds(0.5)
                 .lineToLinearHeading(new Pose2d(34.1, -24, Math.toRadians(180)))
@@ -365,7 +372,7 @@ public class AutoPaths {
                 })
                 .waitSeconds(0.5)
                 .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(270)))
-                .waitSeconds(7.5)
+                .waitSeconds(delay)
 
                 .lineToLinearHeading(new Pose2d(15, -9, Math.toRadians(270)))
                 .waitSeconds(0.5)
@@ -407,7 +414,7 @@ public class AutoPaths {
                 .waitSeconds(0.35)
                 .lineToLinearHeading(new Pose2d(-46.3, -38.8, Math.toRadians(0)))
                 .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(90)))
-                .waitSeconds(7.5)
+                .waitSeconds(delay)
                 .lineToLinearHeading(new Pose2d(15, -9, Math.toRadians(90)))
                 .waitSeconds(0.5)
                 .lineToLinearHeading(new Pose2d(34.1, -24, Math.toRadians(180)))
