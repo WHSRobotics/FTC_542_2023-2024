@@ -11,6 +11,7 @@ public class DroneBTest extends OpModeEx {
     @Override
     public void initInternal() {
         droneB = new DroneB(hardwareMap);
+        gamepad1.BUMPER_RIGHT.onPress(droneB::hold);
         gamepad1.SQUARE.onPress(droneB::nextDefinedAngle);
         gamepad1.CROSS.onPress(droneB::fire);
         gamepad1.CIRCLE.onPress(droneB::retract);
@@ -25,5 +26,6 @@ public class DroneBTest extends OpModeEx {
         telemetryPro.addData("Drone Angle", droneB.getAngle());
         telemetryPro.addData("AnglePosition", droneB.getPosition());
         telemetryPro.addData("Get Firing Position", droneB.getFiringPosition());
+        telemetryPro.addData("Hold Position", droneB.getHoldPos());
     }
 }

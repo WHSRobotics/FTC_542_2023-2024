@@ -13,15 +13,16 @@ import java.util.TreeMap;
 
 @Config
 public class DroneB implements SubsystemIterative {
-    private Servo angle, fire;
+    private Servo angle, fire, hold;
     private double angleNumeric = 0.0;
     private double position = 0.0d;
+    private double holdPos = 0.72;
 
     private int i = 1;
 
     public static String newPair = "";
 
-    public static double firingPosition = 0.5d;
+    public static double firingPosition = 0d;
 
     //Regression constants for angles
     //See https://www.desmos.com/calculator/ow5xt1unvc
@@ -31,12 +32,13 @@ public class DroneB implements SubsystemIterative {
     public static double D = -2.9912e-7;
 
     public void fire(){
-        firingPosition = 0.26;
+        firingPosition = 0.79;
     }
 
     public void retract(){
         setAngle(0.0d);
-        firingPosition = 0.69;
+        firingPosition = 0;
+        holdPos = 0.72;
         i = 1;
     }
 
@@ -60,17 +62,26 @@ public class DroneB implements SubsystemIterative {
         angleNumeric = angle;
     }
 
-    public
+    public void hold(){
+        if (holdPos == 0.72) {
+            holdPos = 0;
+        } else if (holdPos == 0){
+            holdPos = 0.72;
+        }
+    }
+
     SortedMap<Double, Double> anglePositions = new TreeMap<>();
     public DroneB(HardwareMap hardwareMap){
         angle = hardwareMap.get(Servo.class, "angle");
         fire = hardwareMap.get(Servo.class, "drone");
+        hold = hardwareMap.get(Servo.class, "hold");
         reset();
     }
 
     @Override
     public void init() {
         setAngle(0.0d);
+        holdPos = 0.72;
         retract();
         update();
     }
@@ -79,6 +90,7 @@ public class DroneB implements SubsystemIterative {
     public void update() {
         this.angle.setPosition(position);
         this.fire.setPosition(firingPosition);
+        this.hold.setPosition(holdPos);
     }
 
 
@@ -88,6 +100,10 @@ public class DroneB implements SubsystemIterative {
 
     public double getPosition(){
         return position;
+    }
+
+    public double getHoldPos(){
+        return holdPos;
     }
 
     public double getFiringPosition(){
@@ -118,10 +134,10 @@ public class DroneB implements SubsystemIterative {
     @Override
     public void reset() {
         anglePositions.clear();
-        anglePositions.put(0.0, 0.86);
-        anglePositions.put(30.0, 0.67);
-        anglePositions.put(45.0, 0.60);
-        anglePositions.put(50.0,0.58);
-        anglePositions.put(60.0, 0.54);
+        anglePositions.put(0.0, 0.63);
+        anglePositions.put(11.0, 0.56);
+        anglePositions.put(20.0, 0.52);
+        anglePositions.put(30.0,0.47);
+        anglePositions.put(45.0, 0.42);
     }
 }
