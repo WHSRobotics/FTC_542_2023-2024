@@ -57,7 +57,6 @@ public class RobotImpl {
     }
 
     public final CenterstageMecanumDrive drive;
-//    public final PrismSensor prismSensor;
     public final ColorSubsystem colorSubsystem;
     public final VoltageSensor voltageSensor;
 

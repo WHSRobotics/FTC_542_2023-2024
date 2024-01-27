@@ -36,7 +36,7 @@ public class DroneB implements SubsystemIterative {
     }
 
     public void retract(){
-        setAngle(0.0d);
+        position = 0.62;
         firingPosition = 0;
         holdPos = 0.72;
         i = 1;
@@ -64,8 +64,8 @@ public class DroneB implements SubsystemIterative {
 
     public void hold(){
         if (holdPos == 0.72) {
-            holdPos = 0;
-        } else if (holdPos == 0){
+            holdPos = 0.61;
+        } else if (holdPos == 0.61){
             holdPos = 0.72;
         }
     }
@@ -80,7 +80,7 @@ public class DroneB implements SubsystemIterative {
 
     @Override
     public void init() {
-        setAngle(0.0d);
+        position = 0.62;
         holdPos = 0.72;
         retract();
         update();
@@ -134,10 +134,10 @@ public class DroneB implements SubsystemIterative {
     @Override
     public void reset() {
         anglePositions.clear();
-        anglePositions.put(0.0, 0.63);
+        anglePositions.put(0.0, 0.62);
+        anglePositions.put(45.0, 0.42);
         anglePositions.put(11.0, 0.56);
         anglePositions.put(20.0, 0.52);
         anglePositions.put(30.0,0.47);
-        anglePositions.put(45.0, 0.42);
     }
 }
