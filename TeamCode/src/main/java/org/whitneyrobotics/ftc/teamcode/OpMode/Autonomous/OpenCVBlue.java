@@ -32,7 +32,7 @@ public class OpenCVBlue {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
         camera.setPipeline(new Pipeline());
         camera.openCameraDevice();
-        camera.startStreaming(1920, 1080);
+        camera.startStreaming(800, 448);
     }
 
     public static void stopCamera(){
@@ -51,17 +51,17 @@ public class OpenCVBlue {
             Core.flip(input.t(), input, 2);
             Core.split(input, channels);
 
-            Mat blueChannel = channels.get(0);
+            Mat redChannel = channels.get(0);
 
-            Rect leftRegion = new Rect(150, 20, 240, 260);
-            Rect centerRegion = new Rect(798, 50, 242, 245);
-            Rect rightRegion = new Rect(1465, 140, 270, 270);
+            Rect leftRegion = new Rect(50,1,120,115);
+            Rect centerRegion = new Rect(370,1,75,70);
+            Rect rightRegion = new Rect(610,1,170,120);
 //            Rect leftRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
 //            Rect centerRegion = new Rect((int) centerRegionX, (int) centerRegionY, (int) centerRegionWidth, (int) centerRegionHeight);
 //            Rect rightRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
-            Mat leftRedRegion = new Mat(blueChannel, leftRegion);
-            Mat centerRedRegion = new Mat(blueChannel, centerRegion);
-            Mat rightRedRegion = new Mat(blueChannel, rightRegion);
+            Mat leftRedRegion = new Mat(redChannel, leftRegion);
+            Mat centerRedRegion = new Mat(redChannel, centerRegion);
+            Mat rightRedRegion = new Mat(redChannel, rightRegion);
             Scalar leftMean = Core.mean(leftRedRegion);
             Scalar centerMean = Core.mean(centerRedRegion);
             Scalar rightMean = Core.mean(rightRedRegion);
@@ -77,7 +77,7 @@ public class OpenCVBlue {
             Imgproc.rectangle(input, centerRegion.tl(), centerRegion.br(), new Scalar(0, 255, 0), 2);
             Imgproc.rectangle(input, rightRegion.tl(), rightRegion.br(), new Scalar(0, 255, 0), 2);
 
-            double meanRedIntensity = Core.mean(blueChannel).val[0];
+            double meanRedIntensity = Core.mean(redChannel).val[0];
 
             //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
 

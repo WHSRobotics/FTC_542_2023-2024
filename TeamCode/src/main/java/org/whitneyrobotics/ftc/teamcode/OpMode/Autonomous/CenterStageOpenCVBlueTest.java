@@ -46,7 +46,7 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
         camera.setPipeline(new Pipeline());
         camera.openCameraDevice();
-        camera.startStreaming(1920, 1080);
+        camera.startStreaming(800, 448);
 
         waitForStart();
 
@@ -78,11 +78,11 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
             Core.flip(input.t(), input, 2);
             Core.split(input, channels);
 
-            Mat redChannel = channels.get(2);
+            Mat redChannel = channels.get(0);
 
-            Rect leftRegion = new Rect(350, 45, 270, 260);
-            Rect centerRegion = new Rect(((input.width() / 2) - 135), 200, 270, 260);
-            Rect rightRegion = new Rect(990, 200, 270, 270);
+            Rect leftRegion = new Rect(50,1,120,115);
+            Rect centerRegion = new Rect(370,1,75,70);
+            Rect rightRegion = new Rect(610,1,170,120);
 //            Rect leftRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
 //            Rect centerRegion = new Rect((int) centerRegionX, (int) centerRegionY, (int) centerRegionWidth, (int) centerRegionHeight);
 //            Rect rightRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
@@ -110,9 +110,9 @@ public class CenterStageOpenCVBlueTest extends LinearOpMode {
 
             //rightIntensity is reduced by 22 to compensate for the fact that it is overpowered because it can see more of the Spike Mark than left can
 
-            if (rightIntensity > leftIntensity && rightIntensity > centerIntensity) {
+            if (rightIntensity < leftIntensity && rightIntensity < centerIntensity) {
                 position = Position.RIGHT;
-            }else if (leftIntensity > rightIntensity && leftIntensity > centerIntensity) {
+            }else if (leftIntensity < rightIntensity && leftIntensity < centerIntensity) {
                 position = Position.LEFT;
             } else {
                 position = Position.CENTER;

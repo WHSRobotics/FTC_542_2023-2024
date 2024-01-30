@@ -12,6 +12,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ElbowWristImpl;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
@@ -82,6 +83,10 @@ public class WHSTeleOp extends OpModeEx {
         gamepad1.DPAD_RIGHT.onPress(robot.drone::fire);
         gamepad1.TOUCHPAD.onPress(robot.drone::reset);
         gamepad1.SHARE.onPress(robot.drone::init);
+        gamepad1.DPAD_LEFT.onPress(()->{
+            robot.purpleAuto.setState(PurpleServo.PurplePositions.CLOSED);
+            robot.purpleAuto.update();
+        });
         gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
         gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
         gamepad2.TRIANGLE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.TWO));

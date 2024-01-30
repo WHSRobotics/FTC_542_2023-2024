@@ -32,7 +32,7 @@ public class OpenCVRed {
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
         camera.setPipeline(new Pipeline());
         camera.openCameraDevice();
-        camera.startStreaming(1920, 1080);
+        camera.startStreaming(800, 448);
     }
 
     public static void stopCamera(){
@@ -53,9 +53,9 @@ public class OpenCVRed {
 
             Mat redChannel = channels.get(2);
 
-            Rect leftRegion = new Rect(150, 20, 240, 260);
-            Rect centerRegion = new Rect(798, 50, 242, 245);
-            Rect rightRegion = new Rect(1465, 140, 270, 270);
+            Rect leftRegion = new Rect(50,1,120,115);
+            Rect centerRegion = new Rect(370,1,75,70);
+            Rect rightRegion = new Rect(610,1,170,120);
 //            Rect leftRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);
 //            Rect centerRegion = new Rect((int) centerRegionX, (int) centerRegionY, (int) centerRegionWidth, (int) centerRegionHeight);
 //            Rect rightRegion = new Rect((int) rightRegionX, (int) rightRegionY, (int) rightRegionWidth, (int) rightRegionHeight);

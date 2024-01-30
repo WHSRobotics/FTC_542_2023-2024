@@ -256,16 +256,16 @@ public class MeepMeepApp {
 
 
                 //blue alliance backdrop
-                //.addEntity(blueBotBackdrop1) //left
+                .addEntity(blueBotBackdrop1) //left
                 .addEntity(blueBotBackdrop2) //center
-                //.addEntity(blueBotBackdrop3) //right(MIGHT COLLIDE WITH TRUSS)
+                .addEntity(blueBotBackdrop3) //right(MIGHT COLLIDE WITH TRUSS)
 
 
 
                 //red alliance, backdrop
                  .addEntity(redBotBackdrop1) //right
                 .addEntity(redBotBackdrop2) //left
-                //.addEntity(redBotBackdrop3) //center
+                .addEntity(redBotBackdrop3) //center
 //
 //
 //
@@ -276,10 +276,9 @@ public class MeepMeepApp {
                 .addEntity(blueBotWall3) //left (MIGHT HIT TRUSS)
 //
 //
-//
-                    //.addEntity(redBotWall1)//left
-                //.addEntity(redBotWall2)//center
-                //.addEntity(redBotWall3)//right
+                .addEntity(redBotWall1)//left
+                .addEntity(redBotWall2)//center
+                .addEntity(redBotWall3)//right
 
                 //.addEntity(something)
 

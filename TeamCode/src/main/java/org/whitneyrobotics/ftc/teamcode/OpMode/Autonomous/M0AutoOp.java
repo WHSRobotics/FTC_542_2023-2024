@@ -73,16 +73,23 @@ public class M0AutoOp extends OpModeEx {
         dashboardTelemetry.setMsTransmissionInterval(25);
         allianceSensor = new AllianceSensor(hardwareMap);
         delaySelector.onChange(AutoPaths::setDelay);
+
         robot.alliance = allianceSensor.isRedAlliance() ? RED : BLUE;
 
         telemetryPro.addData("Initial Alliance", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
         allianceSensor.onChange(isRed -> {
             robot.alliance = isRed ? RED : BLUE;
             telemetryPro.addData("Alliance changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE).persistent();
+
             playSound("chime");
         });
         gamepad1.CIRCLE.onPress(() -> {
             robot.switchAlliance();
+            if (robot.alliance == RED){
+                OpenCVRed.initalizeCamCV(hardwareMap);
+            }else if (robot.alliance == BLUE){
+                OpenCVBlue.initalizeCamCV(hardwareMap);
+            }
             telemetryPro.addData("Alliance manually changed to", robot.alliance.name(), robot.alliance == RED ? LineItem.Color.RED : LineItem.Color.BLUE, LineItem.RichTextFormat.ITALICS).persistent();
         });
         if (robot.alliance == RED){
@@ -98,15 +105,17 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void initInternalLoop(){
         allianceSensor.update();
-
         if (robot.alliance == RED){
             numeric_path = OpenCVRed.Pipeline.convertEnumToInteger();
             telemetryPro.addData("Numeric Path",numeric_path);
             telemetryPro.addData(" Path",OpenCVRed.Pipeline.getPosition());
+            telemetryPro.addData("delay", AutoPaths.getDelay());
         }else if (robot.alliance == BLUE){
             numeric_path = OpenCVBlue.Pipeline.convertEnumToInteger();
             telemetryPro.addData("Numeric Path",numeric_path);
-            telemetryPro.addData(" Path",OpenCVBlue.Pipeline.getPosition());        }
+            telemetryPro.addData(" Path",OpenCVBlue.Pipeline.getPosition());
+
+        }
 
         //numeric_path = cameraView.path();
         List<TestManager.Test> results =  telemetryPro.getTestManager().run();
