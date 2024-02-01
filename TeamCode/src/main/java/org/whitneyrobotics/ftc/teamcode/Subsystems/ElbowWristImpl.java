@@ -79,14 +79,15 @@ public class ElbowWristImpl {
 
     public void toggle(){
         if(stateMachine.getState() instanceof SubstateMachine){
-            ((SubstateMachine<?,?>) stateMachine.getState()).getEmbeddedStateMachine().transitionNextLinear();
+            ((SubstateMachine<?,?>) stateMachine.getState())
+                    .getEmbeddedStateMachine()
+                    .transitionNextLinear();
         }
     }
 
     public void update(){
         stateMachine.update();
         elbow.run();
-
         wrist.run();
     }
 
