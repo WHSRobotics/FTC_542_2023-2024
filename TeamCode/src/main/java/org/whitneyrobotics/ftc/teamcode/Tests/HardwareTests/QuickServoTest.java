@@ -11,7 +11,7 @@ public class QuickServoTest extends OpModeEx {
     double pos;
     @Override
     public void initInternal() {
-        s = hardwareMap.get(Servo.class, "droneServo");
+        s = hardwareMap.get(Servo.class, "angle");
         pos = s.getPosition();
         gamepad1.DPAD_UP.onPress(() -> pos = pos + 0.01);
         gamepad1.DPAD_DOWN.onPress(() -> pos = pos - 0.01);

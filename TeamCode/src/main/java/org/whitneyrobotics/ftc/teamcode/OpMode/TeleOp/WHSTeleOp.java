@@ -13,6 +13,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ElbowWristImpl;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
@@ -83,6 +84,7 @@ public class WHSTeleOp extends OpModeEx {
         gamepad1.DPAD_RIGHT.onPress(robot.drone::fire);
         gamepad1.TOUCHPAD.onPress(robot.drone::reset);
         gamepad1.SHARE.onPress(robot.drone::init);
+        gamepad1.DPAD_UP.onPress(robot.drone::quickPrep);
         gamepad1.DPAD_LEFT.onPress(()->{
             robot.purpleAuto.setState(PurpleServo.PurplePositions.CLOSED);
             robot.purpleAuto.update();
@@ -142,7 +144,14 @@ public class WHSTeleOp extends OpModeEx {
         robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
         if (robot.hookAndWinch.hookReleased()) robot.hookAndWinch.setPower(gamepad2.RIGHT_STICK_Y.value());
 
-
+        if(gamepad1.RIGHT_STICK_DOWN.value()){
+            if(gamepad1.LEFT_STICK_DOWN.value()){
+                robot.colorSubsystem.requestColor(ColorSubsystem.Colors.PURPLE_PIXEL);
+            } else {
+                robot.colorSubsystem.requestColor(ColorSubsystem.Colors.GREEN_PIXEL);
+            }
+        } else if (gamepad1.LEFT_STICK_DOWN.value()) robot.colorSubsystem.requestColor(ColorSubsystem.Colors.YELLOW_PIXEL);
+        else if (gamepad1.DPAD_DOWN.value()) robot.colorSubsystem.requestColor(ColorSubsystem.Colors.WHITE);
         float brakePower = gamepad1.LEFT_TRIGGER.value();
         UnaryOperator<Float> scaling = scalingFunctionDefault;
         if(gamepad1.BUMPER_LEFT.value()) scaling = x -> x/2;

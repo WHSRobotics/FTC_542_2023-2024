@@ -32,14 +32,19 @@ public class DroneB implements SubsystemIterative {
     public static double D = -2.9912e-7;
 
     public void fire(){
-        firingPosition = 0.79;
+        firingPosition = 1.00;
     }
 
     public void retract(){
         position = 0.62;
-        firingPosition = 0;
+        firingPosition = 0.1;
         holdPos = 0.72;
         i = 1;
+    }
+
+    public void quickPrep(){
+        holdPos = 0.61;
+        position = 0.42;
     }
 
     public static double regress(double angle){
@@ -139,5 +144,7 @@ public class DroneB implements SubsystemIterative {
         anglePositions.put(11.0, 0.56);
         anglePositions.put(20.0, 0.52);
         anglePositions.put(30.0,0.47);
+        anglePositions.put(65.0, 0.38);
+        anglePositions.put(51.0, 0.40);
     }
 }

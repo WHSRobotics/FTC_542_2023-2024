@@ -130,14 +130,14 @@ public class ArmElevator {
                                         kA*motionProfile.accelerationAt(stopwatch.seconds())/A_MAX+
                                         controller.getOutput()+kStatic);
                     })
-                    .onExit(() -> currentTargetPositionInches= null)
+                    .onExit(() -> currentTargetPositionInches = null)
                     .transition(() -> {
                         calculateError();
                         return motionProfile.isFinished(stopwatch.seconds()) && (Math.abs(
                                 motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition() //error from designed position
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
-                    .transitionLinear(() -> Math.abs(requestedPower)>0 || currentTargetPositionInches == null)
+                    .transitionLinear(() -> Math.abs(requestedPower) > 0 || currentTargetPositionInches == null)
                     .transition(() -> newTargetPosInches != null, ElevatorStates.IDLE)
                     .fin()
                 .build();
