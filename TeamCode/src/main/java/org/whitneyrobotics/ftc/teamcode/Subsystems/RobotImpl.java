@@ -11,12 +11,16 @@ import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Libraries.StateForge.StateMachine;
 import org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous.OpenCVRed;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
+import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.DroneB;
+
+import java.util.ArrayList;
+import java.util.List;
 //import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 
 /**
@@ -46,7 +50,7 @@ public class RobotImpl {
 
     public static RobotImpl getInstance(HardwareMap hardwareMap){
         //if(instance == null){ Right now, robot is having a hard time reassigning motors. So we will force reinit and restore the state
-            init(hardwareMap);
+        init(hardwareMap);
         //}
         return instance;
     }
@@ -71,6 +75,7 @@ public class RobotImpl {
     public final PurpleServo purpleAuto;
 
     public final HookAndWinch hookAndWinch;
+    public final StandardTrackingWheelLocalizer localizer;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
@@ -85,6 +90,7 @@ public class RobotImpl {
         gate = new Gate(hardwareMap);
         purpleAuto = new PurpleServo(hardwareMap);
         hookAndWinch = new HookAndWinch(hardwareMap);
+        localizer = new StandardTrackingWheelLocalizer(hardwareMap, new ArrayList<>(), new ArrayList<>());
 //        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
@@ -99,11 +105,15 @@ public class RobotImpl {
     }
 
     public void teleOpInit(){ //Restore states of motors from memory
-        drive.setPoseEstimate(RobotImpl.poseMemory);
+        Pose2d poseMemory = localizer.getPoseEstimate();
+        drive.setPoseEstimate(poseMemory);
         elevator.setCalibrationOffset(slidesHeightMemory);
         elevator.setCalibrationOffset(heightMemory);
+
+
         drone.init();
         hookAndWinch.init();
+
     }
     public void update(){
         elevator.update();
@@ -118,6 +128,7 @@ public class RobotImpl {
         purpleAuto.update();
         hookAndWinch.update();
 
+
         Colors status = Colors.OFF;
         if(drive.isBusy()){
             status = Colors.AUTO_RUNNING;
@@ -125,7 +136,7 @@ public class RobotImpl {
         if (showMatchNotifs){
             status = Colors.NOTIFICATION;
         }
-        
+
         if (Math.abs(drive.getLocalizer().getPoseEstimate().getX()-TILE_WIDTH.toInches(-0.5)) <= TILE_WIDTH.toInches((double)2/3)){
             status = Colors.BUSY;
             /*if(elevator.isBusy() || elevator.getPosition()>4){ //Auto retraction - UNTESTED
