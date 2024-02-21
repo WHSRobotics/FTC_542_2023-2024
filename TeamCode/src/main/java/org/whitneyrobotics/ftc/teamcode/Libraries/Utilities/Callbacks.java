@@ -1,5 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.Libraries.Utilities;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 public class Callbacks {
 
     private static int GLOBAL_ID = 0;
@@ -10,7 +12,7 @@ public class Callbacks {
                 Thread.sleep(delay);
                 callback.run();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                RobotLog.e(e.toString());
             }
         }).start();
     }
@@ -27,11 +29,11 @@ public class Callbacks {
                         break;
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    RobotLog.ee("Problem with Interval with PID: " + breakId,e.toString());
                 }
             }
         }).start();
-        return GLOBAL_ID++;
+        return breakId;
     }
 
     public static void clearInterval(int id) {

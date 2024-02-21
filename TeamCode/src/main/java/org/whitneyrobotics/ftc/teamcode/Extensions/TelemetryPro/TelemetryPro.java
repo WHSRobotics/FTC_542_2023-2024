@@ -83,7 +83,7 @@ public class TelemetryPro {
         return instance;
     }
 
-    public void update(){
+    public synchronized void update(){
         //blink every second
         interact();
         boolean blink = currentOpMode.getRuntime() % 0.5 > 0.25;

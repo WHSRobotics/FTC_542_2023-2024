@@ -33,5 +33,7 @@ dependencies {
     implementation 'org.ftclib.ftclib:core:2.1.1'
     // the following is optional if you want vision
     implementation 'org.ftclib.ftclib:vision:2.1.0'
-    implementation 'org.tensorflow:tensorflow-lite'
+    implementation 'org.tensorflow:tensorflow-lite:2.14.0'
+    implementation 'com.google.android.gms:play-services-tflite-java:16.1.0'
+    implementation 'com.google.android.gms:play-services-tflite-gpu:16.2.0'
 }

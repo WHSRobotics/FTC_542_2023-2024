@@ -1,5 +1,8 @@
 package org.whitneyrobotics.ftc.teamcode.Tests.HardwareTests;
 
+import android.graphics.Color;
+
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -10,11 +13,13 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 
 import java.io.IOException;
+import java.util.List;
 
 @TeleOp(name="Color Box Test")
 public class ColorBoxTest extends OpModeEx {
     RevColorSensorV3 c1, c2;
     DataLogger c1dl = new DataLogger("color1-" + Math.floor(Math.random() * 1000)+".tsv");
+    List<LynxModule> hubs;
 
     public ColorBoxTest() throws IOException {
     }
@@ -30,7 +35,7 @@ public class ColorBoxTest extends OpModeEx {
     public void logPixelData(RevColorSensorV3 c, int color) {
         NormalizedRGBA cData = c.getNormalizedColors();
         try {
-            c1dl.addDataLine(cData.red, cData.blue, cData.green, cData.alpha, color);
+            c1dl.addDataLine(cData.red, cData.blue, cData.green, cData.alpha, c.getRawLightDetected(), cData.toColor(), color);
             telemetryPro.addLine("Color "+ color +" logged.").persistent();
         } catch(IOException e) {
             RobotLog.e(e.toString());
@@ -39,6 +44,7 @@ public class ColorBoxTest extends OpModeEx {
 
     @Override
     public void initInternal() {
+        hubs = hardwareMap.getAll(LynxModule.class);
         c1 = hardwareMap.get(RevColorSensorV3.class, "color1");
         c2 = hardwareMap.get(RevColorSensorV3.class, "color2");
         telemetryPro.useDashboardTelemetry(dashboardTelemetry);
@@ -57,6 +63,7 @@ public class ColorBoxTest extends OpModeEx {
         telemetryPro.addData("C1 G", c1Data.green, LineItem.Color.GREEN);
         telemetryPro.addData("C1 B", c1Data.blue, LineItem.Color.BLUE);
         telemetryPro.addData("C1 A", c1Data.alpha);
+        hubs.forEach(hub -> hub.setConstant(c1Data.toColor()));
 
         NormalizedRGBA c2Data = c2.getNormalizedColors();
         telemetryPro.addData("C2 R", c2Data.red, LineItem.Color.RED);
