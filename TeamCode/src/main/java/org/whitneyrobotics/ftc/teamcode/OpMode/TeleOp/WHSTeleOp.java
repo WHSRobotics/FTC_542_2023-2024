@@ -78,17 +78,20 @@ public class WHSTeleOp extends OpModeEx {
             robot.elbowWrist.endgameFlipBucket();
         });
         gamepad2.DPAD_DOWN.onPress(() -> robot.gate.update());
-        gamepad1.SQUARE.onPress(robot.intake::stackPosition);
-        gamepad1.CROSS.onPress(robot.intake::onePosition);
+
         gamepad1.CIRCLE.onPress(robot.drone::nextDefinedAngle);
-        gamepad1.DPAD_RIGHT.onPress(robot.drone::fire);
+        gamepad1.CROSS.onPress(robot.drone::quickPrep);
+
+        gamepad1.DPAD_DOWN.onPress(robot.intake::onePosition);
+        gamepad1.DPAD_RIGHT.onPress(robot.intake::stackPosition);
+        gamepad1.DPAD_UP.onPress(robot.intake::raisedPosition);
+        gamepad1.DPAD_LEFT.onPress(robot.drone::fire);
+
+
         gamepad1.TOUCHPAD.onPress(robot.drone::reset);
         gamepad1.SHARE.onPress(robot.drone::init);
-        gamepad1.DPAD_UP.onPress(robot.drone::quickPrep);
-        gamepad1.DPAD_LEFT.onPress(()->{
-            robot.purpleAuto.setState(PurpleServo.PurplePositions.CLOSED);
-            robot.purpleAuto.update();
-        });
+
+
         gamepad2.CROSS.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.RETRACT));
         gamepad2.SQUARE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.ONE));
         gamepad2.TRIANGLE.onPress(e -> robot.elevator.setTargetPosition(ArmElevator.Target.TWO));
@@ -101,6 +104,10 @@ public class WHSTeleOp extends OpModeEx {
         gamepad2.DPAD_RIGHT.onPress(() -> {
             robot.hookAndWinch.toggleHook();
             robot.elbowWrist.endgameFlipBucket();
+        });
+        gamepad2.DPAD_LEFT.onPress(()->{
+            robot.purpleAuto.setState(PurpleServo.PurplePositions.CLOSED);
+            robot.purpleAuto.update();
         });
         robot.intake.onePosition();
 
@@ -151,7 +158,7 @@ public class WHSTeleOp extends OpModeEx {
                 robot.colorSubsystem.requestColor(ColorSubsystem.Colors.GREEN_PIXEL);
             }
         } else if (gamepad1.LEFT_STICK_DOWN.value()) robot.colorSubsystem.requestColor(ColorSubsystem.Colors.YELLOW_PIXEL);
-        else if (gamepad1.DPAD_DOWN.value()) robot.colorSubsystem.requestColor(ColorSubsystem.Colors.WHITE);
+
         float brakePower = gamepad1.LEFT_TRIGGER.value();
         UnaryOperator<Float> scaling = scalingFunctionDefault;
         if(gamepad1.BUMPER_LEFT.value()) scaling = x -> x/2;

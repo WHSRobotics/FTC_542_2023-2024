@@ -13,12 +13,16 @@ public class AutoPurpleTest extends OpModeEx {
     @Override
     public void initInternal() {
         purpleServo = new PurpleServo(hardwareMap);
-        gamepad1.TRIANGLE.onPress(() -> purpleServo.update());
+        gamepad1.TRIANGLE.onPress(() ->  purpleServo.setState(PurpleServo.PurplePositions.CLOSED));
+        gamepad1.CIRCLE.onPress(() ->  purpleServo.setState(PurpleServo.PurplePositions.OPEN));
+
+
 
     }
 
     @Override
     protected void loopInternal() {
         //purpleServo.run();
+        purpleServo.update();
     }
 }
