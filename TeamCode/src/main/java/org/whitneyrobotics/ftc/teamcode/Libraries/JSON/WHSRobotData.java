@@ -9,4 +9,7 @@ public class WHSRobotData {
     public static void reset() {
         heading = 0.0d;
     }
+    public static Pose2d getPose() {
+        return new Pose2d(lastX, lastY, heading);
+    }
 }
