@@ -39,7 +39,9 @@ public class WHSTeleOp extends OpModeEx {
     private boolean unPressed = true;
     @Override
     public void initInternal() {
+        RobotDataUtil.load(WHSRobotData.class);
         robot = RobotImpl.getInstance(hardwareMap);
+        robot.drive.setPoseEstimate(WHSRobotData.getPose());
 
         robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -52,7 +54,7 @@ public class WHSTeleOp extends OpModeEx {
             robot.drive.setPoseEstimate(new Pose2d(
                     previousPosition.getX(),
                     previousPosition.getY(),
-                    robot.alliance.headingAngle
+                    0 + (robot.alliance == Alliance.RED ? Math.PI/2 : -Math.PI/2)
             ));
         });
         //gamepad1.CROSS.onPress(robot.droneLauncher::toggleState);
