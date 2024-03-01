@@ -1,5 +1,7 @@
 package org.whitneyrobotics.ftc.teamcode.Libraries.JSON;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 public class WHSRobotData {
     public static double heading = 0.0d;
     public static double lastX = 0.0d;

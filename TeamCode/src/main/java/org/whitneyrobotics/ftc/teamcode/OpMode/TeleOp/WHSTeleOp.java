@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.whitneyrobotics.ftc.teamcode.Constants.Alliance;
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
+import org.whitneyrobotics.ftc.teamcode.Libraries.JSON.RobotDataUtil;
+import org.whitneyrobotics.ftc.teamcode.Libraries.JSON.WHSRobotData;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Utilities.Functions;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
@@ -150,7 +152,7 @@ public class WHSTeleOp extends OpModeEx {
         robot.update();
         robot.intake.setRPM(Math.sqrt(gamepad1.RIGHT_TRIGGER.value()) * Meet3Intake.MAX_RPM);
         robot.intake.setReversed(gamepad1.TRIANGLE.value());
-        robot.elevator.inputPower(gamepad2.LEFT_STICK_Y.value());
+        robot.elevator.inputPower(-gamepad2.LEFT_STICK_Y.value());
         if (robot.hookAndWinch.hookReleased()) robot.hookAndWinch.setPower(gamepad2.RIGHT_STICK_Y.value());
 
         if(gamepad1.RIGHT_STICK_DOWN.value()){
