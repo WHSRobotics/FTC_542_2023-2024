@@ -1,5 +1,9 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
+
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -8,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.ControlConstants;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Controllers.PIDController;
 import org.whitneyrobotics.ftc.teamcode.Libraries.Motion.MotionProfileTrapezoidal;
@@ -33,7 +38,7 @@ public class ArmElevator {
     public static ControlConstants EXTENSION_PID= new ControlConstants(0.5,0,0.001);
 
     public static MotionProfileTrapezoidal motionProfile = new MotionProfileTrapezoidal(V_MAX, A_MAX);
-    private final double SPOOL_RADIUS = 1.27/2; //in
+    private final double SPOOL_RADIUS = MM.toInches(20.75); //in
 
     private PIDController controller = new PIDController(EXTENSION_PID);
 
@@ -63,6 +68,11 @@ public class ArmElevator {
 
     public final static double ACCEPTABLE_ERROR = 0.1; //inches
 
+    public Double targetPos = null;
+
+    @NonNull
+    private Target target = Target.NONE;
+
     VoltageSensor voltageSensor;
 
     enum ElevatorStates {
@@ -71,6 +81,7 @@ public class ArmElevator {
     }
 
     public enum Target {
+        NONE(0),
         RETRACT(0),
         ONE(0.5),
         TWO(6),
@@ -80,15 +91,12 @@ public class ArmElevator {
         }
         double pos;
     }
-
-    private Double currentTargetPositionInches; //inches
     private double error, initialPosition;
 
     public static double INTAKE_CUTOFF = Target.ONE.pos;
     private boolean underIntakeCutoff;
 
     private Consumer<Boolean> onZoneChangeConsumer;
-    public Double newTargetPosInches;
 
     public ArmElevator(HardwareMap hardwareMap){
         lSlides = hardwareMap.get(DcMotorEx.class, "linearSlides");
@@ -105,11 +113,8 @@ public class ArmElevator {
                     .periodic(() -> {
                         lSlides.setPower(requestedPower * (slowed ? 0.5 : 1));
                     })
-                    .onExit(() -> {
-                        currentTargetPositionInches = newTargetPosInches;
-                        newTargetPosInches = null;
-                    })
-                    .transition(() -> currentTargetPositionInches != null || newTargetPosInches != null, ElevatorStates.RISING)
+                    .transitionLinear(() -> target != Target.NONE)
+                     .transitionLinear(() -> targetPos != null)
                     .fin()
                 .state(ElevatorStates.RISING)
                     .onEntry(() -> {
@@ -123,30 +128,37 @@ public class ArmElevator {
                     })
                     .periodic(() -> {
                         //Find expected position from motion profile
-                        double errorFromExpected = motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition();
-                        controller.calculate(errorFromExpected);
+                        double errorPosition = motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition();
+                        controller.calculate(errorPosition);
                         lSlides.setPower(
                                 kV*motionProfile.velocityAt(stopwatch.seconds())/V_MAX * NOMINAL_VOLTAGE/voltageSensor.getVoltage()+
                                         kA*motionProfile.accelerationAt(stopwatch.seconds())/A_MAX+
                                         controller.getOutput()+kStatic);
                     })
-                    .onExit(() -> currentTargetPositionInches = null)
                     .transition(() -> {
                         calculateError();
                         return motionProfile.isFinished(stopwatch.seconds()) && (Math.abs(
                                 motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition() //error from designed position
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
-                    .transitionLinear(() -> Math.abs(requestedPower) > 0 || currentTargetPositionInches == null)
-                    .transition(() -> newTargetPosInches != null, ElevatorStates.IDLE)
+                    .transitionLinear(() -> Math.abs(requestedPower) > 0)
+                    .transitionLinear(() -> target == Target.NONE)
+                    .transitionLinear(() -> targetPos == null)
+                    .onExit(() -> {
+                        target=Target.NONE;
+                        targetPos = null;
+                    })
                     .fin()
                 .build();
         elevatorStatesStateMachine.start();
     }
 
+    /**
+     * Sets the global error of the slides. If the target position is not set, the error will be 0 (no PID).
+     */
     public void calculateError(){
-        if(currentTargetPositionInches == null) return;
-        error = currentTargetPositionInches-getPosition();
+        Double t = getTargetPosition();
+        error = t != null ? t-getPosition() : 0;
     }
 
     public void resetEncoders(){
@@ -154,12 +166,13 @@ public class ArmElevator {
         lSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void breakLifting(){
-        currentTargetPositionInches = null;
+    public void cancel(){
+        target = Target.NONE;
+        targetPos = null;
     }
 
     public boolean isBusy(){
-        return currentTargetPositionInches != null;
+        return target != Target.NONE;
     }
 
     public void update(){
@@ -172,12 +185,12 @@ public class ArmElevator {
     }
 
     public void setTargetPosition(Target target){
-        setTargetPosition(target.pos);
+        this.target = target;
+        update();
     }
 
     public void setTargetPosition(double pos){
-        newTargetPosInches = pos;
-        currentTargetPositionInches = pos;
+        targetPos = pos;
         update();
     }
 
@@ -220,17 +233,17 @@ public class ArmElevator {
         return elevatorStatesStateMachine.getMachineState().name();
     }
 
-    public void cancel(){
-        currentTargetPositionInches = null;
-    }
 
     public void forceManualControl(){
         elevatorStatesStateMachine.transitionTo(ElevatorStates.IDLE);
     }
 
-    public double getTargetPosition(){
-        if(currentTargetPositionInches == null) return 0;
-        return currentTargetPositionInches;
+    /**
+     * Returns the target position. A defined target position will override the target enum.
+     * @return Target position. If the return value is `null`, the target is not set, and therefore automatic following will cancel.
+     */
+    public Double getTargetPosition(){
+        return  targetPos != null ? targetPos : (target != Target.NONE ? target.pos : null);
     }
 
     public void onZoneChange(Consumer<Boolean> consumer){
