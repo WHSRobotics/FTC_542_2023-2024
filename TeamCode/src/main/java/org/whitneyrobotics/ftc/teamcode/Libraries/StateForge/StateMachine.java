@@ -107,6 +107,11 @@ public class StateMachine<E extends Enum<E>> {
         Action exitAction = null;
         State<E> nextState = null;
         boolean willTransition = false;
+        if(!ranEnterCallback && currentState.getOnEntryAction() != null){
+            currentState.getOnEntryAction().call();
+            ranEnterCallback = true;
+        }
+
         for (Triple<TransitionCondition, E, Action> transitionInfo : currentState.getTransitions()){
             if(transitionInfo.a instanceof TimedTransition && !((TimedTransition) transitionInfo.a).timerStarted()){
                 ((TimedTransition) transitionInfo.a).startTimer();
@@ -127,11 +132,6 @@ public class StateMachine<E extends Enum<E>> {
                 willTransition = true;
                 break;
             }
-        }
-
-        if(!ranEnterCallback && currentState.getOnEntryAction() != null){
-            currentState.getOnEntryAction().call();
-            ranEnterCallback = true;
         }
 
         if(willTransition && nextState != null){

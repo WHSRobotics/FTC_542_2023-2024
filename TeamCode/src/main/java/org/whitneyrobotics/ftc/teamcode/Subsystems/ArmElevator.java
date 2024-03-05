@@ -117,9 +117,15 @@ public class ArmElevator {
                     })
 
                     .transitionLinear(() -> target != Target.NONE)
+<<<<<<< Updated upstream
                      .transitionLinear(() -> targetPos != null)                    .onExit(stopwatch::reset)
                 .onExit(stopwatch::reset)
                 .fin()
+=======
+                     .transitionLinear(() -> targetPos != null)
+                     .onExit(stopwatch::reset)
+                    .fin()
+>>>>>>> Stashed changes
                 .state(ElevatorStates.RISING)
                     .onEntry(() -> {
                         calculateError();
@@ -146,7 +152,11 @@ public class ArmElevator {
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
                     .transitionLinear(() -> Math.abs(requestedPower) > 0)
+<<<<<<< Updated upstream
                     .transitionLinear(() -> (target == Target.NONE) && (targetPos == null))
+=======
+                    .transitionLinear(() -> target == Target.NONE && targetPos == null)
+>>>>>>> Stashed changes
                     .onExit(() -> {
                         target=Target.NONE;
                         targetPos = null;
@@ -187,7 +197,7 @@ public class ArmElevator {
         elevatorStatesStateMachine.update();
     }
 
-    public void setTargetPosition(Target target){
+    public void setTargetPosition(@NonNull Target target){
         this.target = target;
         update();
     }

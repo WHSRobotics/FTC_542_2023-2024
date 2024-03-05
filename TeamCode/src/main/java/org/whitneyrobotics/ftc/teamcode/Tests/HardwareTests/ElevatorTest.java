@@ -42,7 +42,5 @@ public class ElevatorTest extends OpModeEx {
         telemetryPro.addData("Elevator Acceleration", elevator.getDesiredAcceleration());
         telemetryPro.addData("Target Position", elevator.getTargetPosition());
         telemetryPro.addData("TargetPosDebug", elevator.targetPos);
-        telemetryPro.addData("Elevator Target", elevator.target);
-
     }
 }
