@@ -149,12 +149,12 @@ public class ArmElevator {
                                 motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition() //error from designed position
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
-                    .transition(() -> newwTarget, ElevatorStates.STATE_CHANGED_INTERMITTENTLY)
+                    .transitionWithAction(() -> newwTarget, ElevatorStates.STATE_CHANGED_INTERMITTENTLY, ()->{})
                     .transitionLinear(() -> Math.abs(requestedPower) > 0)
                     .transitionLinear(() -> (target == Target.NONE) && (targetPos == null))
                     .transitionLinear(() -> target == Target.NONE && targetPos == null)
                     .onExit(() -> {
-                        target=Target.NONE;
+                        target = Target.NONE;
                         targetPos = null;
                     })
                     .fin()
@@ -199,13 +199,11 @@ public class ArmElevator {
     public void setTargetPosition(@NonNull Target target){
         this.target = target;
         newwTarget = true;
-        update();
     }
 
     public void setTargetPosition(double pos){
         targetPos = pos;
         newwTarget = true;
-        update();
     }
 
     public void  inputPower(double power){

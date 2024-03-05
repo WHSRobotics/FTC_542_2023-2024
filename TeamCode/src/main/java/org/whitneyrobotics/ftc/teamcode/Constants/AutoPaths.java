@@ -201,8 +201,6 @@ public class AutoPaths {
                     //CLAW STUFF
                     purpleServo.setState(PurpleServo.PurplePositions.CLOSED);
                     elevator.setTargetPosition(ArmElevator.Target.THREE);
-                    elevator.update();
-                    elevator.update();
 
                 })
 //                .lineToLinearHeading(new Pose2d(distFromBackdrop-0.8

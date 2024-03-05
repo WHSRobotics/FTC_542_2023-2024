@@ -116,7 +116,7 @@ public class StateMachine<E extends Enum<E>> {
             if(transitionInfo.a instanceof TimedTransition && !((TimedTransition) transitionInfo.a).timerStarted()){
                 ((TimedTransition) transitionInfo.a).startTimer();
             }
-            int index = linearStateMap.get(currentState.getState());
+            int index = linearStateMap.getOrDefault(currentState.getState(), linearStates.size()-1);
             if(transitionInfo.a.shouldTransition()){
                 exitAction = transitionInfo.c;
 

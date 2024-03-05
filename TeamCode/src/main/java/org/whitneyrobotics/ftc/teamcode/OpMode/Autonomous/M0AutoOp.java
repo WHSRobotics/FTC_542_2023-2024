@@ -132,7 +132,6 @@ public class M0AutoOp extends OpModeEx {
         robot.intake.raisedPosition();
         robot.intake.update();
         //robot.elevator.setTargetPosition(ArmElevator.Target.THREE);
-        robot.elevator.update();
         telemetryPro.addData("Position", robot.elevator.getPosition());
         telemetryPro.addData("Target Position", robot.elevator.getTargetPosition());
 
@@ -145,7 +144,6 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     public void startInternal() {
-        robot.elevator.update();
         //robot.elevator.setTargetPosition(ArmElevator.Target.THREE);
         if (robot.alliance == RED){
             OpenCVRed.stopCamera();
@@ -230,9 +228,7 @@ public class M0AutoOp extends OpModeEx {
         AutoPaths.setAutoSubsystems(robot.purpleAuto,robot.elbowWrist,robot.gate, robot.intake, robot.elevator);
         robot.drive.sendPacket(packet);
         robot.update();
-        robot.elevator.update();
 
-        robot.elevator.update();
         telemetryPro.addData("Trajectory",selectedTrajectory);
         RobotImpl.poseMemory = robot.drive.getPoseEstimate();
     }
