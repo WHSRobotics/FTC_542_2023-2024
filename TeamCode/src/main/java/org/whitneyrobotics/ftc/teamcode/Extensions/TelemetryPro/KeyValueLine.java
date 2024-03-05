@@ -45,7 +45,6 @@ public class KeyValueLine<T> extends LineItem {
     @Override
     protected String format(boolean blink) {
         if(valueProducer != null) value = valueProducer.value();
-        if(value == null) return "";
-        return String.format("%s%s%s",caption,separator,value.toString());
+        return String.format("%s%s%s",caption,separator,value != null ? value.toString() : "null");
     }
 }

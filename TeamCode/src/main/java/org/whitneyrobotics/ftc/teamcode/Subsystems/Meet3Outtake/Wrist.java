@@ -1,17 +1,22 @@
 package org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Config
 public class Wrist {
     public Servo wristL;
     public Servo wristR;
 
+    public static double INTAKING_posL = 1.0, INTAKING_posR = 0.78, ONE = 0.64;
+
+
     public WristPositions currentState = WristPositions.INTAKING;
 
     public enum WristPositions{
-        INTAKING(0.96, 0),
-        OUTTAKING(0, 0.7);
+        INTAKING(1, 0),
+        OUTTAKING(0, 0.695);
 
         double posL;
         double posR;

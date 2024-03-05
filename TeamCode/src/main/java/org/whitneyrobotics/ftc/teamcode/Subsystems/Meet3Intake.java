@@ -17,7 +17,7 @@ public class Meet3Intake {
 
     private double motorPower = 0.0;
 
-    public static double RAISED = 1.0, STACK = 0.88, ONE = 0.84;
+    public static double RAISED = 1.0, STACK = 0.78, ONE = 0.64;
 
     public static double servoPos = RAISED;
     private boolean reversed = false;
@@ -47,7 +47,7 @@ public class Meet3Intake {
     }
 
     public void update(){
-        intakeMotor.setPower(motorPower * (reversed ? -1 : 1));
+        intakeMotor.setPower(motorPower * (reversed ? 1 : -1));
         intakeServo.setPosition(servoPos);
     }
 

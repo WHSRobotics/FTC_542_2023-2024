@@ -23,6 +23,7 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TelemetryPro;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 //import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
@@ -47,7 +48,7 @@ public class M0AutoOp extends OpModeEx {
     public void initInternal() {
         RobotImpl.init(hardwareMap);
         robot = RobotImpl.getInstance();
-        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
+        //robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.enableRobotDrawing();
         robot.drone.init();
 
@@ -126,10 +127,16 @@ public class M0AutoOp extends OpModeEx {
         if(gamepad1.TRIANGLE.value()){ //Press and hold triangle to check alliance
             desiredColor = robot.alliance == Alliance.RED ? ColorSubsystem.Colors.RED : ColorSubsystem.Colors.BLUE;
         }
-        robot.colorSubsystem.requestColor(desiredColor);
-        robot.colorSubsystem.update();
+//        robot.colorSubsystem.requestColor(desiredColor);
+//        robot.colorSubsystem.update();
         robot.intake.raisedPosition();
         robot.intake.update();
+        //robot.elevator.setTargetPosition(ArmElevator.Target.THREE);
+        robot.elevator.update();
+        telemetryPro.addData("Position", robot.elevator.getPosition());
+        telemetryPro.addData("Target Position", robot.elevator.getTargetPosition());
+
+
         telemetryPro.addData("Alliance", robot.alliance.name(), (robot.alliance == Alliance.RED ? LineItem.Color.RED : LineItem.Color.BLUE));
         robot.drive.sendPacket(packet);
 
@@ -138,6 +145,8 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     public void startInternal() {
+        robot.elevator.update();
+        //robot.elevator.setTargetPosition(ArmElevator.Target.THREE);
         if (robot.alliance == RED){
             OpenCVRed.stopCamera();
         }else if (robot.alliance == BLUE){
@@ -218,9 +227,12 @@ public class M0AutoOp extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        AutoPaths.setAutoSubsystems(robot.purpleAuto,robot.elbowWrist,robot.gate, robot.intake);
+        AutoPaths.setAutoSubsystems(robot.purpleAuto,robot.elbowWrist,robot.gate, robot.intake, robot.elevator);
         robot.drive.sendPacket(packet);
         robot.update();
+        robot.elevator.update();
+
+        robot.elevator.update();
         telemetryPro.addData("Trajectory",selectedTrajectory);
         RobotImpl.poseMemory = robot.drive.getPoseEstimate();
     }

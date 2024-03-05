@@ -45,7 +45,7 @@ public class WHSTeleOp extends OpModeEx {
         robot = RobotImpl.getInstance(hardwareMap);
         robot.drive.setPoseEstimate(WHSRobotData.getPose());
 
-        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
+        //robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dashboardTelemetry.setMsTransmissionInterval(25);
@@ -155,13 +155,13 @@ public class WHSTeleOp extends OpModeEx {
         robot.elevator.inputPower(-gamepad2.LEFT_STICK_Y.value());
         if (robot.hookAndWinch.hookReleased()) robot.hookAndWinch.setPower(gamepad2.RIGHT_STICK_Y.value());
 
-        if(gamepad1.RIGHT_STICK_DOWN.value()){
-            if(gamepad1.LEFT_STICK_DOWN.value()){
-                robot.colorSubsystem.requestColor(ColorSubsystem.Colors.PURPLE_PIXEL);
-            } else {
-                robot.colorSubsystem.requestColor(ColorSubsystem.Colors.GREEN_PIXEL);
-            }
-        } else if (gamepad1.LEFT_STICK_DOWN.value()) robot.colorSubsystem.requestColor(ColorSubsystem.Colors.YELLOW_PIXEL);
+//        if(gamepad1.RIGHT_STICK_DOWN.value()){
+//            if(gamepad1.LEFT_STICK_DOWN.value()){
+//                robot.colorSubsystem.requestColor(ColorSubsystem.Colors.PURPLE_PIXEL);
+//            } else {
+//                robot.colorSubsystem.requestColor(ColorSubsystem.Colors.GREEN_PIXEL);
+//            }
+//        } else if (gamepad1.LEFT_STICK_DOWN.value()) robot.colorSubsystem.requestColor(ColorSubsystem.Colors.YELLOW_PIXEL);
 
         float brakePower = gamepad1.LEFT_TRIGGER.value();
         UnaryOperator<Float> scaling = scalingFunctionDefault;

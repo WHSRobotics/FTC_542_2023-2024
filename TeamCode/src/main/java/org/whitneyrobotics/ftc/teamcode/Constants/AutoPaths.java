@@ -2,10 +2,12 @@ package org.whitneyrobotics.ftc.teamcode.Constants;
 
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.drive.CenterstageMecanumDrive;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ElbowWristImpl;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Intake;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import static org.whitneyrobotics.ftc.teamcode.Constants.FieldConstants.StartingTiles.*;
 
@@ -20,16 +22,19 @@ public class AutoPaths {
     private  static Gate gate;
 
     private static Meet3Intake intake;
+    private static ArmElevator elevator;
+
 
     public static double delay;
 
     private static TrajectoryVelocityConstraint VEL;
 
-    public static void setAutoSubsystems(PurpleServo purple, ElbowWristImpl el, Gate gte, Meet3Intake in) {
+    public static void setAutoSubsystems(PurpleServo purple, ElbowWristImpl el, Gate gte, Meet3Intake in, ArmElevator elev) {
         purpleServo = purple;
         elbowWrist = el;
         gate = gte;
         intake = in;
+        elevator = elev;
     }
 
     public static void setDelay(double del){
@@ -189,41 +194,48 @@ public class AutoPaths {
                 .lineToLinearHeading(new Pose2d(58, -8.3, Math.toRadians(180)))
                 .build();
     }
-    public static final TrajectorySequence RedBackstageCenter(CenterstageMecanumDrive drivetrain
-                                                              ){
+    public static final TrajectorySequence RedBackstageCenter(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(21.3, -18.2, Math.toRadians(180)))
+//                .lineToLinearHeading(new Pose2d(21.3, -18.2, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     //CLAW STUFF
                     purpleServo.setState(PurpleServo.PurplePositions.CLOSED);
+                    elevator.setTargetPosition(ArmElevator.Target.THREE);
+                    elevator.update();
+                    elevator.update();
 
-
                 })
-                .lineToLinearHeading(new Pose2d(distFromBackdrop+1.05, -35, Math.toRadians(180)))
-                .waitSeconds(2)
-                .addTemporalMarker(3.4,() -> {
-                    intake.stackPosition();
-                    intake.update();
-                })
-                .waitSeconds(1)
-                .addTemporalMarker(5,() -> {
-                    elbowWrist.toggle();
-                    elbowWrist.update();
-                })
-                .addTemporalMarker(6.8,() -> {
-                    gate.update();
-                    gate.run();
-                })
-
-                .addTemporalMarker(8.5,() -> {
-                    elbowWrist.toggle();
-                    elbowWrist.update();
-                })
-                .waitSeconds(3)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -10.3, Math.toRadians(180)))
-
-                .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(58, -10.3, Math.toRadians(180)))
+//                .lineToLinearHeading(new Pose2d(distFromBackdrop-0.8
+//                        , -35, Math.toRadians(180)))
+//                .waitSeconds(2)
+//                .addTemporalMarker(3.4,() -> {
+//                    intake.onePosition();
+//                    intake.update();
+//                })
+//                .waitSeconds(1)
+//                .addTemporalMarker(5,() -> {
+//                    elevator.setTargetPosition(ArmElevator.Target.THREE);
+//                    elevator.update();
+//                    elevator.update();
+//
+//                    elbowWrist.toggle();
+//                    elbowWrist.update();
+//                })
+//                .addTemporalMarker(6.8,() -> {
+//                    gate.update();
+//                    gate.run();
+//                })
+//
+//                .addTemporalMarker(8.5,() -> {
+//                    elbowWrist.toggle();
+//                    elbowWrist.update();
+//                })
+//                .waitSeconds(3)
+//                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -10.3, Math.toRadians(180)))
+//
+//                .waitSeconds(2)
+//                .lineToLinearHeading(new Pose2d(58, -10.3, Math.toRadians(180)))
+                .waitSeconds(10)
                 .build();
     }
     public static final TrajectorySequence RedBackstageRight(CenterstageMecanumDrive drivetrain){
@@ -441,11 +453,11 @@ public class AutoPaths {
                 .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(270)))
                 .waitSeconds(delay)
 
-                .lineToLinearHeading(new Pose2d(15, -6, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(15, -9, Math.toRadians(270)))
                 .waitSeconds(0.5)
-                .lineToLinearHeading(new Pose2d(34.1, -24, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(34.1, -25, Math.toRadians(180)))
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop+2.5, -28.2
+                .lineToLinearHeading(new Pose2d(distFromBackdrop+2.5, -33
                         , Math.toRadians(180)))
                 .addTemporalMarker(20,() -> {
                     intake.stackPosition();

@@ -32,7 +32,7 @@ public class ElevatorTest extends OpModeEx {
 
     @Override
     protected void loopInternal() {
-        elevator.inputPower(gamepad1.LEFT_STICK_Y.value());
+        elevator.inputPower(-gamepad1.LEFT_STICK_Y.value());
         elevator.update();
         telemetryPro.addData("Elevator State", elevator.getState());
         telemetryPro.addData("Elevator Position", elevator.getPosition());
@@ -41,6 +41,8 @@ public class ElevatorTest extends OpModeEx {
         telemetryPro.addData("Desired Velocity", elevator.getDesiredVelocity());
         telemetryPro.addData("Elevator Acceleration", elevator.getDesiredAcceleration());
         telemetryPro.addData("Target Position", elevator.getTargetPosition());
-        telemetryPro.addData("TargetPosDebug", elevator.newTargetPosInches);
+        telemetryPro.addData("TargetPosDebug", elevator.targetPos);
+        telemetryPro.addData("Elevator Target", elevator.target);
+
     }
 }

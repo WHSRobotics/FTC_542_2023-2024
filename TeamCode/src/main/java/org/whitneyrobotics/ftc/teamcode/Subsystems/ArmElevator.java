@@ -71,7 +71,7 @@ public class ArmElevator {
     public Double targetPos = null;
 
     @NonNull
-    private Target target = Target.NONE;
+    public Target target = Target.NONE;
 
     VoltageSensor voltageSensor;
 
@@ -83,9 +83,11 @@ public class ArmElevator {
     public enum Target {
         NONE(0),
         RETRACT(0),
-        ONE(0.5),
-        TWO(6),
-        THREE(8);
+
+        AUTO(-0.2),
+        ONE(-0.5),
+        TWO(-6),
+        THREE(-8);
         Target(double pos){
             this.pos = pos;
         }
@@ -113,9 +115,11 @@ public class ArmElevator {
                     .periodic(() -> {
                         lSlides.setPower(requestedPower * (slowed ? 0.5 : 1));
                     })
+
                     .transitionLinear(() -> target != Target.NONE)
-                     .transitionLinear(() -> targetPos != null)
-                    .fin()
+                     .transitionLinear(() -> targetPos != null)                    .onExit(stopwatch::reset)
+                .onExit(stopwatch::reset)
+                .fin()
                 .state(ElevatorStates.RISING)
                     .onEntry(() -> {
                         calculateError();
@@ -142,8 +146,7 @@ public class ArmElevator {
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
                     .transitionLinear(() -> Math.abs(requestedPower) > 0)
-                    .transitionLinear(() -> target == Target.NONE)
-                    .transitionLinear(() -> targetPos == null)
+                    .transitionLinear(() -> (target == Target.NONE) && (targetPos == null))
                     .onExit(() -> {
                         target=Target.NONE;
                         targetPos = null;
