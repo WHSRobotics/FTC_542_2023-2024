@@ -6,6 +6,6 @@ public interface GamepadHardware {
     Consumer<GamepadInteractionEvent> defaultConsumer = event -> {};
 
     void onInteraction(Consumer<GamepadInteractionEvent> callback);
-    void update(Object newState);
+    void update();
     void disconnectAllHandlers();
 }

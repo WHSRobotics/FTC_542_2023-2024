@@ -10,10 +10,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class GamepadScalarHardware implements GamepadHardware{
     public Consumer<GamepadInteractionEvent> interactionConsumer = defaultConsumer;
+    protected Supplier<Object> newStateSupplier = () -> false;
     private Float previousState = 0.0f;
     private boolean inverted = false;
     private boolean limitSensitivity;
@@ -27,12 +29,13 @@ public class GamepadScalarHardware implements GamepadHardware{
         float sensitivity() default 0.1f;
     }
 
-    public GamepadScalarHardware(boolean inverted){
-        this();
+    public GamepadScalarHardware(Supplier<Object> newStateSupplier, boolean inverted){
+        this(newStateSupplier);
         this.inverted = inverted;
     }
 
-    public GamepadScalarHardware(){
+    public GamepadScalarHardware(Supplier<Object> newStateSupplier){
+        this.newStateSupplier = newStateSupplier;
         LimitSensitivity sensitive = this.getClass().getDeclaredAnnotation(LimitSensitivity.class);
         if(sensitive != null){
             sensitivityThreshold = sensitive.sensitivity();
@@ -55,8 +58,8 @@ public class GamepadScalarHardware implements GamepadHardware{
     }
 
     @Override
-    public void update(Object newState) {
-        Float input = (Float) newState;
+    public void update() {
+        Float input = (Float) newStateSupplier.get();
         if(previousState != input) {
             if (limitSensitivity) {
                 if ((Math.abs(previousState - input) < previousState * sensitivityThreshold)) {

@@ -81,7 +81,7 @@ public class AutoPaths {
     public static final TrajectorySequence BlueBackstageCenter(CenterstageMecanumDrive drivetrain
                                                                ) {
         return drivetrain.trajectorySequenceBuilder(BLUE_A4.pose)
-                .lineToLinearHeading(new Pose2d(23.3, 26.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(23.3, 27.8, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     //CLAW STUFF
                     purpleServo.setState(PurpleServo.PurplePositions.CLOSED);
@@ -185,7 +185,7 @@ public class AutoPaths {
                     elbowWrist.toggle();
                     elbowWrist.update();
                 })
-                .lineToLinearHeading(new Pose2d(distFromBackdrop, -10.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -10.3, Math.toRadians(180)))
                 .lineToLinearHeading(new Pose2d(58, -8.3, Math.toRadians(180)))
                 .build();
     }

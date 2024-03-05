@@ -17,7 +17,7 @@ public class Meet3Intake {
 
     private double motorPower = 0.0;
 
-    public static double RAISED = 1.0, STACK = 0.7, ONE = 0.6;
+    public static double RAISED = 1.0, STACK = 0.88, ONE = 0.84;
 
     public static double servoPos = RAISED;
     private boolean reversed = false;

@@ -6,17 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class Button implements GamepadHardware{
 
-    private Consumer<GamepadInteractionEvent> interactionEventConsumer = defaultConsumer;
-    private Consumer<GamepadInteractionEvent> pressEventConsumer = defaultConsumer;
-    private Consumer<GamepadInteractionEvent> releaseEventConsumer = defaultConsumer;
-    private Consumer<GamepadInteractionEvent> doublePressEventConsumer = defaultConsumer;
-    private Consumer<GamepadInteractionEvent> holdEventConsumer = defaultConsumer;
-    private Consumer<GamepadInteractionEvent> shortPressConsumer = defaultConsumer;
+    protected Supplier<Object> newStateSupplier = () -> false;
+    protected Consumer<GamepadInteractionEvent> interactionEventConsumer = defaultConsumer;
+    protected Consumer<GamepadInteractionEvent> pressEventConsumer = defaultConsumer;
+    protected Consumer<GamepadInteractionEvent> releaseEventConsumer = defaultConsumer;
+    protected Consumer<GamepadInteractionEvent> doublePressEventConsumer = defaultConsumer;
+    protected Consumer<GamepadInteractionEvent> holdEventConsumer = defaultConsumer;
+    protected Consumer<GamepadInteractionEvent> shortPressConsumer = defaultConsumer;
 
+    protected boolean blockInteraction, blockPress, blockRelease;
     private boolean lastState;
     private Long lastChanged;
     private int consecutivePresses = 0;
@@ -67,11 +70,12 @@ public class Button implements GamepadHardware{
         this.shortPressConsumer = callback;
     }
 
-    public Button(){
-        this(false);
+    public Button(Supplier<Object> newStateSupplier){
+        this(newStateSupplier, false);
     }
 
-    public Button(boolean initialState){
+    public Button(Supplier<Object> newStateSupplier, boolean initialState){
+        this.newStateSupplier = newStateSupplier;
         lastState = initialState;
         lastChanged = System.currentTimeMillis();
     }
@@ -86,17 +90,18 @@ public class Button implements GamepadHardware{
     }
 
     @Override
-    public void update(Object newState) {
+    public void update() {
+        Object newState = newStateSupplier.get();
         GamepadInteractionEvent event = new GamepadInteractionEvent((boolean)newState, null, lastChanged, consecutivePresses);
         if(lastState != (boolean)newState){
-            interactionEventConsumer.accept(event);
+            if(!blockInteraction) interactionEventConsumer.accept(event);
             if((boolean)newState) {
-                pressEventConsumer.accept(event);
+                if(!blockPress) pressEventConsumer.accept(event);
                 if(consecutivePresses ==  2){
                     doublePressEventConsumer.accept(event);
                 }
             } else {
-                releaseEventConsumer.accept(event);
+                if(!blockRelease) releaseEventConsumer.accept(event);
                 lastReleased = System.currentTimeMillis();
             }
         } else {
@@ -113,6 +118,9 @@ public class Button implements GamepadHardware{
         }
         lastChanged = System.currentTimeMillis();
         lastState = (boolean)newState;
+        blockInteraction = false;
+        blockPress = false;
+        blockRelease = false;
     }
 
     public void removeInteractionHandler(){
