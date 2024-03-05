@@ -64,9 +64,11 @@ public class ArmElevator {
 
     private final static double NOMINAL_VOLTAGE = 12.0;
 
-    public final static double TIMEOUT = 0.5; //seconds
+    public static double TIMEOUT = 0.5; //seconds
 
-    public final static double ACCEPTABLE_ERROR = 0.1; //inches
+    public final static double ACCEPTABLE_ERROR = 0.2; //inches
+
+    private boolean newwTarget = false;
 
     public Double targetPos = null;
 
@@ -78,6 +80,7 @@ public class ArmElevator {
     enum ElevatorStates {
         IDLE,
         RISING,
+        STATE_CHANGED_INTERMITTENTLY
     }
 
     public enum Target {
@@ -117,17 +120,12 @@ public class ArmElevator {
                     })
 
                     .transitionLinear(() -> target != Target.NONE)
-<<<<<<< Updated upstream
-                     .transitionLinear(() -> targetPos != null)                    .onExit(stopwatch::reset)
+                     .transitionLinear(() -> targetPos != null)
                 .onExit(stopwatch::reset)
                 .fin()
-=======
-                     .transitionLinear(() -> targetPos != null)
-                     .onExit(stopwatch::reset)
-                    .fin()
->>>>>>> Stashed changes
                 .state(ElevatorStates.RISING)
                     .onEntry(() -> {
+                        newwTarget = false;
                         calculateError();
                         initialPosition = getPosition();
                         controller.init(0);
@@ -151,16 +149,17 @@ public class ArmElevator {
                                 motionProfile.positionAt(stopwatch.seconds())+initialPosition-getPosition() //error from designed position
                         )<=ACCEPTABLE_ERROR || stopwatch.seconds()>=TIMEOUT+motionProfile.getDuration());
                     }, ElevatorStates.IDLE)
+                    .transition(() -> newwTarget, ElevatorStates.STATE_CHANGED_INTERMITTENTLY)
                     .transitionLinear(() -> Math.abs(requestedPower) > 0)
-<<<<<<< Updated upstream
                     .transitionLinear(() -> (target == Target.NONE) && (targetPos == null))
-=======
                     .transitionLinear(() -> target == Target.NONE && targetPos == null)
->>>>>>> Stashed changes
                     .onExit(() -> {
                         target=Target.NONE;
                         targetPos = null;
                     })
+                    .fin()
+                    .nonLinearState(ElevatorStates.STATE_CHANGED_INTERMITTENTLY)
+                        .transition(()->true,ElevatorStates.RISING)
                     .fin()
                 .build();
         elevatorStatesStateMachine.start();
@@ -199,11 +198,13 @@ public class ArmElevator {
 
     public void setTargetPosition(@NonNull Target target){
         this.target = target;
+        newwTarget = true;
         update();
     }
 
     public void setTargetPosition(double pos){
         targetPos = pos;
+        newwTarget = true;
         update();
     }
 
