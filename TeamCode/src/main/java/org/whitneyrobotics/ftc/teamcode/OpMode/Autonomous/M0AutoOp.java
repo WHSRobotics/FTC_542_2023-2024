@@ -230,6 +230,8 @@ public class M0AutoOp extends OpModeEx {
         robot.update();
 
         telemetryPro.addData("Trajectory",selectedTrajectory);
+        telemetryPro.addData("TIME RIGHT NOW: ", System.currentTimeMillis()/1000);
+
         RobotImpl.poseMemory = robot.drive.getPoseEstimate();
     }
 

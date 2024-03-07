@@ -4,11 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.whitneyrobotics.ftc.teamcode.Extensions.OpModeEx.OpModeEx;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
 
 @TeleOp(name = "Servo Testing 12.1.2023")
 public class ClawDualServoPosTest extends OpModeEx {
     public Servo clawTestServo;
     public Servo clawTestServoTwo;
+
+    public Elbow elbow;
     public double testPos;
     public double testPosTwo;
 
@@ -19,11 +22,15 @@ public class ClawDualServoPosTest extends OpModeEx {
 
     @Override
     public void initInternal() {
+        elbow = new Elbow(hardwareMap);
+
         clawTestServo = hardwareMap.get(Servo.class, "wristLeft");
         clawTestServoTwo = hardwareMap.get(Servo.class, "wristRight");
 
-        testPos = 0.96;
-        testPosTwo = 0;
+        testPos = 0;
+        testPosTwo = 0.39;
+        elbow.update();
+        elbow.run();
     }
 
     @Override

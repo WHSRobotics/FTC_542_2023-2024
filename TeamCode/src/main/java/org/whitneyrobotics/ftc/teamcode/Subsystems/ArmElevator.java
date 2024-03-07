@@ -29,16 +29,19 @@ public class ArmElevator {
     private double requestedPower;
     private boolean slowed;
 
-    private double GEAR_RATIO = 0.5;
+    private double GEAR_RATIO = 2;
+    private double coefficient = -1;
 
     private StateMachine<ElevatorStates> elevatorStatesStateMachine;
-    public static double V_MAX = 5, A_MAX = 5; //in/s, in/s^2
+    public static double V_MAX = 8, A_MAX = 10; //in/s, in/s^2
 
     //TODO: Potentially add gain scheduling for a gravitational constant
-    public static ControlConstants EXTENSION_PID= new ControlConstants(0.5,0,0.001);
+    public static ControlConstants EXTENSION_PID= new ControlConstants(0.9,0,0.002);
 
     public static MotionProfileTrapezoidal motionProfile = new MotionProfileTrapezoidal(V_MAX, A_MAX);
-    private final double SPOOL_RADIUS = MM.toInches(20.75); //in
+
+    public static double CORRECTION_FACTOR = 0.71;
+    private final double SPOOL_RADIUS = MM.toInches(38.2/2d); //in
 
     private PIDController controller = new PIDController(EXTENSION_PID);
 
@@ -46,20 +49,22 @@ public class ArmElevator {
 
     public final double TICKS_PER_REV =	384.5;
 
-    public static double kStatic = 0.9465;
+    public static double kStatic = 0.21;
 
-    public static double kV = 2.25;
+    public static double kV = 1.5;
 
-    public static double kA = 0.0127;
+    public static double kA = 0.01;
+
+
 
     private NanoStopwatch stopwatch = new NanoStopwatch();
 
     public final double totalTicksToInches(double ticks){
-        return (ticks / TICKS_PER_REV) * (2 * Math.PI * SPOOL_RADIUS) * GEAR_RATIO;
+        return (ticks / TICKS_PER_REV) * (2 * Math.PI * SPOOL_RADIUS) * (1/GEAR_RATIO) * CORRECTION_FACTOR;
     }
 
     public final double angularToLinear(double angle){
-        return angle * SPOOL_RADIUS * (1/GEAR_RATIO);
+        return angle * SPOOL_RADIUS * GEAR_RATIO;
     }
 
     private final static double NOMINAL_VOLTAGE = 12.0;
@@ -87,10 +92,11 @@ public class ArmElevator {
         NONE(0),
         RETRACT(0),
 
-        AUTO(-0.2),
-        ONE(-0.5),
-        TWO(-6),
-        THREE(-8);
+        ONE(8),
+        TWO(16),
+        AUTO_ENTER(7.25),
+
+        THREE(21);
         Target(double pos){
             this.pos = pos;
         }
@@ -109,7 +115,7 @@ public class ArmElevator {
         else voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
         lSlides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lSlides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lSlides.setDirection(DcMotorSimple.Direction.REVERSE);
+        //lSlides.setDirection(DcMotorSimple.Direction.REVERSE);
         elevatorStatesStateMachine = new StateForge.StateMachineBuilder<ElevatorStates>()
                 .state(ElevatorStates.IDLE)
                     .onEntry(() -> {
@@ -207,7 +213,7 @@ public class ArmElevator {
     }
 
     public void  inputPower(double power){
-        requestedPower = power;
+        requestedPower = power * coefficient;
     }
 
     public void slowModeOn(){slowed=true;} //Bind these to onPress and onRelease methods

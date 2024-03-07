@@ -16,7 +16,7 @@ public class Wrist {
 
     public enum WristPositions{
         INTAKING(1, 0),
-        OUTTAKING(0, 0.695);
+        OUTTAKING(0.39, 0);
 
         double posL;
         double posR;
