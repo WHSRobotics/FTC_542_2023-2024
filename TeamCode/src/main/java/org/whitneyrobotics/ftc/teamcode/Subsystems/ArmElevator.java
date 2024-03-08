@@ -94,7 +94,7 @@ public class ArmElevator {
 
         ONE(8),
         TWO(16),
-        AUTO_ENTER(7.25),
+        AUTO_ENTER(9),
 
         THREE(21);
         Target(double pos){

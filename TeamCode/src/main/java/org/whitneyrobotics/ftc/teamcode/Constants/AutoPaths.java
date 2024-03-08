@@ -86,8 +86,8 @@ public class AutoPaths {
 
                 })
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop, 10.3, Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(58, 10.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 12.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(58, 12.3, Math.toRadians(180)))
                 .build();
     }
     public static final TrajectorySequence BlueBackstageCenter(CenterstageMecanumDrive drivetrain
@@ -174,7 +174,7 @@ public class AutoPaths {
 
                 })
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop, 13.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop, 12.3, Math.toRadians(180)))
                 .lineToLinearHeading(new Pose2d(58, 12.3, Math.toRadians(180)))
 
                 .build();
@@ -217,8 +217,8 @@ public class AutoPaths {
 
                 })
                 .waitSeconds(3)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -10.3, Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(58, -10.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -9.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(58, -9.3, Math.toRadians(180)))
                 .build();
     }
     public static final TrajectorySequence RedBackstageCenter(CenterstageMecanumDrive drivetrain){
@@ -258,10 +258,10 @@ public class AutoPaths {
                 })
 
                 .waitSeconds(3)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -10.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -9.3, Math.toRadians(180)))
 
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(58, -10.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(58, -9.3, Math.toRadians(180)))
                 .waitSeconds(10)
                 .build();
     }
@@ -299,8 +299,8 @@ public class AutoPaths {
 
                 })
                 .waitSeconds(4)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop-2, -10.3, Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(58, -10.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop-2, -9.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(58, -9.3, Math.toRadians(180)))
                 .build();
     }
 
