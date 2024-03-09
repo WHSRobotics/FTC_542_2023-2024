@@ -2,7 +2,6 @@ package org.whitneyrobotics.ftc.teamcode.VisionImpl;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.whitneyrobotics.ftc.teamcode.OpMode.Autonomous.M0AutoOp;
 
 import java.util.List;
 

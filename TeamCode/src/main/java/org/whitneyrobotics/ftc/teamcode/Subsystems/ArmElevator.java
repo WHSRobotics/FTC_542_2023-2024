@@ -91,10 +91,11 @@ public class ArmElevator {
     public enum Target {
         NONE(0),
         RETRACT(0),
+        AUTO_MINI(0),
 
         ONE(8),
         TWO(16),
-        AUTO_ENTER(9),
+        AUTO_ENTER(5),
 
         THREE(21);
         Target(double pos){

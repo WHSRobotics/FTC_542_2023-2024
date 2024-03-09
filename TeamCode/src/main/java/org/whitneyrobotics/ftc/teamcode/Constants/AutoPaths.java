@@ -223,10 +223,11 @@ public class AutoPaths {
     }
     public static final TrajectorySequence RedBackstageCenter(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(21.3, -19.8, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(21.3, -19.4, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     //CLAW STUFF
                     purpleServo.setState(PurpleServo.PurplePositions.CLOSED);
+                    elevator.setTargetPosition(ArmElevator.Target.AUTO_MINI);
 
                 })
                 .lineToLinearHeading(new Pose2d(distFromBackdrop-4
@@ -258,16 +259,16 @@ public class AutoPaths {
                 })
 
                 .waitSeconds(3)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop-1, -9.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(distFromBackdrop-3, -9.7, Math.toRadians(180)))
 
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(58, -9.3, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(58, -9.7, Math.toRadians(180)))
                 .waitSeconds(10)
                 .build();
     }
     public static final TrajectorySequence RedBackstageRight(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(RED_F4.pose)
-                .lineToLinearHeading(new Pose2d(32.6, -25, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(31.3, -25, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     //CLAW STUFF
                     purpleServo.setState(PurpleServo.PurplePositions.CLOSED);
@@ -340,7 +341,7 @@ public class AutoPaths {
                     elbowWrist.update();
                 })
                 .waitSeconds(20)
-                .build();         
+                .build();
     }
     public static final TrajectorySequence BlueAudienceCenter(CenterstageMecanumDrive drivetrain){
         return drivetrain.trajectorySequenceBuilder(BLUE_A2.pose)
@@ -481,38 +482,49 @@ public class AutoPaths {
                 .addTemporalMarker(() -> {
                     //CLAW STUFF
                     purpleServo.setState(PurpleServo.PurplePositions.CLOSED);
+                    elevator.setTargetPosition(ArmElevator.Target.AUTO_MINI);
 
                 })
                 .waitSeconds(0.5)
-                .strafeLeft(4.5)
-                .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(270)))
+                .back(4.5)
+                .strafeLeft(15.5)
+
+                .lineToLinearHeading(new Pose2d(-36, -7, Math.toRadians(0)))
                 .waitSeconds(delay)
 
-                .lineToLinearHeading(new Pose2d(15, -9, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(5, -7, Math.toRadians(0)))
                 .waitSeconds(0.5)
-                .lineToLinearHeading(new Pose2d(34.1, -25, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(25, -12, Math.toRadians(270)))
+
+                .lineToLinearHeading(new Pose2d(34.1, -26, Math.toRadians(180)))
                 .waitSeconds(2)
-                .lineToLinearHeading(new Pose2d(distFromBackdrop+2.5, -33
+                .lineToLinearHeading(new Pose2d(distFromBackdrop-5.5, -30
                         , Math.toRadians(180)))
+
                 .addTemporalMarker(20,() -> {
                     intake.stackPosition();
                     intake.update();
+                    elevator.setTargetPosition(ArmElevator.Target.AUTO_ENTER);
                 })
                 .waitSeconds(1)
-                .addTemporalMarker(22.5,() -> {
+                .waitSeconds(7)
+                .back(5.2)
+                .addTemporalMarker(17.5,() -> {
+                    intake.onePosition();
+                    intake.update();
                     elbowWrist.toggle();
                     elbowWrist.update();
                 })
+
                 .addTemporalMarker(23.8,() -> {
                     gate.update();
                     gate.run();
                 })
-                .waitSeconds(1)
+
                 .addTemporalMarker(24,() -> {
                     elbowWrist.toggle();
                     elbowWrist.update();
                 })
-
                 .waitSeconds(10)
                 .build();
     }

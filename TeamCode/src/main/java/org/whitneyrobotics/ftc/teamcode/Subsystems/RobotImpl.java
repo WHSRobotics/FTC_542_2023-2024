@@ -57,7 +57,7 @@ public class RobotImpl {
     }
 
     public final CenterstageMecanumDrive drive;
-    //public final ColorSubsystem colorSubsystem;
+    public final ColorSubsystem colorSubsystem;
     public final VoltageSensor voltageSensor;
 
     public final Meet3Intake intake;
@@ -77,7 +77,7 @@ public class RobotImpl {
         drive = new CenterstageMecanumDrive(hardwareMap);
         //prismSensor = new PrismSensor(hardwareMap);
         voltageSensor = hardwareMap.getAll(VoltageSensor.class).iterator().next();
-        //colorSubsystem = new ColorSubsystem(hardwareMap);
+        colorSubsystem = new ColorSubsystem(hardwareMap);
         elevator = new ArmElevator(hardwareMap);
         drone = new DroneB(hardwareMap);
         elbowWrist = new ElbowWristImpl(hardwareMap);
@@ -134,8 +134,8 @@ public class RobotImpl {
             }*/
         }
         //Check if linear slides are busy and set color to BUSY if true
-//        colorSubsystem.requestColor(status);
-//        colorSubsystem.update();
+        colorSubsystem.requestColor(status);
+        colorSubsystem.update();
     }
 
 }

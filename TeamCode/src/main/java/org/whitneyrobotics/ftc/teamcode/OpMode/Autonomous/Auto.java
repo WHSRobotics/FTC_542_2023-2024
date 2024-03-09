@@ -19,18 +19,16 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.AutoSetupTesting
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.LineItem;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.MultipleChoicePoll;
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.NumberSliderPoll;
-import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.TelemetryPro;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
 //import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
-import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import java.util.List;
 
-@Autonomous(name="M0 Auto", preselectTeleOp="Centerstage TeleOp")
-public class M0AutoOp extends OpModeEx {
+@Autonomous(name="Auto", preselectTeleOp="Centerstage TeleOp")
+public class Auto extends OpModeEx {
     RobotImpl robot;
     MultipleChoicePoll tileSelector;
     NumberSliderPoll delaySelector;
@@ -51,7 +49,7 @@ public class M0AutoOp extends OpModeEx {
         //robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.enableRobotDrawing();
         robot.drone.init();
-
+        robot.drone.hold();
         telemetryPro.useTestManager()
                 .addTest("Gamepad 1 Initialization", () -> Tests.assertGamepadSetup(gamepad1, "Gamepad 1"))
                 .addTest("Gamepad 2 Initialization", () -> Tests.assertGamepadSetup(gamepad2, "Gamepad 2"))
@@ -106,6 +104,8 @@ public class M0AutoOp extends OpModeEx {
     @Override
     public void initInternalLoop(){
         allianceSensor.update();
+        robot.drone.hold();
+//
         if (robot.alliance == RED){
             numeric_path = OpenCVRed.Pipeline.convertEnumToInteger();
             telemetryPro.addData("Numeric Path",numeric_path);
