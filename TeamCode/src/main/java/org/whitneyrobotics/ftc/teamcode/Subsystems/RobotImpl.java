@@ -17,6 +17,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Elbow;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Gate;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Outtake.Wrist;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.DroneB;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.DroneRetention;
 //import static org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem.Colors;
 
 /**
@@ -71,6 +72,7 @@ public class RobotImpl {
     public final PurpleServo purpleAuto;
 
     public final HookAndWinch hookAndWinch;
+    public final DroneRetention droneRetention;
 
 
     private RobotImpl(HardwareMap hardwareMap) {
@@ -85,6 +87,8 @@ public class RobotImpl {
         gate = new Gate(hardwareMap);
         purpleAuto = new PurpleServo(hardwareMap);
         hookAndWinch = new HookAndWinch(hardwareMap);
+        droneRetention = new DroneRetention(hardwareMap);
+
 //        elbow = new Elbow(hardwareMap);
         //claw = new JeffClaw(hardwareMap);
         //clawStatesStateMachine.start();
@@ -117,6 +121,7 @@ public class RobotImpl {
         elbowWrist.update();
         purpleAuto.update();
         hookAndWinch.update();
+        droneRetention.update();
 
         Colors status = Colors.OFF;
         if(drive.isBusy()){
@@ -125,6 +130,7 @@ public class RobotImpl {
         if (showMatchNotifs){
             status = Colors.NOTIFICATION;
         }
+
         
         if (Math.abs(drive.getLocalizer().getPoseEstimate().getX()-TILE_WIDTH.toInches(-0.5)) <= TILE_WIDTH.toInches((double)2/3)){
             status = Colors.BUSY;

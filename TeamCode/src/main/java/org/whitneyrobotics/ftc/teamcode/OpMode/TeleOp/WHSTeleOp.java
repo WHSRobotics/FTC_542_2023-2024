@@ -17,6 +17,7 @@ import org.whitneyrobotics.ftc.teamcode.Subsystems.ArmElevator;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Auto.PurpleServo;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ElbowWristImpl;
+import org.whitneyrobotics.ftc.teamcode.Subsystems.Odometry.DroneRetention;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
 import org.whitneyrobotics.ftc.teamcode.Subsystems.Meet3Intake;
@@ -83,8 +84,14 @@ public class WHSTeleOp extends OpModeEx {
         });
         gamepad2.DPAD_DOWN.onPress(() -> robot.gate.update());
 
-        gamepad1.CIRCLE.onPress(robot.drone::nextDefinedAngle);
-        gamepad1.CROSS.onPress(robot.drone::quickPrep);
+        gamepad1.CIRCLE.onPress(()->{
+            robot.drone.nextDefinedAngle();
+            robot.droneRetention.setPos(DroneRetention.DroneArmPositions.RELEASE);
+        });
+        gamepad1.CROSS.onPress(()->{
+            robot.droneRetention.setPos(DroneRetention.DroneArmPositions.RELEASE);
+            robot.drone.quickPrep();
+        });
 
         gamepad1.DPAD_DOWN.onPress(robot.intake::onePosition);
         gamepad1.DPAD_RIGHT.onPress(robot.intake::stackPosition);
@@ -114,6 +121,7 @@ public class WHSTeleOp extends OpModeEx {
             robot.purpleAuto.update();
         });
         robot.intake.onePosition();
+        robot.droneRetention.setPos(DroneRetention.DroneArmPositions.CLAMP);
 
     }
 
