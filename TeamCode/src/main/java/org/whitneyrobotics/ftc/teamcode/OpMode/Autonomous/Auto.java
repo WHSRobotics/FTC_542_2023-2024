@@ -21,7 +21,6 @@ import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.MultipleChoicePo
 import org.whitneyrobotics.ftc.teamcode.Extensions.TelemetryPro.NumberSliderPoll;
 import org.whitneyrobotics.ftc.teamcode.Roadrunner.trajectorysequence.TrajectorySequence;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.AllianceSensor;
-//import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.ColorSubsystem;
 import org.whitneyrobotics.ftc.teamcode.Subsystems.RobotImpl;
 
@@ -46,7 +45,7 @@ public class Auto extends OpModeEx {
     public void initInternal() {
         RobotImpl.init(hardwareMap);
         robot = RobotImpl.getInstance();
-        //robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
+        robot.colorSubsystem.bindGamepads(gamepad1, gamepad2);
         robot.drive.enableRobotDrawing();
         robot.drone.init();
         robot.drone.hold();
@@ -127,8 +126,8 @@ public class Auto extends OpModeEx {
         if(gamepad1.TRIANGLE.value()){ //Press and hold triangle to check alliance
             desiredColor = robot.alliance == Alliance.RED ? ColorSubsystem.Colors.RED : ColorSubsystem.Colors.BLUE;
         }
-//        robot.colorSubsystem.requestColor(desiredColor);
-//        robot.colorSubsystem.update();
+        robot.colorSubsystem.requestColor(desiredColor);
+        robot.colorSubsystem.update();
         robot.intake.raisedPosition();
         robot.intake.update();
         //robot.elevator.setTargetPosition(ArmElevator.Target.THREE);
